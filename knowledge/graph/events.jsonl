@@ -116,3 +116,6 @@
 {"t":"2026-09-22T17:37:56.742Z","type":"dispatch","cycle":"C-0012","node":"skill:adversarial-review","seq":4,"seat":"fable","escalate":"trio","sha256":"7fa2bd1a868dce7bb5e710678ca42c5233408345c1fdfb2b6b43ac4a160828dd"}
 {"t":"2026-09-22T17:37:56.894Z","type":"dispatch","cycle":"C-0012","node":"skill:adversarial-review","seq":5,"seat":"grok","escalate":"trio","sha256":"2adafaea813dee304b224ee4d35c6313adaf5e45aefbd592fa154881eddbf9f1"}
 {"t":"2026-09-22T17:37:57.046Z","type":"dispatch","cycle":"C-0012","node":"skill:adversarial-review","seq":6,"seat":"muse","escalate":"trio","sha256":"c7d5b7ca81731af4f2e18b6430fb561dc36a77199fe7e9be1d3c9953041d562c"}
+{"t":"2026-09-22T17:43:52.875Z","type":"dispatch","cycle":"C-0012","node":"skill:adversarial-review","seq":7,"seat":"fable","escalate":"trio","sha256":"7f81b130c10822612a871120d028ac2123fda68abbdcccf43ead5847fc7137c2"}
+{"t":"2026-09-22T17:43:53.020Z","type":"dispatch","cycle":"C-0012","node":"skill:adversarial-review","seq":8,"seat":"grok","escalate":"trio","sha256":"5f984f778c2859f2a933c10818fbd1c108107d29a4d404ba7caab0fd5746409f"}
+{"t":"2026-09-22T17:43:53.166Z","type":"dispatch","cycle":"C-0012","node":"skill:adversarial-review","seq":9,"seat":"muse","escalate":"trio","sha256":"ded241386bd4f919f698ce81fd9644752ce3691341906d7c1e7742a681fa4366"}
