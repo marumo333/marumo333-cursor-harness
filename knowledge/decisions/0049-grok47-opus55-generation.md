@@ -15,10 +15,10 @@
   - スラッグ実在（席ではない。generalPurpose）:
     - `grok-4.7-high` 完走。自己名は Grok 4.7。agent `bc-042db141-d286-5d4d-9510-d95317b24124`。
     - `claude-opus-5-5-high` 完走。自己名は Claude Opus 5.5。agent `bc-8b11a21d-33a1-535f-84f8-90dc5b81c03c`。
-  - 席の実起動（[[0047]] 決定7の水準。generalPurpose では足りない。子はスラッグ文字列を自己証明できない。親が Task の model に渡した値と、返った自己名と agent ID を記録する）:
-    - trio 体2: 親が `security-reviewer` を `model: grok-4.7-high` で起動し完走。自己名は Grok 4.7。agent `bc-e8b55d49-7cd6-50fd-9ec7-f0bcc3614bbe`。
-    - verifier: 親が `verifier` を `model: claude-opus-5-5-high` で起動し完走。自己名は Claude Opus 5.5。agent `bc-5c1eeb74-7db5-5a81-994b-8febb0f3a6f0`。判定は前進可能。
-    - 体1の実効モデルは Claude Fable 5.1（`bc-820dd2b0-df15-512a-a6ef-4f75a243792e`）。Opus への落下は無い。体3は Muse Spark 1.3（`bc-14d8b253-9c0e-5ae3-9edd-39bb842a58ed`）。初回 trio は差し戻し。指摘は effort 既定の機械側不一致と、この節が空欄だったこと。空欄を埋めてから再レビューする。
+  - 席の実起動（[[0047]] 決定7の水準。generalPurpose では足りない。子はスラッグ文字列を自己証明できない。親が Task の model に渡した値と、返った自己名と agent ID だけを記録する。この節は先端差分の前進判定ではない。F-0013 の verification は pending のまま）:
+    - trio 体2（`grok_task` 席）: 親が `security-reviewer` を `model: grok-4.7-high` で起動し完走。自己名は Grok 4.7。agent `bc-e8b55d49-7cd6-50fd-9ec7-f0bcc3614bbe`。この起動は初回差分を差し戻した。
+    - verifier: 親が `verifier` を `model: claude-opus-5-5-high` で起動し完走。自己名は Claude Opus 5.5。agent `bc-5c1eeb74-7db5-5a81-994b-8febb0f3a6f0`。スラッグの席起動であり、この ADR の先端を承認した記録ではない。
+    - 体1の実効モデルは Claude Fable 5.1（`bc-820dd2b0-df15-512a-a6ef-4f75a243792e`）。Opus への落下は無い。体3は Muse Spark 1.3（`bc-14d8b253-9c0e-5ae3-9edd-39bb842a58ed`）。
   - Grok の採用根拠は次の5点だけ。
     1. GA（https://x.ai/news/grok-4-7 、2026-09-21、Cursor で利用可）。
     2. Task スラッグ `grok-4.7-high` の allowlist + 実起動。
