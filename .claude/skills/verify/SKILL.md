@@ -5,7 +5,7 @@ description: 完了の定義を機械判定（feature-gate / opa test / cycle �
 
 # verify skill（= verifier agent の実体・Opus 5.5 Task）
 
-親チャットは Grok 4.7 high 前提（[[0033]] / [[0037]] / [[0040]] / [[0049]]）。本 skill の判定主体は `verifier`（`claude-opus-5-5-high`）または同等の独立呼び出し。
+親チャットは Grok 4.7 high 前提（[[0033]] / [[0037]] / [[0040]] / [[0049]]）。本 skill の判定主体は名前付き `verifier` で、Task の model は `claude-opus-5-5-high`。別モデルの代替は前進段にしない。
 
 ## チェック（全項目合格で「前進可能」・ADR0016）
 

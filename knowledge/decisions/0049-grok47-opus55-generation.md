@@ -15,9 +15,10 @@
   - スラッグ実在（席ではない。generalPurpose）:
     - `grok-4.7-high` 完走。自己名は Grok 4.7。agent `bc-042db141-d286-5d4d-9510-d95317b24124`。
     - `claude-opus-5-5-high` 完走。自己名は Claude Opus 5.5。agent `bc-8b11a21d-33a1-535f-84f8-90dc5b81c03c`。
-  - 席の実起動（[[0047]] 決定7の水準。generalPurpose では足りない）:
-    - trio 体2 / `grok_task`: （本 PR のモード2完走後に追記）
-    - verifier: （本 PR の named agent 完走後に追記）
+  - 席の実起動（[[0047]] 決定7の水準。generalPurpose では足りない。子はスラッグ文字列を自己証明できない。親が Task の model に渡した値と、返った自己名と agent ID を記録する）:
+    - trio 体2: 親が `security-reviewer` を `model: grok-4.7-high` で起動し完走。自己名は Grok 4.7。agent `bc-e8b55d49-7cd6-50fd-9ec7-f0bcc3614bbe`。
+    - verifier: 親が `verifier` を `model: claude-opus-5-5-high` で起動し完走。自己名は Claude Opus 5.5。agent `bc-5c1eeb74-7db5-5a81-994b-8febb0f3a6f0`。判定は前進可能。
+    - 体1の実効モデルは Claude Fable 5.1（`bc-820dd2b0-df15-512a-a6ef-4f75a243792e`）。Opus への落下は無い。体3は Muse Spark 1.3（`bc-14d8b253-9c0e-5ae3-9edd-39bb842a58ed`）。初回 trio は差し戻し。指摘は effort 既定の機械側不一致と、この節が空欄だったこと。空欄を埋めてから再レビューする。
   - Grok の採用根拠は次の5点だけ。
     1. GA（https://x.ai/news/grok-4-7 、2026-09-21、Cursor で利用可）。
     2. Task スラッグ `grok-4.7-high` の allowlist + 実起動。
@@ -48,12 +49,16 @@
      [[0044]] 決定7の概念既定は medium だった。medium スラッグが実在する今、
      high を選ぶのは「世代ピンだけ」では説明できない。根拠は、公式の同段比較が high、
      Cursor の Grok 4.7 既定が high、`effort_allow` が親と実装の high を既に許すこと。
-     medium は `effort_allow` に残し、ピンにはしない。
+     medium は許容に残し、ピンにはしない。
+     機械の既定は `scripts/lib/packet-policy.mjs` の配列先頭である。親と実装は
+     `['high', 'medium']` とし、criteria の `effort_defaults` と一致させる。
   5. **Fable のガードフォールバックは、実効モデルが `fable_pin` でなければ failed。**
      「Opus に落ちた」だけを見ない。Opus 5.5 への落下も failed。
   6. **旧 ADR は廃止しない。** 決定本文は履歴。改正注記と criteria / skill / agent の
      `model:` だけを現行ピンにする。`supersedes` に載せない。
   7. **適用経路。** F-0013 は `proposed`（出生規則）。同一 PR の canon 適用は
      F-0001（`in_progress` / `supersede_adr: true`）の被覆。F-0003 / F-0009 と同じ。
+     OPA の allow はパス被覆と形状だけを見る。ベンチ数値とスラッグの正しさは
+     allow では証明されない。それはこの ADR の調査と、別文脈の敵対レビューが持つ。
 - 結果: 席の役割は [[0047]] のまま。世代ピンだけ Grok 4.7 high と Opus 5.5 high。
 - 関連: [[0026]] [[0031]] [[0033]] [[0037]] [[0040]] [[0044]] [[0047]]

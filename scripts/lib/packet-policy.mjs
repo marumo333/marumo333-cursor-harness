@@ -27,8 +27,8 @@ const SEATS_BY_NODE = {
 };
 
 const EFFORT_ALLOW = {
-	parent: ['medium', 'high'],
-	implement: ['medium', 'high'],
+	parent: ['high', 'medium'],
+	implement: ['high', 'medium'],
 	gate: ['high'],
 	review: ['high'],
 	third: ['medium'],

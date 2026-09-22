@@ -109,3 +109,7 @@
 {"t":"2026-09-11T13:57:46.636Z","type":"edge_state","cycle":"C-0011","from":"skill:verify","to":"skill:reflect","state":"taken","reason":"feature-gate / pnpm test 緑"}
 {"t":"2026-09-11T13:57:46.664Z","type":"token_ledger","cycle":"C-0011","seat":"grok","effort":"medium","packet_bytes":6813,"tasks":8,"zero_value_reinject":false}
 {"t":"2026-09-11T14:08:07.590Z","type":"human_approved","cycle":"C-0011","merge_sha":"dd1e2d55229fa5117c3293b3012b8ff69b75454a","pr":"14"}
+{"t":"2026-09-22T17:28:15.019Z","type":"cycle_open","cycle":"C-0012","source":"manual"}
+{"t":"2026-09-22T17:28:31.987Z","type":"dispatch","cycle":"C-0012","node":"skill:adversarial-review","seq":1,"seat":"fable","escalate":"trio","sha256":"4a284fbdf2ac8e08c82c2b64226a057e331147cac54bc58000076565b74541d9"}
+{"t":"2026-09-22T17:28:37.884Z","type":"dispatch","cycle":"C-0012","node":"skill:adversarial-review","seq":2,"seat":"grok","escalate":"trio","sha256":"c77344af1fd43e84e01c96af8e1223d2bc5b0c7860c0fa8c2147c8cb77eca870"}
+{"t":"2026-09-22T17:28:43.030Z","type":"dispatch","cycle":"C-0012","node":"skill:adversarial-review","seq":3,"seat":"muse","escalate":"trio","sha256":"408beb28123d2d28f406bbb3ab403f147f891e83bf6e7b2d1380361b0b2de9cf"}

@@ -41,11 +41,11 @@ effort_defaults:
   ceiling: high
 effort_allow:
   parent:
-    - medium
     - high
+    - medium
   implement:
-    - medium
     - high
+    - medium
   gate:
     - high
   third:

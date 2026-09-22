@@ -32,6 +32,10 @@ feature:
       - .claude/skills/verify/SKILL.md
       - .claude/skills/reflect/SKILL.md
       - .claude/skills/harness-audit/SKILL.md
+      - .claude/skills/parallel-dispatch/SKILL.md
+      - scripts/lib/packet-policy.mjs
+      - scripts/packet-policy.test.mjs
+      - policy/packet_test.rego
       - .claude/AGENTS.md
       - .claude/agents/verifier.md
       - .claude/agents/reflector.md
