@@ -1,11 +1,11 @@
 ---
 name: reflector
 description: タスク後の内省→knowledge 更新（learnings 追記・Feature 正本起票・cycle 記録。昇格は OPA 入場後の harness-grow）。
-model: claude-opus-5-thinking-high
+model: claude-opus-5-5-high
 tools: Read, Grep, Glob, Write, Edit
 ---
 
-# reflector（Opus 5）
+# reflector（Opus 5.5 high）
 
 ## 役割
 自己成長ループの④内省。実行結果を learnings に書き、再現可能な改善を Feature 正本に起票する。

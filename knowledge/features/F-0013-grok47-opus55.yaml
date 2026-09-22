@@ -1,0 +1,50 @@
+feature:
+  id: F-0013
+  title: 世代ピンを Grok 4.7 high と Opus 5.5 high にする
+  kind: harness-grow
+  status: proposed
+  source: human
+  created: '2026-09-22'
+  learning_refs:
+    - knowledge/learnings.md
+  problem: >
+    親の実体は Grok 4.7 で、Opus 5.5 が Opus 5 の後継として Cursor に出た。
+    文書と model-routing は Grok 4.6 / Opus 5 のまま。席の役割（親 Grok、
+    計画/レビューは Fable、検証/内省は Opus、第3は Muse）は変えない。
+    0044 の「high-fast しか無い」例外は、非 fast の high が実在したので消滅する。
+    適用は F-0001 被覆（F-0003 / F-0009 と同じ）。本票は proposed のまま。
+  proposed_change:
+    mutates_canon: true
+    paths:
+      - knowledge/features/F-0013-grok47-opus55.yaml
+      - knowledge/criteria/model-routing.yaml
+      - knowledge/decisions/0049-grok47-opus55-generation.md
+      - knowledge/decisions/0026-model-strategy-accuracy.md
+      - knowledge/decisions/0031-model-strategy-cursor-multi-family.md
+      - knowledge/decisions/0033-harness-api-budget-routing.md
+      - knowledge/decisions/0037-opus5-gate-routing.md
+      - knowledge/decisions/0040-grok46-parent-routing.md
+      - knowledge/decisions/0044-token-efficiency.md
+      - knowledge/decisions/0047-fable-plan-review.md
+      - knowledge/decisions/0016-definition-of-done.md
+      - .claude/skills/harness-api-budget/SKILL.md
+      - .claude/skills/adversarial-review/SKILL.md
+      - .claude/skills/verify/SKILL.md
+      - .claude/skills/reflect/SKILL.md
+      - .claude/skills/harness-audit/SKILL.md
+      - .claude/AGENTS.md
+      - .claude/agents/verifier.md
+      - .claude/agents/reflector.md
+      - .claude/agents/security-reviewer.md
+      - .claude/hooks/post_task_reflect.mjs
+      - README.md
+      - TEMPLATE.md
+  evidence:
+    adversarial_review: pending
+    review_agent: security-reviewer
+    verification: pending
+    opa_decision: pending
+  constraints:
+    supersede_adr: true
+    no_jp_code_merge_write: true
+    supersedes: []

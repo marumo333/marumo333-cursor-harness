@@ -11,7 +11,7 @@ Cursor ハーネスの**テンプレート**。対象は席・正本・ゲート
 
 ## 何をするか
 
-- 席: 親 Grok 4.6 / 計画・レビューは Fable 5.1 / 検証は Opus 5 / Muse Spark 1.3 は**高リスク3体多数決のみ**
+- 席: 親 Grok 4.7 high / 計画・レビューは Fable 5.1 / 検証は Opus 5.5 high / Muse Spark 1.3 は**高リスク3体多数決のみ**
 - 正本: [`knowledge/features/F-NNNN-*.yaml`](knowledge/features/README.md)。GitHub Issues / Spec Kit は正本にしない（[ADR 0033](knowledge/decisions/0033-harness-api-budget-routing.md)）
 - ゲート: OPA `node scripts/feature-gate.mjs`（自己改善ループそのものではない）
 - 出生規則: Feature は `proposed` で起票する。**同一 PR で `admitted` / `approved` にしない**（[ADR 0038](knowledge/decisions/0038-feature-canon-opa-grow.md)）
@@ -38,7 +38,7 @@ node scripts/install-git-hooks.mjs
 このハーネスは席・正本・ゲート・cycle で回る。入力は人間の依頼と Feature、
 実行は席、token効率化は code-mode と packet、品質ゲートは hooks / OPA / feature-gate、
 成果は正本（skill / ADR / criteria / Rego）、フィードバックは cycle と learnings である。
-監査の主体は親 Grok 4.6 である。Uber の Gateway や艦隊は置かない。OPA は canon 変更のゲートであり、自己改善ループそのものではない。
+監査の主体は親 Grok 4.7 high である。Uber の Gateway や艦隊は置かない。OPA は canon 変更のゲートであり、自己改善ループそのものではない。
 
 旧 PNG は [`docs/architecture/`](docs/architecture/) に履歴として残す。正は下記 mermaid。
 
@@ -56,7 +56,7 @@ flowchart TB
   end
 
   subgraph plant["実行"]
-    P["監査 親 Grok 4.6"]
+    P["監査 親 Grok 4.7"]
     CM["token効率化"]
     PK["packet"]
     PL["計画 writing-plans"]
@@ -113,10 +113,10 @@ hooks を踏むのは実装 Grok の commit。OPA は判定であり正本へは
 flowchart LR
   subgraph seats["席"]
     direction TB
-    G["親 Grok 4.6"]
+    G["親 Grok 4.7"]
     IMP["実装 Grok"]
     F["計画 / レビュー Fable 5.1"]
-    O["検証 / 内省 Opus 5"]
+    O["検証 / 内省 Opus 5.5"]
     M["第3 Muse medium"]
   end
 

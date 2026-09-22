@@ -1,11 +1,11 @@
 ---
 name: verifier
 description: feature-gate / opa test / cycle 指標を実行し完了の定義を判定。タスクの検証段で使う。
-model: claude-opus-5-thinking-high
+model: claude-opus-5-5-high
 tools: Read, Grep, Glob, Bash
 ---
 
-# verifier（Opus 5・独立敵対）
+# verifier（Opus 5.5 high・独立敵対）
 
 ## 役割
 `knowledge/decisions/0016-definition-of-done.md` を機械的に判定し、前進可否を返す。

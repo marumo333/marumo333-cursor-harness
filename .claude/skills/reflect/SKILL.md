@@ -3,7 +3,7 @@ name: reflect
 description: タスク後の内省（効いた/失敗/境界事例を言語化し learnings に追記）。自己成長ループ④の入口。
 ---
 
-# reflect skill（= reflector agent・Opus Task）
+# reflect skill（= reflector agent・Opus 5.5 Task）
 
 自己成長ループ④の入口（[[0033]] / [[0039]]）。親 Grok が本 skill を読み、`reflector` を Task 起動する。
 入力は **packet**（cycle events と起票下書き。`scripts/harness-query.mjs`）。
