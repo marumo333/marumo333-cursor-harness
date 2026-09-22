@@ -919,6 +919,15 @@
 			"summary": "世代ピンを Grok 4.7 high と Opus 5.5 high にする"
 		},
 		{
+			"id": "F-0014",
+			"kind": "feature",
+			"layer": "machine",
+			"path": "knowledge/features/F-0014-packetless-gate-not-seat-proof.yaml",
+			"rels": [],
+			"status": "proposed",
+			"summary": "packet 無しのゲート起動を席の実起動に数えない"
+		},
+		{
 			"id": "cycle:required",
 			"kind": "cycle",
 			"layer": "machine",

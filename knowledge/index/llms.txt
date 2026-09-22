@@ -17,6 +17,7 @@
 - [F-0011](knowledge/features/F-0011-mit-license-factory-diagram.yaml) (proposed): MITライセンス発行と監査 mermaid
 - [F-0012](knowledge/features/F-0012-packet-review-scope.yaml) (proposed): packet の diff_stat を commit 後も実パスにする
 - [F-0013](knowledge/features/F-0013-grok47-opus55.yaml) (proposed): 世代ピンを Grok 4.7 high と Opus 5.5 high にする
+- [F-0014](knowledge/features/F-0014-packetless-gate-not-seat-proof.yaml) (proposed): packet 無しのゲート起動を席の実起動に数えない
 - [criterion:code-quality](knowledge/criteria/code-quality.yaml) (n/a): コード品質バー — ハーネス テンプレート。出典: ADR 0013-0016 / 0038 / 0039
 - [criterion:cycle-metrics](knowledge/criteria/cycle-metrics.yaml) (n/a): サイクル3指標 — ADR 0039。実装は scripts/cycle-metrics.mjs / policy/cycle.rego
 - [criterion:grow-admission](knowledge/criteria/grow-admission.yaml) (n/a): Feature 正本 + OPA grow 入場 — ハーネス/reflector/verify が参照。出典: ADR 0038
