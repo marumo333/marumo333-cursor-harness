@@ -6,7 +6,13 @@ import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildPacket, writePacket } from './lib/harness-query.mjs';
-import { assertDispatchPolicy, buildDispatchPolicyInput, countCanonPaths, roleFor } from './lib/packet-policy.mjs';
+import {
+	assertDispatchPolicy,
+	buildDispatchPolicyInput,
+	countCanonPaths,
+	effortAllowFor,
+	roleFor
+} from './lib/packet-policy.mjs';
 
 const WORKSPACE = join(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -79,6 +85,13 @@ test('sha256 不一致と欠落パケットは dispatch を拒否する', () => 
 		/packet|ノード/
 	);
 	assert.equal(written.bytes > 0, true);
+});
+
+test('親と実装の effort 既定は high で medium は許容に残る', () => {
+	assert.deepEqual(effortAllowFor('parent'), ['high', 'medium']);
+	assert.deepEqual(effortAllowFor('implement'), ['high', 'medium']);
+	assert.equal(effortAllowFor('parent')[0], 'high');
+	assert.equal(effortAllowFor('implement')[0], 'high');
 });
 
 test('ゲートに Muse / stay / 下げ effort を同時に置くと deny', () => {

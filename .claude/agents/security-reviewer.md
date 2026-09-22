@@ -5,7 +5,7 @@ model: claude-fable-5-1-thinking-high
 tools: Read, Grep, Glob, Bash
 ---
 
-# security-reviewer（Fable 5.1 high 既定・敵対的。3体多数決時は Task 起動時のモデル指定で Grok 4.6 / Muse Spark 1.3 にも割当）
+# security-reviewer（Fable 5.1 high 既定・敵対的。3体多数決時は Task 起動時のモデル指定で Grok 4.7 high / Muse Spark 1.3 にも割当）
 
 ## 役割
 攻撃者視点で脆弱性を探す。**書き込みはせず指摘のみ**（修正は担当 agent）。

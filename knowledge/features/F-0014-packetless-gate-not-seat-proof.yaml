@@ -1,0 +1,27 @@
+feature:
+  id: F-0014
+  title: packet 無しのゲート起動を席の実起動に数えない
+  kind: harness-grow
+  status: proposed
+  source: reflector
+  created: '2026-09-22'
+  learning_refs:
+    - knowledge/learnings.md
+  problem: >
+    名前付き verifier を packet 無しで起動し、子が前進可能と返した記録を
+    ADR の席証拠に置くと、verify チェック8（packet 必須）を破った結果が正本になる。
+    スラッグが解決したことと、手順を満たした検証は分けて書く。
+  proposed_change:
+    mutates_canon: true
+    paths:
+      - .claude/skills/verify/SKILL.md
+      - knowledge/decisions/0049-grok47-opus55-generation.md
+  evidence:
+    adversarial_review: pending
+    review_agent: security-reviewer
+    verification: pending
+    opa_decision: pending
+  constraints:
+    supersede_adr: false
+    no_jp_code_merge_write: true
+    supersedes: []

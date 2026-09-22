@@ -1,10 +1,11 @@
-# ハーネス席 — ADR 0031 / 0033 / 0037 / 0039 / 0040 / 0046 / 0047
-# 親も Task も high-fast。xhigh は 4.6 の努力段だが Task allowlist に無い。
+# ハーネス席 — ADR 0031 / 0033 / 0037 / 0039 / 0040 / 0046 / 0047 / 0049
+# 親も Task も grok-4.7-high。cursor- 接頭辞は 4.7 で消えた。
+# fast / xhigh / 裸の grok-4.7 はピンにも予備にも書かない（[[0049]]）。
 # 第3は medium を明示する。Muse の公式既定 high には上げない。
-# 計画とレビューは Fable 5.1 high。verifier / reflector は Opus。
+# 計画とレビューは Fable 5.1 high。verifier / reflector は Opus 5.5 high。
 harness_agents:
-  chat_orchestrator: cursor-grok-4.6-high-fast
-  grok_task: cursor-grok-4.6-high-fast
+  chat_orchestrator: grok-4.7-high
+  grok_task: grok-4.7-high
   fable_gates:
     - plan-confirm
     - review_default
@@ -13,7 +14,7 @@ harness_agents:
     - reflector
   review_trio:
     - model: claude-fable-5-1-thinking-high
-    - model: cursor-grok-4.6-high-fast
+    - model: grok-4.7-high
     - model: muse-spark-1.3-medium
   sonnet_pin: claude-sonnet-5-thinking-high
   fable_pin: claude-fable-5-1-thinking-high
@@ -29,21 +30,22 @@ harness_agents:
     no_generic_task_as_gate: true
     no_fable_opus_cohabit_trio: true
     fable_guardrail_fallback_is_fail: true
-# effort は概念値。Task 実在スラッグが high-fast だけの席はスラッグを変えない（[[0044]] / [[0045]]）。
+# 親と実装の既定は high（[[0049]]）。medium は許可に残し、ピンにはしない。
+# 0044 の「high-fast しか無い」例外は消滅した。fast はピンにしない。
 # 幅1の上書きは packet.rego が deny。ゲートを親が下げることも不可。
 effort_defaults:
-  parent: medium
-  implement: medium
+  parent: high
+  implement: high
   gate: high
   third: medium
   ceiling: high
 effort_allow:
   parent:
-    - medium
     - high
+    - medium
   implement:
-    - medium
     - high
+    - medium
   gate:
     - high
   third:

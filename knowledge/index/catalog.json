@@ -134,7 +134,7 @@
 			"path": "knowledge/criteria/model-routing.yaml",
 			"rels": [],
 			"status": "n/a",
-			"summary": "ハーネス席 — ADR 0031 / 0033 / 0037 / 0039 / 0040 / 0046 / 0047"
+			"summary": "ハーネス席 — ADR 0031 / 0033 / 0037 / 0039 / 0040 / 0046 / 0047 / 0049"
 		},
 		{
 			"id": "criterion:security-policy",
@@ -764,6 +764,44 @@
 			"summary": "Uber code-mode＝bash 一括と要約"
 		},
 		{
+			"id": "ADR-0049",
+			"kind": "decision",
+			"layer": "human",
+			"path": "knowledge/decisions/0049-grok47-opus55-generation.md",
+			"rels": [
+				{
+					"rel": "cites",
+					"target": "ADR-0026"
+				},
+				{
+					"rel": "cites",
+					"target": "ADR-0031"
+				},
+				{
+					"rel": "cites",
+					"target": "ADR-0033"
+				},
+				{
+					"rel": "cites",
+					"target": "ADR-0037"
+				},
+				{
+					"rel": "cites",
+					"target": "ADR-0040"
+				},
+				{
+					"rel": "cites",
+					"target": "ADR-0044"
+				},
+				{
+					"rel": "cites",
+					"target": "ADR-0047"
+				}
+			],
+			"status": "accepted",
+			"summary": "世代ピン＝Grok 4.7 high / Opus 5.5 high（席は動かさない）"
+		},
+		{
 			"id": "F-0001",
 			"kind": "feature",
 			"layer": "machine",
@@ -870,6 +908,24 @@
 			"rels": [],
 			"status": "proposed",
 			"summary": "packet の diff_stat を commit 後も実パスにする"
+		},
+		{
+			"id": "F-0013",
+			"kind": "feature",
+			"layer": "machine",
+			"path": "knowledge/features/F-0013-grok47-opus55.yaml",
+			"rels": [],
+			"status": "proposed",
+			"summary": "世代ピンを Grok 4.7 high と Opus 5.5 high にする"
+		},
+		{
+			"id": "F-0014",
+			"kind": "feature",
+			"layer": "machine",
+			"path": "knowledge/features/F-0014-packetless-gate-not-seat-proof.yaml",
+			"rels": [],
+			"status": "proposed",
+			"summary": "packet 無しのゲート起動を席の実起動に数えない"
 		},
 		{
 			"id": "cycle:required",

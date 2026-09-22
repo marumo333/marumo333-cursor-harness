@@ -9,7 +9,7 @@ description: ハーネス健全性を決定的にスコア化し履歴に記録�
 
 - ルール網羅: CLAUDE.md の禁止が hooks/agent で強制されているか。
 - knowledge 充足: ADR に未解決の重要判断が残っていないか・criteria が最新か。
-- **席割当の整合（[[0033]] / [[0037]] / [[0040]] / [[0047]]）**: `model-routing.yaml` の chat_orchestrator=Grok（世代ピンは 0040）・grok_task・fable_gates・opus_gates・
+- **席割当の整合（[[0033]] / [[0037]] / [[0040]] / [[0047]] / [[0049]]）**: `model-routing.yaml` の chat_orchestrator=Grok（世代ピンは 0049）・grok_task・fable_gates・opus_gates・
   review_trio(Fable/Grok/Muse)・budget_guards が AGENTS / skills / `.claude/agents/*.md` 先頭事項と矛盾していないか。
 - **ハーネス制約（[[0039]] / [[0046]] / [[0047]]）**: 席は親 Grok + 計画/レビュー Fable + 検証 Opus + Muse は3体。正本は Feature。ゲートは OPA。グラフは skill/feature/cycle。
 - **cycle 整合（[[0039]]）**: required-cycle の必須ノードが記録され、3指標が出せるか。

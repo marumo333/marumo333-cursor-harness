@@ -28,8 +28,9 @@ description: 実装の並列展開判断と起動手順（Task並列 / 作業ツ
 
 1. superpowers `writing-plans` で **2-5分粒度**にタスクを分解し、各タスクの「触るファイル群」を明記する。
 2. `plan-confirm` を通す。
-3. 仕様が明文化できたタスクのみ `grok_task`（[[0040]] / `model-routing.yaml`）に委譲する。
-   親 UI スラッグ（`chat_orchestrator`）を Task に渡さない。曖昧なタスク・非自明ロジックは Opus Task。
+3. 仕様が明文化できたタスクのみ `grok_task`（[[0040]] / [[0049]] / `model-routing.yaml`）に委譲する。
+   実行時の親名が裸の `grok-4.7` でも、Task には `grok-4.7-high` を渡す。裸の `grok-4.7` は Task スラッグではない。
+   曖昧なタスク・非自明ロジックは Opus 5.5 Task（`claude-opus-5-5-high`）。
 4. subagent への指示に必ず含める: 対象ファイル / 完了条件 / 読むべき ADR・criteria / 禁止事項。
    入力は **packet**（`scripts/harness-query.mjs`）。会話 fork は置かない。
    effort / escalate は親だけが cycle dispatch に書く。子が同じキーを返したら deny。

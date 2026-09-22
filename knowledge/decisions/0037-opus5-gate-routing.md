@@ -1,7 +1,7 @@
 # ADR 0037: ハーネス Claude ゲート席＝Opus 5（骨格は 0033 維持）
 
 - 状態: 受理（改正対象: [[0033]] [[0031]]；改正: [[0039]] [[0040]]）
-- 改正注記: 「Grok 4.5 据え置き」は [[0040]] で 4.6。第3は [[0046]] で Muse medium。計画/レビューは [[0047]] で Fable 5.1。verifier / reflector は Opus 5。決定本文の「全 Claude ゲート＝Opus 5」「Fable を既定から外す」は履歴。
+- 改正注記: 「Grok 4.5 据え置き」は [[0040]] で 4.6、[[0049]] で Grok 4.7 high。第3は [[0046]] で Muse medium。計画/レビューは [[0047]] で Fable 5.1。verifier / reflector は [[0049]] で Opus 5.5 high。決定本文の「全 Claude ゲート＝Opus 5」「Fable を既定から外す」と本文の 4.6 / Opus 5 スラッグは履歴。
 - 日付: 2026-07-24
 - 背景: Claude Opus 5 GA。0033 の枠（親 Grok＋Claude ゲート集中）を維持しつつゲート既定を Opus 5 にする。
 - 決定:

@@ -76,11 +76,11 @@ test_deny_width1_effort_override if {
 }
 
 test_allow_width2_effort_override if {
-	d := object.union(ok_dispatch, {"effort": "high"})
+	d := object.union(ok_dispatch, {"effort": "medium"})
 	count(canon.deny) == 0 with input as object.union(ok_input, {
 		"dispatch": d,
-		"effort_allow": ["medium", "high"],
-		"effort_default": "medium",
+		"effort_allow": ["high", "medium"],
+		"effort_default": "high",
 	})
 }
 
@@ -88,8 +88,8 @@ test_deny_effort_outside_allow if {
 	d := object.union(ok_dispatch, {"effort": "low"})
 	count(canon.deny) > 0 with input as object.union(ok_input, {
 		"dispatch": d,
-		"effort_allow": ["medium", "high"],
-		"effort_default": "medium",
+		"effort_allow": ["high", "medium"],
+		"effort_default": "high",
 	})
 }
 

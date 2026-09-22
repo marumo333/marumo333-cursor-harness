@@ -2,15 +2,15 @@
 
 ハーネスは **Cursor**。対象は席・正本・ゲート・cycle（[[0039]]）。使い方は `TEMPLATE.md`。
 
-## モデル戦略（[[0047]] / [[0046]] / [[0040]] / [[0037]] / [[0033]] / [[0031]]）
+## モデル戦略（[[0049]] / [[0047]] / [[0046]] / [[0040]] / [[0037]] / [[0033]] / [[0031]]）
 
 精度は独立検証の深さで決まる。ファミリー多様性はレビューで稼ぐ。
 
 | 席 | モデル | 役割 |
 | --- | --- | --- |
-| 親チャット | Grok 4.6 | 壁打ち・ディスパッチ・統合・cycle 記録 |
+| 親チャット | Grok 4.7 high | 壁打ち・ディスパッチ・統合・cycle 記録 |
 | 計画 / レビュー | Fable 5.1 high | plan-confirm / 敵対レビュー / 設計 |
-| 検証 / 内省 | Opus 5 | verifier / reflector |
+| 検証 / 内省 | Opus 5.5 high | verifier / reflector |
 | 第3レンズ | Muse Spark 1.3 medium | 高リスク3体多数決のみ |
 
 親は常時 Grok。Fable / Opus は名前付き Task のみ。Muse は3体多数決以外禁止。Sol は使わない。
@@ -35,5 +35,5 @@ commit は hook 必須。主語は `feat:` / `fix:` / `docs:` 等 + 日本語（
 | --- | --- | --- |
 | `backend-architect` | Fable 5.1 high | 設計・ADR・plan-confirm |
 | `security-reviewer` | Fable 5.1 high 既定 | 独立敵対レビュー。高リスクは Grok / Muse も割当 |
-| `verifier` | Opus 5 | feature-gate / テスト / 前進判定 |
-| `reflector` | Opus 5 | 内省・Feature 起票 |
+| `verifier` | Opus 5.5 high | feature-gate / テスト / 前進判定 |
+| `reflector` | Opus 5.5 high | 内省・Feature 起票 |
