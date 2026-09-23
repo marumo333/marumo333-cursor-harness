@@ -3,14 +3,14 @@ name: harness-api-budget
 description: Ultraでもトークン効率と精度を同時に取る席ルーティング（Grok親・計画/レビューはFable・検証はOpus・Museは3体・照会はcode-mode・子へはpacket）。壁打ち〜検証の席判断で使う。
 ---
 
-# harness-api-budget skill（[[0033]] / [[0037]] / [[0039]] / [[0040]] / [[0045]] / [[0046]] / [[0047]] / [[0048]] / [[0049]]）
+# harness-api-budget skill（[[0033]] / [[0037]] / [[0039]] / [[0040]] / [[0045]] / [[0046]] / [[0047]] / [[0048]] / [[0049]] / [[0050]]）
 
 ## 席の要約
 
 | 席                   | いつ                                                                 |
 | -------------------- | -------------------------------------------------------------------- |
 | 親チャット **Grok 4.7 high** | 常時。壁打ち・調査・下書き・ディスパッチ操作・統合・cycle 記録    |
-| Task **Fable 5.1 high** | plan-confirm / 敵対レビュー（モード1・trio 体1） / 設計 / grow 前 |
+| Task **Fable 5.1 high** | plan-confirm / 敵対レビュー（モード1を1回・trio 体1を1周） / 設計 / grow 前 |
 | Task **Opus 5.5 high**  | verifier / reflector                                                 |
 | Task **Grok 4.7 high**  | 明文化済みの実装並列展開 / 複数試行                                 |
 | Task **Muse Spark 1.3** | **高リスク3体の第3レンズのみ**（secret）。他では使わない。effort は medium |
@@ -20,8 +20,8 @@ description: Ultraでもトークン効率と精度を同時に取る席ルー�
 1. 親を Opus/Fable にピッカー切替しない。
 2. ゲート Task 入力は**成果物のみ**（計画 md / diff / 失敗ログ / ADR パス）。会話履歴の丸投げ禁止。
 3. Muse は `review_trio`（モード2）以外で起動しない。Sol / Terra / Luna は使わない。
-4. 3体多数決は高リスク（セキュリティ/入場/再起/アーキ）のみ。
-5. plan-confirm は **並列展開前のみ**必須（単独小修正は省略可。敵対レビューは省略不可）。
+4. 3体多数決は高リスク（セキュリティ/入場/再起/アーキ、および席・正本・ゲート）の **1周** だけ。再レビューで 3体のやり直しはしない（[[0050]]）。
+5. plan-confirm は **並列展開前のみ**必須（単独小修正は省略可）。コード差分がある変更の敵対レビューは省略不可。議論・文書・用語だけでコード差分が無いときは Task を出さない。
 6. ゲートは **名前付き agent 必須**。model 未指定の汎用 Task でゲート代替禁止。
 7. Fable と Opus を trio に同居させない（Claude 席は1系統・[[0037]]）。
 8. Fable のガードフォールバック（実効モデルが `fable_pin` でない）は failed。天井は extra-high / max の追加だけ。
@@ -33,6 +33,7 @@ description: Ultraでもトークン効率と精度を同時に取る席ルー�
 11. **packet（[[0045]]）**: 子には `scripts/harness-query.mjs` が書いた JSON だけ。
     会話・learnings 全文・ADR 全件は継がない。effort / escalate は親が cycle の dispatch 行に書く。
     ゲートは isolated、Worker / reflector は packet。会話 fork は置かない。
+12. **作業分類を Task の前に1行で書く。** 議論・文書・用語（コード差分が無い）は親 Grok のみ。canon 以外の小さい修正は親が実装し、Fable の単独レビューを1回（plan-confirm と 3体は出さない）。差し戻す指摘の再レビューは、その項目と修正差分の1回で止める。
 
 ## superpowers 接続
 

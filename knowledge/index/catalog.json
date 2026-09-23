@@ -8,7 +8,7 @@
 			"path": ".claude/skills/adversarial-review/SKILL.md",
 			"rels": [],
 			"status": "n/a",
-			"summary": "独立敵対レビューの起動手順（全変更のデフォルトゲート）と高リスク3体3ファミリー多数決。実装完了後・前進判定の前に必ず使う。"
+			"summary": "独立敵対レビューの起動手順（全変更のデフォルトゲート）と高リスク3体1周。実装完了後・前進判定の前に必ず使う。"
 		},
 		{
 			"id": "skill:code-mode",
@@ -802,6 +802,40 @@
 			"summary": "世代ピン＝Grok 4.7 high / Opus 5.5 high（席は動かさない）"
 		},
 		{
+			"id": "ADR-0050",
+			"kind": "decision",
+			"layer": "human",
+			"path": "knowledge/decisions/0050-review-finding-classes.md",
+			"rels": [
+				{
+					"rel": "cites",
+					"target": "ADR-0031"
+				},
+				{
+					"rel": "cites",
+					"target": "ADR-0033"
+				},
+				{
+					"rel": "cites",
+					"target": "ADR-0039"
+				},
+				{
+					"rel": "cites",
+					"target": "ADR-0044"
+				},
+				{
+					"rel": "cites",
+					"target": "ADR-0045"
+				},
+				{
+					"rel": "cites",
+					"target": "ADR-0047"
+				}
+			],
+			"status": "proposed",
+			"summary": "レビュー指摘は3種、再レビューは1回"
+		},
+		{
 			"id": "F-0001",
 			"kind": "feature",
 			"layer": "machine",
@@ -926,6 +960,15 @@
 			"rels": [],
 			"status": "proposed",
 			"summary": "packet 無しのゲート起動を席の実起動に数えない"
+		},
+		{
+			"id": "F-0015",
+			"kind": "feature",
+			"layer": "machine",
+			"path": "knowledge/features/F-0015-review-finding-classes.yaml",
+			"rels": [],
+			"status": "proposed",
+			"summary": "レビュー指摘を3種に分け再レビューを1回で止める"
 		},
 		{
 			"id": "cycle:required",
