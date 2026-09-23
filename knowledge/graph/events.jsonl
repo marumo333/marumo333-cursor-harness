@@ -147,3 +147,5 @@
 {"t":"2026-09-23T09:42:51.116Z","type":"edge_state","cycle":"C-0013","from":"skill:verify","to":"skill:reflect","state":"skipped","reason":"F-0015 は同一 PR で proposed 起票済み。日記のための再レビューは開かない"}
 {"t":"2026-09-23T09:42:51.141Z","type":"token_ledger","cycle":"C-0013","seat":"grok","effort":"high","packet_bytes":2686,"tasks":4,"zero_value_reinject":false}
 {"t":"2026-09-23T09:43:04.174Z","type":"node_state","cycle":"C-0013","node":"skill:verify","state":"used"}
+{"t":"2026-09-23T10:00:17.805Z","type":"human_approved","cycle":"C-0012","merge_sha":"95021324717120daccafc2ca89d40fbc6ba42c7c","pr":"16"}
+{"t":"2026-09-23T10:00:17.815Z","type":"cycle_open","cycle":"C-0013","source":"after-merge","from":"C-0012"}
