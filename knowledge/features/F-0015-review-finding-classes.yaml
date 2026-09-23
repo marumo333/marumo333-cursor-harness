@@ -1,0 +1,38 @@
+feature:
+  id: F-0015
+  title: レビュー指摘を3種に分け再レビューを1回で止める
+  kind: harness-grow
+  status: proposed
+  source: human
+  created: '2026-09-23'
+  learning_refs:
+    - knowledge/learnings.md
+  problem: >
+    指摘を直すたびに差分全体を新しい文脈でレビューし、3体が何周も回る。
+    手順が「問題が見つからない場合のみ承認」と「同じ手順で再レビュー」になっている。
+    差し戻す指摘、記録だけ、確認できない指摘を分け、再レビューは差し戻した項目と
+    修正差分の1回にする。3体のやり直しはしない。文書だけでコード差分が無いときは
+    Task を出さない。適用は F-0001 被覆。本票は proposed のまま。入場しない。
+  proposed_change:
+    mutates_canon: true
+    paths:
+      - knowledge/features/F-0015-review-finding-classes.yaml
+      - knowledge/decisions/0050-review-finding-classes.md
+      - knowledge/criteria/code-quality.yaml
+      - .claude/skills/adversarial-review/SKILL.md
+      - .claude/skills/harness-api-budget/SKILL.md
+      - .claude/skills/plan-confirm/SKILL.md
+      - .claude/agents/security-reviewer.md
+      - .claude/AGENTS.md
+      - scripts/review-contract.test.mjs
+      - package.json
+      - .github/workflows/feature-gate.yml
+  evidence:
+    adversarial_review: pending
+    review_agent: security-reviewer
+    verification: pending
+    opa_decision: pending
+  constraints:
+    supersede_adr: false
+    no_jp_code_merge_write: true
+    supersedes: []

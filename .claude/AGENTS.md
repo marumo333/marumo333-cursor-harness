@@ -24,7 +24,8 @@ commit は hook 必須。主語は `feat:` / `fix:` / `docs:` 等 + 日本語（
    learnings 全文と decisions 全件を1周で再読しない。
    knowledge 読込 → brainstorming / writing-plans。並列展開前は plan-confirm。
 2. 実装: TDD。親の直接編集は明文化ボイラーのみ。
-3. 検証: feature-gate → 独立敵対レビュー。高リスクは 3ファミリー多数決。
+3. 検証: feature-gate → 独立敵対レビュー。高リスクは 3体1周。
+   差し戻す指摘だけを、その項目と修正差分で1回再レビューする。3体はやり直さない（[[0050]]）。
 4. 内省: reflector が learnings 追記 + Feature 起票。cycle に used/skipped を書く。
 5. 成長: OPA allow の Feature だけ skill/ADR/criteria/Rego に適用。
 6. ガード: budget_guards / 無制限再起防止。metrics 緑なら再起しない（[[0039]]）。
