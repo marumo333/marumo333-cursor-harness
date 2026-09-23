@@ -18,14 +18,21 @@ test('敵対レビューは指摘を3種に分け、再レビューは項目と�
 	assert.match(skill, /差し戻した項目と修正差分だけ/);
 	assert.match(skill, /3体のやり直しはしない/);
 	assert.match(skill, /同じ指摘が2回/);
+	assert.match(skill, /Markdown だけでもモード2/);
 	assert.doesNotMatch(skill, /問題が見つからない場合のみ承認/);
 	assert.doesNotMatch(skill, /同じ手順で新しい文脈/);
+});
+
+test('feature-gate の CI は契約テストを実行する', () => {
+	const workflow = read('.github/workflows/feature-gate.yml');
+	assert.match(workflow, /scripts\/review-contract\.test\.mjs/);
 });
 
 test('席ルーティングは文書を Task にせず、小さい修正は Fable 1回', () => {
 	const budget = read('.claude/skills/harness-api-budget/SKILL.md');
 	assert.match(budget, /議論・文書・用語/);
-	assert.match(budget, /コード差分が無い/);
+	assert.match(budget, /最も重い方/);
+	assert.match(budget, /Markdown だけでもモード2/);
 	assert.match(budget, /canon 以外の小さい修正/);
 	assert.match(budget, /3体のやり直しはしない/);
 });

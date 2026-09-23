@@ -13,9 +13,11 @@ diff / 関連 ADR・criteria パス / 意図1-2行のみ（実装時の思考過
 
 ## 作業の分類（Task の前に親が1行で書く）
 
-- 議論・文書・用語だけでコード差分が無い: 親 Grok が答え、Task は出さない。モード1も出さない。
-- canon 以外の小さい修正: 親が実装する。モード1を1回。plan-confirm とモード2は出さない。
-- 席・正本・ゲート・セキュリティ: モード2を1周。
+分類は当たったうち最も重い方を使う。親の1行で軽い方へ下げない。
+
+- 差分が席・正本・ゲート・セキュリティに当たる: モード2を1周。対象は `.claude/skills/` `.claude/agents/` `.claude/AGENTS.md` `.claude/CLAUDE.md` `.claude/hooks/` `.cursor/hooks/` `knowledge/decisions/` `knowledge/criteria/` `knowledge/features/` `policy/` `.github/workflows/` `scripts/feature-gate.mjs`。Markdown だけでもモード2。
+- それ以外でコード差分がある canon 以外の小さい修正: 親が実装する。モード1を1回。plan-confirm とモード2は出さない。
+- 議論・文書・用語だけで、上のパスに当たらない: 親 Grok が答え、Task は出さない。モード1も出さない。
 
 ## 指摘の種別（[[0050]]）
 

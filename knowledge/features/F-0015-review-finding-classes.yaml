@@ -26,6 +26,7 @@ feature:
       - .claude/AGENTS.md
       - scripts/review-contract.test.mjs
       - package.json
+      - .github/workflows/feature-gate.yml
   evidence:
     adversarial_review: pending
     review_agent: security-reviewer
