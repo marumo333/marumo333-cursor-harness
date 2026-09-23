@@ -134,3 +134,16 @@
 {"t":"2026-09-22T18:03:48.599Z","type":"edge_state","cycle":"C-0012","from":"skill:adversarial-review","to":"skill:verify","state":"failed","reason":"trio は証拠の書き方で差し戻し。verifier は packet 無し"}
 {"t":"2026-09-22T18:03:48.624Z","type":"edge_state","cycle":"C-0012","from":"skill:verify","to":"skill:reflect","state":"taken","reason":"差し戻しを内省へ渡した"}
 {"t":"2026-09-22T18:03:48.648Z","type":"token_ledger","cycle":"C-0012","seat":"grok","effort":"high","packet_bytes":4200,"tasks":18,"zero_value_reinject":false}
+{"t":"2026-09-23T09:42:50.602Z","type":"dispatch","cycle":"C-0013","node":"skill:adversarial-review","seq":1,"seat":"fable","escalate":"trio","sha256":"2ab94ff2e2eb8ddd5cb5015e9b4c277e7011980011a614fe0e7878a7e8c6bf00"}
+{"t":"2026-09-23T09:42:50.692Z","type":"dispatch","cycle":"C-0013","node":"skill:adversarial-review","seq":2,"seat":"grok","escalate":"trio","sha256":"f8ac7ed8ce233564a999df35396671a1aab63542a7882a8b12bda1687382338e"}
+{"t":"2026-09-23T09:42:50.781Z","type":"dispatch","cycle":"C-0013","node":"skill:adversarial-review","seq":3,"seat":"muse","escalate":"trio","sha256":"b5fe523d6abd747bd6ca23960333bcd77c8419d9b88cda44ba7485c18a31294a"}
+{"t":"2026-09-23T09:42:50.874Z","type":"dispatch","cycle":"C-0013","node":"skill:verify","seq":1,"seat":"opus","escalate":"trio","sha256":"e92b4ebf32813147ccc2b3e568dc16fa078e95be5b96729ba52c7fa8f95f94b1"}
+{"t":"2026-09-23T09:42:50.965Z","type":"node_state","cycle":"C-0013","node":"skill:harness-api-budget","state":"used"}
+{"t":"2026-09-23T09:42:50.990Z","type":"node_state","cycle":"C-0013","node":"skill:adversarial-review","state":"used"}
+{"t":"2026-09-23T09:42:51.015Z","type":"node_state","cycle":"C-0013","node":"skill:plan-confirm","state":"skipped"}
+{"t":"2026-09-23T09:42:51.041Z","type":"node_state","cycle":"C-0013","node":"skill:harness-grow","state":"skipped"}
+{"t":"2026-09-23T09:42:51.068Z","type":"node_state","cycle":"C-0013","node":"skill:reflect","state":"skipped"}
+{"t":"2026-09-23T09:42:51.092Z","type":"edge_state","cycle":"C-0013","from":"skill:adversarial-review","to":"skill:verify","state":"taken","reason":"初回3体。体2の2件を直したあとの差分再レビューは Fable 1体が承認"}
+{"t":"2026-09-23T09:42:51.116Z","type":"edge_state","cycle":"C-0013","from":"skill:verify","to":"skill:reflect","state":"skipped","reason":"F-0015 は同一 PR で proposed 起票済み。日記のための再レビューは開かない"}
+{"t":"2026-09-23T09:42:51.141Z","type":"token_ledger","cycle":"C-0013","seat":"grok","effort":"high","packet_bytes":2686,"tasks":4,"zero_value_reinject":false}
+{"t":"2026-09-23T09:43:04.174Z","type":"node_state","cycle":"C-0013","node":"skill:verify","state":"used"}
