@@ -11,6 +11,8 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - name: pnpm
+        run: corepack enable && corepack prepare pnpm@10.33.3 --activate && pnpm install --frozen-lockfile
       - name: feature-gate を実行する（main に載った後は main の policy）
         run: |
           set -euo pipefail
@@ -22,14 +24,14 @@ jobs:
           else
             node scripts/feature-gate.mjs
           fi
-      - name: pnpm
-        run: corepack enable && corepack prepare pnpm@10.33.3 --activate && pnpm install --frozen-lockfile
       - name: 契約の型と振る舞い
         run: node scripts/contract-check.mjs
       - name: レビュー起動の上限
         run: node scripts/review-cap-check.mjs
+      - name: ripgrep
+        run: sudo apt-get update && sudo apt-get install -y ripgrep
       - name: ハーネス単体テスト
-        run: node --test scripts/cycle-metrics.test.mjs scripts/commit-msg-lint.test.mjs scripts/git-commit-cmd.test.mjs scripts/commit-guard.test.mjs scripts/blocked-env.test.mjs scripts/lint-commit-range.test.mjs scripts/knowledge-catalog.test.mjs scripts/code-mode.test.mjs scripts/harness-query.test.mjs scripts/packet-policy.test.mjs scripts/license-readme.test.mjs scripts/review-contract.test.mjs scripts/contract-check.test.mjs scripts/review-cap.test.mjs scripts/review-disposition.test.mjs
+        run: node --test scripts/cycle-metrics.test.mjs scripts/commit-msg-lint.test.mjs scripts/git-commit-cmd.test.mjs scripts/commit-guard.test.mjs scripts/blocked-env.test.mjs scripts/lint-commit-range.test.mjs scripts/knowledge-catalog.test.mjs scripts/code-mode.test.mjs scripts/harness-query.test.mjs scripts/packet-policy.test.mjs scripts/license-readme.test.mjs scripts/review-contract.test.mjs scripts/read-guard.test.mjs scripts/file-window.test.mjs scripts/observation-fold.test.mjs scripts/contract-check.test.mjs scripts/review-cap.test.mjs scripts/review-disposition.test.mjs
       - name: 三層知識カタログの鮮度と OPA 突合
         run: |
           set -euo pipefail

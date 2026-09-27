@@ -227,7 +227,7 @@
   advisory な地図、human（ADR / learnings）は読み物。index は派生で何も決定しない。
 - Pydantic は入れない。依存ゼロ（Node のみ）を保ち、形の正本は OPA / Rego 側に置いた。
 - 差し戻しは全部実装前・マージ前に落ちた。plan-confirm 3 回 → 敵対レビュー 4 回で計 7 件。
-- 席は親 Grok 4.6、設計 / レビュー / 検証は Opus Task。Sol は 3 体多数決の条件に届かず未使用。
+- 当時（2026-08-18）の席は親 Grok 4.6、設計 / レビュー / 検証は Opus Task。Sol は 3 体多数決の条件に届かず未使用。現行の親は `grok-4.7-high`（`knowledge/criteria/model-routing.yaml`）。
 - 検証は `pnpm test` 77 件と feature-gate が緑。
 
 **failed**
@@ -313,8 +313,8 @@
 
 **worked**
 
-- 0031/0033/0037 の決定文を Grok 4.6 にした。0026 に現行注記（実装は Grok 4.6、Sonnet/Haiku 委譲は廃止）。
-- criteria の親/Task を `cursor-grok-4.6-high-fast` に揃えた。xhigh は努力段として残し、ピンにはしない。
+- 当時の世代更新として 0031/0033/0037 の決定文を Grok 4.6 にした。0026 に当時の注記（実装は Grok 4.6、Sonnet/Haiku 委譲は廃止）。現行ピンは `knowledge/criteria/model-routing.yaml`。
+- 当時、criteria の親/Task を `cursor-grok-4.6-high-fast` に揃えた。xhigh は努力段として残し、ピンにはしない。現行の親は `grok-4.7-high`。
 - パッケージマネージャを pnpm に固定（ADR 0041）。
 - TEMPLATE/0039 に clone → ADR 技術選定 → Feature → 実装。README に Mermaid。
 - reflect の評価トークンを `worked` / `failed` / `edge cases` に戻した。
@@ -553,3 +553,21 @@
 **失敗 / リスク**
 
 - 分類そのものは親の判断。機械が見るのは、適用してよい桶が直すだけであることと、周が1回であること。
+
+---
+
+## 2026-09-27 — feature-gate は typescript の後に動かす
+
+**問い**
+
+- main に契約呼び出しが入ったあと、feature-gate の CLI が落ちるのは OPA か。
+
+**効いた**
+
+- 落ちるのは被覆の後。`feature-gate.mjs` が `contract-check.mjs` を呼び、`node_modules/typescript` が無いと `typescript が無い。pnpm install が必要` で exit 1 になる。
+- CI のゲート段は `origin/main` の `feature-gate.mjs` を `/tmp` から実行する。PR のゲート実装だけを変えても、その段は main の呼び出しのまま。先に直るのは、PR の workflow で `pnpm install` をゲートより前に置くこと。
+
+**失敗 / リスク**
+
+- 契約ステップをゲートの後ろに足しただけでは、ゲート自身の呼び出しは先に走る。導入はその前。
+- 導入を先にしても、Actions の ubuntu には `rg` が無い。`search-lines` は `spawn rg` が ENOENT だと終了コード 1 で、stderr が空だとテストは `1 !== 0` としか出さない。CI は単体テストの前に `ripgrep` を入れる。起動できないときは理由を stderr に残す。

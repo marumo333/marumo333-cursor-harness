@@ -28,6 +28,18 @@ test('feature-gate の CI は契約テストを実行する', () => {
 	assert.match(workflow, /scripts\/review-contract\.test\.mjs/);
 });
 
+test('CI は feature-gate より前に pnpm install する', () => {
+	const workflow = read('.github/workflows/feature-gate.yml');
+	const installAt = workflow.indexOf('pnpm install --frozen-lockfile');
+	const gateAt = workflow.indexOf('node "$tmp/scripts/feature-gate.mjs"');
+	assert.ok(installAt >= 0, 'pnpm install が workflow に無い');
+	assert.ok(gateAt >= 0, 'main の feature-gate 起動が workflow に無い');
+	assert.ok(installAt < gateAt, 'feature-gate は contract-check を呼ぶ。typescript は先に入れる');
+	const rgAt = workflow.indexOf('apt-get install -y ripgrep');
+	const unitAt = workflow.indexOf('scripts/read-guard.test.mjs');
+	assert.ok(rgAt >= 0 && unitAt >= 0 && rgAt < unitAt, 'search-lines は rg を使う。単体テストの前に入れる');
+});
+
 test('席ルーティングは検証 subagent を出さない', () => {
 	const budget = read('.claude/skills/harness-api-budget/SKILL.md');
 	assert.match(budget, /verifier \/ reflector \/ 3体は起動しない/);
