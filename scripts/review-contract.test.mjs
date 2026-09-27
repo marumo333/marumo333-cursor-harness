@@ -15,6 +15,8 @@ test('敵対レビューは指摘を3種に分け、再レビューは項目と�
 	assert.match(skill, /差し戻す指摘/);
 	assert.match(skill, /記録だけ/);
 	assert.match(skill, /確認できない指摘/);
+	assert.match(skill, /正解は契約である/);
+	assert.match(skill, /その振る舞いについてレビューは差し戻さない/);
 	assert.match(skill, /差し戻した項目と修正差分だけ/);
 	assert.match(skill, /3体のやり直しはしない/);
 	assert.match(skill, /同じ指摘が2回/);

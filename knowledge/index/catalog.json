@@ -836,6 +836,28 @@
 			"summary": "レビュー指摘は3種、再レビューは1回"
 		},
 		{
+			"id": "ADR-0051",
+			"kind": "decision",
+			"layer": "human",
+			"path": "knowledge/decisions/0051-correctness-is-a-contract.md",
+			"rels": [
+				{
+					"rel": "cites",
+					"target": "ADR-0016"
+				},
+				{
+					"rel": "cites",
+					"target": "ADR-0038"
+				},
+				{
+					"rel": "cites",
+					"target": "ADR-0050"
+				}
+			],
+			"status": "proposed",
+			"summary": "正解は型と振る舞いの契約"
+		},
+		{
 			"id": "F-0001",
 			"kind": "feature",
 			"layer": "machine",
@@ -969,6 +991,15 @@
 			"rels": [],
 			"status": "proposed",
 			"summary": "レビュー指摘を3種に分け再レビューを1回で止める"
+		},
+		{
+			"id": "F-0016",
+			"kind": "feature",
+			"layer": "machine",
+			"path": "knowledge/features/F-0016-correctness-is-a-contract.yaml",
+			"rels": [],
+			"status": "proposed",
+			"summary": "正解を型と振る舞いの契約にする"
 		},
 		{
 			"id": "cycle:required",

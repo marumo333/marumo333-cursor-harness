@@ -352,6 +352,15 @@ if (canonPaths.length > 0) {
 	console.log(`[feature-gate] 被覆:\n  ${reports.join('\n  ')}`);
 }
 
+execFileSync(process.execPath, [join(ROOT, 'scripts/contract-check.mjs')], {
+	stdio: 'inherit',
+	cwd: ROOT
+});
+execFileSync(process.execPath, [join(ROOT, 'scripts/review-cap-check.mjs')], {
+	stdio: 'inherit',
+	cwd: ROOT
+});
+
 console.log(
 	`[feature-gate] 成功（Feature ${loaded.length}、差分 ${paths.length}、canon ${canonPaths.length}）`
 );

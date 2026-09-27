@@ -1,0 +1,40 @@
+feature:
+  id: F-0016
+  title: 正解を型と振る舞いの契約にする
+  kind: harness-grow
+  status: proposed
+  source: human
+  created: '2026-09-27'
+  learning_refs:
+    - knowledge/learnings.md
+  problem: >
+    設計と実装の一致を別のモデルが文章で判定すると、読むたびに新しい指摘が出て
+    レビューが周を重ねる。正解は型と、入力に対する出力の組であり、
+    tsc と振る舞いの実行が判定する。LLM の承認は正解ではない。
+    レビュー起動は初回3体と再確認1回を超えたら feature-gate が拒否する。
+    適用は F-0001 被覆。本票は proposed のまま。入場しない。
+  proposed_change:
+    mutates_canon: true
+    paths:
+      - knowledge/features/F-0016-correctness-is-a-contract.yaml
+      - knowledge/decisions/0051-correctness-is-a-contract.md
+      - knowledge/criteria/code-quality.yaml
+      - .claude/skills/adversarial-review/SKILL.md
+      - .claude/skills/harness-api-budget/SKILL.md
+      - .claude/agents/security-reviewer.md
+      - .claude/AGENTS.md
+      - .claude/CLAUDE.md
+      - scripts/
+      - contracts/
+      - package.json
+      - pnpm-lock.yaml
+      - .github/workflows/feature-gate.yml
+  evidence:
+    adversarial_review: pending
+    review_agent: security-reviewer
+    verification: pending
+    opa_decision: pending
+  constraints:
+    supersede_adr: false
+    no_jp_code_merge_write: true
+    supersedes: []
