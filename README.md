@@ -40,7 +40,7 @@ node scripts/install-git-hooks.mjs
 成果は正本（skill / ADR / criteria / Rego）、フィードバックは cycle と learnings である。
 監査の主体は親 Grok 4.7 high である。Uber の Gateway や艦隊は置かない。OPA は canon 変更のゲートであり、自己改善ループそのものではない。
 
-図は [`docs/architecture/`](docs/architecture/) の画像。編集する正は下記 mermaid。
+図は [`docs/architecture/`](docs/architecture/) のイラスト。緑のマントの狐が親エージェント、藍の梟が Fable、棚の白い鳥は起動しない verifier と reflector、本棚へ本を置くのは人間だけ。編集する正は下記 mermaid。
 
 ### モデルとレビュー
 
