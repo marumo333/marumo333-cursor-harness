@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { spawnSync } from 'node:child_process';
+import { ensureRg } from './ensure-rg.mjs';
 import { commandDropsSearchLines } from './lib/read-guard.mjs';
 
 const argv = process.argv.slice(2);
@@ -13,7 +14,14 @@ if (commandDropsSearchLines(['rg', ...flags].join(' '))) {
 	console.error('検索は一致行を残す。ファイル名だけと件数だけは使わない。');
 	process.exit(2);
 }
-const r = spawnSync('rg', ['-n', '-F', ...flags, '--', pattern, '.'], {
+let bin;
+try {
+	bin = ensureRg();
+} catch (error) {
+	console.error(error instanceof Error ? error.message : String(error));
+	process.exit(1);
+}
+const r = spawnSync(bin, ['-n', '-F', ...flags, '--', pattern, '.'], {
 	cwd: process.cwd(),
 	encoding: 'utf8',
 	stdio: ['ignore', 'pipe', 'pipe']

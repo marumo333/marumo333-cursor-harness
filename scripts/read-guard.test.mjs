@@ -5,6 +5,7 @@ import { mkdtempSync, readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { ensureRg } from './ensure-rg.mjs';
 import {
 	commandDropsSearchLines,
 	commandTouchesDependency,
@@ -58,14 +59,15 @@ test('search-lines は一致行を返す', () => {
 	assert.match(r.stdout, /PACKET_MAX_BYTES = 32768/);
 });
 
-test('rg が無いときは理由を残して失敗する', () => {
-	const r = spawnSync(process.execPath, ['scripts/search-lines.mjs', 'PACKET_MAX_BYTES'], {
+test('search-lines は PATH の rg を使わない', () => {
+	ensureRg();
+	const r = spawnSync(process.execPath, ['scripts/search-lines.mjs', 'export const PACKET_MAX_BYTES = 32768;'], {
 		cwd: ROOT,
 		encoding: 'utf8',
 		env: { ...process.env, PATH: mkdtempSync(join(tmpdir(), 'norg-')) }
 	});
-	assert.equal(r.status, 1);
-	assert.match(r.stderr, /rg を起動できない/);
+	assert.equal(r.status, 0, r.stderr);
+	assert.match(r.stdout, /PACKET_MAX_BYTES = 32768/);
 });
 
 test('learnings の席記述は当時と現行ピンを分ける', () => {

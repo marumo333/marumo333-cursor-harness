@@ -14,6 +14,7 @@ Node.js 製のガバナンスハーネス。npm 依存パッケージは無い�
 
 - Node.js 22 系 + pnpm 10.33.3（corepack 経由）。追加の言語ランタイムは不要。
 - ゲート（feature-gate / OPA）は **Linux amd64 専用**。`scripts/ensure-opa.mjs` が OPA v1.8.0 を `.tools/opa` に digest 検証付きで取得する（`.tools/` は gitignore）。macOS / Windows / Linux arm64 では動かない。
+- 一致行検索の `rg` も同じ。`scripts/ensure-rg.mjs` が ripgrep 15.2.0 の musl バイナリを `.tools/rg` に tarball とバイナリの digest で固定する。PATH の `rg` と `apt-get` は使わない。
 - `scripts/feature-gate.mjs` は末尾で `scripts/contract-check.mjs` を呼ぶ。契約は `node_modules/typescript` が要る。CI は `pnpm install` を feature-gate より前に置く。PR のゲート段は `origin/main` の `feature-gate.mjs` を `/tmp` から実行するので、PR 側のゲートだけ直しても先には直らない。
 - OPA バイナリの取得には GitHub Releases への外向き通信が必要。初回の `node scripts/feature-gate.mjs` 実行時に遅延ダウンロードされる。
 
