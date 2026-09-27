@@ -18,6 +18,10 @@ const r = spawnSync('rg', ['-n', '-F', ...flags, '--', pattern, '.'], {
 	encoding: 'utf8',
 	stdio: ['ignore', 'pipe', 'pipe']
 });
+if (r.error || r.status === null) {
+	console.error(`rg を起動できない。${r.error?.message ?? '終了コードが無い'}`);
+	process.exit(1);
+}
 if (r.stdout) process.stdout.write(r.stdout);
 if (r.stderr) process.stderr.write(r.stderr);
-process.exit(r.status === 1 ? 0 : (r.status ?? 1));
+process.exit(r.status === 1 ? 0 : r.status);

@@ -35,6 +35,9 @@ test('CI は feature-gate より前に pnpm install する', () => {
 	assert.ok(installAt >= 0, 'pnpm install が workflow に無い');
 	assert.ok(gateAt >= 0, 'main の feature-gate 起動が workflow に無い');
 	assert.ok(installAt < gateAt, 'feature-gate は contract-check を呼ぶ。typescript は先に入れる');
+	const rgAt = workflow.indexOf('apt-get install -y ripgrep');
+	const unitAt = workflow.indexOf('scripts/read-guard.test.mjs');
+	assert.ok(rgAt >= 0 && unitAt >= 0 && rgAt < unitAt, 'search-lines は rg を使う。単体テストの前に入れる');
 });
 
 test('席ルーティングは検証 subagent を出さない', () => {

@@ -1,7 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { readFileSync } from 'node:fs';
+import { mkdtempSync, readFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
@@ -53,8 +54,18 @@ test('search-lines は一致行を返す', () => {
 		cwd: ROOT,
 		encoding: 'utf8'
 	});
-	assert.equal(r.status, 0);
+	assert.equal(r.status, 0, r.stderr);
 	assert.match(r.stdout, /PACKET_MAX_BYTES = 32768/);
+});
+
+test('rg が無いときは理由を残して失敗する', () => {
+	const r = spawnSync(process.execPath, ['scripts/search-lines.mjs', 'PACKET_MAX_BYTES'], {
+		cwd: ROOT,
+		encoding: 'utf8',
+		env: { ...process.env, PATH: mkdtempSync(join(tmpdir(), 'norg-')) }
+	});
+	assert.equal(r.status, 1);
+	assert.match(r.stderr, /rg を起動できない/);
 });
 
 test('learnings の席記述は当時と現行ピンを分ける', () => {
