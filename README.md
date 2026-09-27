@@ -176,7 +176,7 @@ flowchart LR
 AI 実装 PR に省略・失敗・差し戻しが残ったときだけ回る。人間のマージが点火。
 cycle-after-merge は下書き PR までで、エージェントは自動起動しない。OPA は横のゲート。
 
-![再起的自己改善](docs/architecture/self-improve-overview.png)
+![再起的自己改善](docs/architecture/self-improve-flow.png)
 
 ```mermaid
 flowchart TD
