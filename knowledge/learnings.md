@@ -553,3 +553,20 @@
 **失敗 / リスク**
 
 - 分類そのものは親の判断。機械が見るのは、適用してよい桶が直すだけであることと、周が1回であること。
+
+---
+
+## 2026-09-27 — feature-gate は typescript の後に動かす
+
+**問い**
+
+- main に契約呼び出しが入ったあと、feature-gate の CLI が落ちるのは OPA か。
+
+**効いた**
+
+- 落ちるのは被覆の後。`feature-gate.mjs` が `contract-check.mjs` を呼び、`node_modules/typescript` が無いと `typescript が無い。pnpm install が必要` で exit 1 になる。
+- CI のゲート段は `origin/main` の `feature-gate.mjs` を `/tmp` から実行する。PR のゲート実装だけを変えても、その段は main の呼び出しのまま。先に直るのは、PR の workflow で `pnpm install` をゲートより前に置くこと。
+
+**失敗 / リスク**
+
+- 契約ステップをゲートの後ろに足しただけでは、ゲート自身の呼び出しは先に走る。導入はその前。
