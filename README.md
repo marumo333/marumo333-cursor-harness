@@ -44,7 +44,7 @@ node scripts/install-git-hooks.mjs
 
 ### モデルとレビュー
 
-親 Grok 4.7 が常時動く。型の正解は `tsc --noEmit`。品質の指摘は親が1回、4つに分ける。コードを変えるのは直すだけ。緑のあと二周目は開かない。Fable は並列展開の前か、人が明示した1回だけ。verifier と reflector の起動は feature-gate が 0 回で拒否する。監査は OPA の被覆、契約の実行、起動回数の比較。
+常時動くのは親エージェント Grok 4.7 high だけ。型の正解は `tsc --noEmit`。品質の指摘は親が1回、4つに分ける。コードを変えるのは直すだけ。緑のあと二周目は開かない。Fable の backend-architect は並列展開の前だけ、security-reviewer は人が明示した1回だけ。verifier と reflector は起動せず、feature-gate が 0 回で拒否する。
 
 ![モデルとレビュー](docs/architecture/model-review.png)
 
@@ -71,9 +71,9 @@ flowchart TB
   FG --> BEH["契約の振る舞い"]
   FG --> PR["PR"]
   PR --> HM["人間マージ"]
-  G -.->|並列展開の前| FABLE["Fable plan-confirm"]
-  G -.->|人が明示した1回| ONCE["Fable 1回"]
-  CAP -->|verify と reflect| DENY["0回で拒否"]
+  G -.->|並列展開の前| BA["Fable backend-architect"]
+  G -.->|人が明示した1回| SR["Fable security-reviewer"]
+  CAP -->|0回| OFF["verifier と reflector は起動しない"]
 ```
 
 ### 監査
@@ -98,6 +98,7 @@ flowchart TB
     PL["計画 writing-plans"]
     IM["実装 親 Grok"]
     CT["契約と feature-gate"]
+    OFF["verifier / reflector は出さない"]
   end
 
   subgraph qa["品質ゲート"]
@@ -143,6 +144,8 @@ flowchart LR
     direction TB
     G["親 Grok 4.7"]
     IMP["実装と検証は親"]
+    BA["Fable は条件付き"]
+    OFF["verifier と reflector は起動しない"]
   end
 
   subgraph force["強制"]
