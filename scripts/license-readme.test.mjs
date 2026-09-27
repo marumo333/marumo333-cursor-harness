@@ -56,10 +56,12 @@ test('README は mermaid を編集の正にし、docs の画像を示す', () =>
 	assert.doesNotMatch(readme, /正本倉庫/);
 	assert.doesNotMatch(readme, /出荷/);
 	assert.doesNotMatch(readme, /原料/);
-	assert.match(readme, /docs\/architecture\/model-review\.png/);
-	assert.match(readme, /docs\/architecture\/audit-flow\.png/);
-	assert.match(readme, /docs\/architecture\/harness-runtime-architecture\.png/);
-	assert.match(readme, /docs\/architecture\/harness-self-improve-architecture\.png/);
+	assert.match(readme, /docs\/architecture\/review-overview\.png/);
+	assert.match(readme, /docs\/architecture\/audit-overview\.png/);
+	assert.match(readme, /docs\/architecture\/runtime-overview\.png/);
+	assert.match(readme, /docs\/architecture\/self-improve-overview\.png/);
+	assert.doesNotMatch(readme, /model-review\.png/);
+	assert.doesNotMatch(readme, /イラスト/);
 	assert.doesNotMatch(readme, /欠落 PNG/);
 	assert.doesNotMatch(readme, /FG --> warehouse/);
 	assert.doesNotMatch(readme, /Gate --> Feat/);

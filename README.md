@@ -46,7 +46,7 @@ node scripts/install-git-hooks.mjs
 
 常時動くのは親エージェント Grok 4.7 high だけ。型の正解は `tsc --noEmit`。品質の指摘は親が1回、4つに分ける。コードを変えるのは直すだけ。緑のあと二周目は開かない。Fable の backend-architect は並列展開の前だけ、security-reviewer は人が明示した1回だけ。verifier と reflector は起動せず、feature-gate が 0 回で拒否する。
 
-![モデルとレビュー](docs/architecture/model-review.png)
+![モデルとレビュー](docs/architecture/review-overview.png)
 
 ```mermaid
 flowchart TB
@@ -82,7 +82,7 @@ flowchart TB
 必須の辺は無い。検証用の subagent は出さない。
 OPA / feature-gate は横の判定であり、正本へは書かない。正本へ入るのは人間マージだけ。
 
-![監査](docs/architecture/audit-flow.png)
+![監査](docs/architecture/audit-overview.png)
 
 ```mermaid
 flowchart TB
@@ -136,7 +136,7 @@ flowchart TB
 席と強制の層。子へ渡すのは packet だけ。会話履歴と learnings 全文は継がない。
 hooks を踏むのは実装 Grok の commit。OPA は判定であり正本へは書かない。
 
-![ランタイム](docs/architecture/harness-runtime-architecture.png)
+![ランタイム](docs/architecture/runtime-overview.png)
 
 ```mermaid
 flowchart LR
@@ -176,7 +176,7 @@ flowchart LR
 AI 実装 PR に省略・失敗・差し戻しが残ったときだけ回る。人間のマージが点火。
 cycle-after-merge は下書き PR までで、エージェントは自動起動しない。OPA は横のゲート。
 
-![再起的自己改善](docs/architecture/harness-self-improve-architecture.png)
+![再起的自己改善](docs/architecture/self-improve-overview.png)
 
 ```mermaid
 flowchart TD
