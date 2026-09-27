@@ -227,7 +227,7 @@
   advisory な地図、human（ADR / learnings）は読み物。index は派生で何も決定しない。
 - Pydantic は入れない。依存ゼロ（Node のみ）を保ち、形の正本は OPA / Rego 側に置いた。
 - 差し戻しは全部実装前・マージ前に落ちた。plan-confirm 3 回 → 敵対レビュー 4 回で計 7 件。
-- 席は親 Grok 4.6、設計 / レビュー / 検証は Opus Task。Sol は 3 体多数決の条件に届かず未使用。
+- 当時（2026-08-18）の席は親 Grok 4.6、設計 / レビュー / 検証は Opus Task。Sol は 3 体多数決の条件に届かず未使用。現行の親は `grok-4.7-high`（`knowledge/criteria/model-routing.yaml`）。
 - 検証は `pnpm test` 77 件と feature-gate が緑。
 
 **failed**
@@ -313,8 +313,8 @@
 
 **worked**
 
-- 0031/0033/0037 の決定文を Grok 4.6 にした。0026 に現行注記（実装は Grok 4.6、Sonnet/Haiku 委譲は廃止）。
-- criteria の親/Task を `cursor-grok-4.6-high-fast` に揃えた。xhigh は努力段として残し、ピンにはしない。
+- 当時の世代更新として 0031/0033/0037 の決定文を Grok 4.6 にした。0026 に当時の注記（実装は Grok 4.6、Sonnet/Haiku 委譲は廃止）。現行ピンは `knowledge/criteria/model-routing.yaml`。
+- 当時、criteria の親/Task を `cursor-grok-4.6-high-fast` に揃えた。xhigh は努力段として残し、ピンにはしない。現行の親は `grok-4.7-high`。
 - パッケージマネージャを pnpm に固定（ADR 0041）。
 - TEMPLATE/0039 に clone → ADR 技術選定 → Feature → 実装。README に Mermaid。
 - reflect の評価トークンを `worked` / `failed` / `edge cases` に戻した。

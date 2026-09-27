@@ -5,6 +5,11 @@
  * - Cursor beforeShellExecution / beforeReadFile: JSON で拒否
  */
 import { readFileSync } from 'node:fs';
+import {
+	commandDropsSearchLines,
+	commandTouchesDependency,
+	isBlockedDependencyPath
+} from '../../scripts/lib/read-guard.mjs';
 
 let raw = '';
 try {
@@ -48,6 +53,21 @@ function denyCursor(message) {
 function allowCursor() {
 	process.stdout.write(JSON.stringify({ permission: 'allow' }));
 	process.exit(0);
+}
+
+if (isBlockedDependencyPath(filePath) || commandTouchesDependency(cmd)) {
+	const msg = '[block_env_read] node_modules と .tools は読まない。';
+	if (isCursor) denyCursor(msg);
+	console.error(msg);
+	process.exit(2);
+}
+
+if (commandDropsSearchLines(cmd)) {
+	const msg =
+		'[block_env_read] 検索は一致行を残す。ファイル名だけと件数だけは使わない。node scripts/search-lines.mjs か rg -n。';
+	if (isCursor) denyCursor(msg);
+	console.error(msg);
+	process.exit(2);
 }
 
 if (isEnvFile || isShellHit) {
