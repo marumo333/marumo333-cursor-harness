@@ -64,7 +64,11 @@ test('README は mermaid 3図で監査と token効率化を示し PNG を正に�
 	assert.doesNotMatch(readme, /HK --> AR/);
 	assert.doesNotMatch(readme, /HG --> CanonOut/);
 	const fences = [...readme.matchAll(/```mermaid\n([\s\S]*?)```/g)].map((m) => m[1]);
-	assert.equal(fences.length, 3, `mermaid 図は3つ: ${fences.length}`);
+	assert.equal(fences.length, 4, `mermaid 図は4つ: ${fences.length}`);
+	assert.ok(
+		fences.some((b) => /直す/.test(b) && /検討/.test(b) && /記録/.test(b) && /却下/.test(b) && /tsc --noEmit/.test(b)),
+		'モデル図は4分類と noEmit を含む'
+	);
 	assert.ok(
 		fences.some(
 			(b) =>

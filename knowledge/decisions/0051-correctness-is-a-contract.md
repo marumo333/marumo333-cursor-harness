@@ -14,14 +14,14 @@
      戻り値の型が違えば赤。`contracts/*.contract.ts` が契約、`scripts/lib/*.ts` が実装。
   3. **振る舞いの判定は実行。** 契約に書いた引数で関数を呼び、出力か例外が一致すること。
      `node scripts/contract-check.mjs` が両方を見る。feature-gate はこれを通らないと成功にしない。
-  4. **レビューは契約の代わりをしない。** 契約が緑の振る舞いについて差し戻さない。
-     差し戻せるのは、型と振る舞いでは赤にならないもののうち、席・正本・ゲート・秘密に当たり、
-     見た差分で再現できるものだけ（[[0050]]）。
+  4. **品質は親が1回、4分類する。** 直す、検討、記録、却下。コードを変えるのは直すだけ。
+     直したあとは `tsc --noEmit` が緑なら止める。検討・記録・却下はコードを変えず、二周目を開かない。
+     `tsc --noEmit` が緑の変更を、レビューが不正解にしない。
   5. **検証用 subagent は起動しない。** Opus 5 は頼まれなくても自分の作業を確認する。
      確認用の subagent（verifier / reflector / 3体）を足すと、同じ差分の読み直しが新しい指摘を足す。
      完了は親が `node scripts/contract-check.mjs` と `node scripts/feature-gate.mjs` を実行して決める。
   6. **起動回数は機械が拒否する。** 人が明示した `skill:adversarial-review` は新しい周で 1 まで。
      `skill:verify` と `skill:reflect` は新しい周で 0。merge-base に既にある周は、その回数を超えて増やせない。
      超えたら `node scripts/review-cap-check.mjs` が失敗し、feature-gate も失敗する。
-- 結果: 正しさは型検査と振る舞いの緑で決まる。確認用の subagent は周を開かない。
+- 結果: 型の正解は `tsc --noEmit` の緑。品質の指摘は4分類で1回処理し、直す以外はコードに残さない。確認用の subagent は周を開かない。
 - 関連: [[0016]] [[0038]] [[0050]]

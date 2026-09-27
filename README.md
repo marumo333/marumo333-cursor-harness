@@ -42,6 +42,38 @@ node scripts/install-git-hooks.mjs
 
 旧 PNG は [`docs/architecture/`](docs/architecture/) に履歴として残す。正は下記 mermaid。
 
+### モデルとレビュー
+
+親 Grok 4.7 が常時動く。型の正解は `tsc --noEmit`。品質の指摘は親が1回、4つに分ける。コードを変えるのは直すだけ。緑のあと二周目は開かない。Fable は並列展開の前か、人が明示した1回だけ。verifier と reflector の起動は feature-gate が 0 回で拒否する。監査は OPA の被覆、契約の実行、起動回数の比較。
+
+```mermaid
+flowchart TB
+  H["人間の依頼"] --> G["親 Grok 4.7"]
+  G --> IMP["実装"]
+  IMP --> NE["tsc --noEmit"]
+  NE -->|赤| IMP
+  NE -->|緑| CLS["親が1回分類"]
+  CLS --> FIX["直す"]
+  CLS --> HOLD["検討"]
+  CLS --> NOTE["記録"]
+  CLS --> DROP["却下"]
+  FIX --> EDIT["その項目だけ直す"]
+  EDIT --> NE2["tsc --noEmit"]
+  NE2 -->|緑| STOP["停止"]
+  HOLD --> STOP
+  NOTE --> STOP
+  DROP --> STOP
+  STOP --> FG["feature-gate"]
+  FG --> OPA["OPA 被覆"]
+  FG --> CAP["起動回数"]
+  FG --> BEH["契約の振る舞い"]
+  FG --> PR["PR"]
+  PR --> HM["人間マージ"]
+  G -.->|並列展開の前| FABLE["Fable plan-confirm"]
+  G -.->|人が明示した1回| ONCE["Fable 1回"]
+  CAP -->|verify と reflect| DENY["0回で拒否"]
+```
+
 ### 監査
 
 受付 → 親が計画と実装 → 契約と feature-gate → 公開。

@@ -4,7 +4,7 @@
 
 ## モデル戦略（[[0049]] / [[0047]] / [[0046]] / [[0040]] / [[0037]] / [[0033]] / [[0031]]）
 
-精度は独立検証の深さで決まる。ファミリー多様性はレビューで稼ぐ。
+型の正解は `tsc --noEmit`。品質の指摘は親が1回、4分類する。
 
 | 席 | モデル | 役割 |
 | --- | --- | --- |
@@ -12,7 +12,7 @@
 | 計画 | Fable 5.1 high | 並列展開前の plan-confirm だけ |
 | 検証 / 内省 | 親が実行 | verifier と reflector は起動しない |
 
-親は常時 Grok。Fable / Opus は名前付き Task のみ。Muse は3体多数決以外禁止。Sol は使わない。
+親は常時 Grok。Fable は並列展開の前か、人が明示した1回だけ。verifier と reflector は起動しない。Sol は使わない。
 commit は hook 必須。主語は `feat:` / `fix:` / `docs:` 等 + 日本語（[[0042]]）。`--no-verify` 禁止。
 
 ## 自己成長ループ（1周）
@@ -23,8 +23,9 @@ commit は hook 必須。主語は `feat:` / `fix:` / `docs:` 等 + 日本語（
    learnings 全文と decisions 全件を1周で再読しない。
    knowledge 読込 → brainstorming / writing-plans。並列展開前は plan-confirm。
 2. 実装: TDD。親が書く。
-3. 検証: 正解は契約の型検査と振る舞い（[[0051]]）。親が contract-check と feature-gate を実行する。
-   レビュー subagent は起動しない。人が明示したときだけ Fable 1回。2回目は feature-gate が拒否する。
+3. 検証: 型の正解は `tsc --noEmit`（[[0051]]）。親が1回、指摘を直す・検討・記録・却下に分ける。
+   コードを変えるのは直すだけ。そのあと noEmit が緑なら止める。二周目は開かない。
+   レビュー subagent は起動しない。人が明示した Fable は1回まで。
 4. 内省: 親が learnings に書く。reflector は起動しない。
 5. 成長: OPA allow の Feature だけ skill/ADR/criteria/Rego に適用。
 6. ガード: budget_guards / 無制限再起防止。metrics 緑なら再起しない（[[0039]]）。

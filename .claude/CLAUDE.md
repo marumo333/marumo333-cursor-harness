@@ -19,8 +19,9 @@ learnings 全文と decisions 全件を1周で再読しない。
 
 ## 作業の型
 
-`自走(親=Grok) → plan-confirm(並列展開のときだけ) → 実装(TDD) → 契約と feature-gate（親が実行） →
-内省（親が書く） → OPA入場 → grow`。失敗は前進不可。検証用の subagent は起動しない（[[0051]]）。
+`自走(親=Grok) → plan-confirm(並列展開のときだけ) → 実装(TDD) → tsc --noEmit →
+親が1回4分類（直すだけコードを変える） → feature-gate → 内省 → OPA入場 → grow`。
+noEmit が緑なら止める。二周目は開かない。検証用の subagent は起動しない（[[0051]]）。
 
 ## やらないこと
 

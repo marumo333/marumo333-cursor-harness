@@ -54,7 +54,7 @@
 - [ADR-0049](knowledge/decisions/0049-grok47-opus55-generation.md) (accepted): 世代ピン＝Grok 4.7 high / Opus 5.5 high（席は動かさない）
 - [ADR-0050](knowledge/decisions/0050-review-finding-classes.md) (proposed): レビュー指摘は3種、再レビューは1回
 - [ADR-0051](knowledge/decisions/0051-correctness-is-a-contract.md) (proposed): 正解は型と振る舞いの契約
-- [skill:adversarial-review](.claude/skills/adversarial-review/SKILL.md) (n/a): 正解は契約と feature-gate。レビュー subagent は起動しない。人が明示したときだけ Fable を1回。
+- [skill:adversarial-review](.claude/skills/adversarial-review/SKILL.md) (n/a): 親が指摘を直す・検討・記録・却下に1回分ける。直すだけコードを変え、tsc --noEmit が緑なら止める。
 - [skill:code-mode](.claude/skills/code-mode/SKILL.md) (n/a): 照会 bash を1回の CLI にまとめ、中間出力を文脈に載せない（Uber code-mode / read_cache）。2本以上の git status
 - [skill:cycle](.claude/skills/cycle/SKILL.md) (n/a): 1周の skill 使用/省略をグラフに記録し、3指標を出す。ループ終了時に必ず使う。
 - [skill:harness-api-budget](.claude/skills/harness-api-budget/SKILL.md) (n/a): 親は Grok。検証は契約と feature-gate を親が実行する。検証用 subagent は出さない。照会は code-mode、子へは packet。

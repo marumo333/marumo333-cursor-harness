@@ -8,7 +8,7 @@
 			"path": ".claude/skills/adversarial-review/SKILL.md",
 			"rels": [],
 			"status": "n/a",
-			"summary": "正解は契約と feature-gate。レビュー subagent は起動しない。人が明示したときだけ Fable を1回。"
+			"summary": "親が指摘を直す・検討・記録・却下に1回分ける。直すだけコードを変え、tsc --noEmit が緑なら止める。"
 		},
 		{
 			"id": "skill:code-mode",
