@@ -42,7 +42,7 @@ test('package.json の license は MIT である', () => {
 	assert.equal(pkg.license, 'MIT');
 });
 
-test('README は mermaid 3図で監査と token効率化を示し PNG を正にしない', () => {
+test('README は mermaid を編集の正にし、docs の画像を示す', () => {
 	const readme = readFileSync(join(ROOT, 'README.md'), 'utf8');
 	assert.match(readme, /### 監査/);
 	assert.match(readme, /token効率化/);
@@ -56,22 +56,38 @@ test('README は mermaid 3図で監査と token効率化を示し PNG を正に�
 	assert.doesNotMatch(readme, /正本倉庫/);
 	assert.doesNotMatch(readme, /出荷/);
 	assert.doesNotMatch(readme, /原料/);
-	assert.doesNotMatch(readme, /harness-runtime-architecture\.png/);
-	assert.doesNotMatch(readme, /harness-self-improve-architecture\.png/);
+	assert.match(readme, /docs\/architecture\/review-overview\.png/);
+	assert.match(readme, /docs\/architecture\/audit-overview\.png/);
+	assert.match(readme, /docs\/architecture\/runtime-overview\.png/);
+	assert.match(readme, /docs\/architecture\/self-improve-flow\.png/);
+	assert.doesNotMatch(readme, /self-improve-overview\.png/);
+	assert.doesNotMatch(readme, /model-review\.png/);
+	assert.doesNotMatch(readme, /イラスト/);
 	assert.doesNotMatch(readme, /欠落 PNG/);
 	assert.doesNotMatch(readme, /FG --> warehouse/);
 	assert.doesNotMatch(readme, /Gate --> Feat/);
 	assert.doesNotMatch(readme, /HK --> AR/);
 	assert.doesNotMatch(readme, /HG --> CanonOut/);
 	const fences = [...readme.matchAll(/```mermaid\n([\s\S]*?)```/g)].map((m) => m[1]);
-	assert.equal(fences.length, 3, `mermaid 図は3つ: ${fences.length}`);
+	assert.equal(fences.length, 4, `mermaid 図は4つ: ${fences.length}`);
 	assert.ok(
-		fences.some((b) => /監査/.test(b) && /token効率化/.test(b) && /AR --> VR/.test(b) && /VR --> RF/.test(b) && /HM --> warehouse/.test(b)),
-		'監査図は cycle 辺と人間マージ入場を含む'
+		fences.some((b) => /直す/.test(b) && /検討/.test(b) && /記録/.test(b) && /却下/.test(b) && /tsc --noEmit/.test(b)),
+		'モデル図は4分類と noEmit を含む'
 	);
 	assert.ok(
-		fences.some((b) => /実装 Grok/.test(b) && /IMP --> Hook/.test(b) && /判定のみ/.test(b)),
-		'ランタイム図は実装が hooks を踏み OPA は判定のみ'
+		fences.some(
+			(b) =>
+				/監査/.test(b) &&
+				/token効率化/.test(b) &&
+				/契約と feature-gate/.test(b) &&
+				/HM --> warehouse/.test(b) &&
+				!/AR --> VR/.test(b)
+		),
+		'監査図は契約と人間マージを含み、レビュー周の辺を含まない'
+	);
+	assert.ok(
+		fences.some((b) => /実装と検証は親/.test(b) && /IMP --> Hook/.test(b) && /判定のみ/.test(b)),
+		'ランタイム図は親が hooks を踏み OPA は判定のみ'
 	);
 	assert.ok(
 		fences.some((b) => /cycle-after-merge/.test(b) && /エージェントは自動起動しない/.test(b)),

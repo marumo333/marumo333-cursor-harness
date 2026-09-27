@@ -19,13 +19,14 @@
 - [F-0013](knowledge/features/F-0013-grok47-opus55.yaml) (proposed): 世代ピンを Grok 4.7 high と Opus 5.5 high にする
 - [F-0014](knowledge/features/F-0014-packetless-gate-not-seat-proof.yaml) (proposed): packet 無しのゲート起動を席の実起動に数えない
 - [F-0015](knowledge/features/F-0015-review-finding-classes.yaml) (proposed): レビュー指摘を3種に分け再レビューを1回で止める
+- [F-0016](knowledge/features/F-0016-correctness-is-a-contract.yaml) (proposed): 正解を型と振る舞いの契約にする
 - [criterion:code-quality](knowledge/criteria/code-quality.yaml) (n/a): コード品質バー — ハーネス テンプレート。出典: ADR 0013-0016 / 0038 / 0039
 - [criterion:cycle-metrics](knowledge/criteria/cycle-metrics.yaml) (n/a): サイクル3指標 — ADR 0039。実装は scripts/cycle-metrics.mjs / policy/cycle.rego
 - [criterion:grow-admission](knowledge/criteria/grow-admission.yaml) (n/a): Feature 正本 + OPA grow 入場 — ハーネス/reflector/verify が参照。出典: ADR 0038
 - [criterion:knowledge-layers](knowledge/criteria/knowledge-layers.yaml) (n/a): 三層知識の型 — ハーネスが参照。出典: ADR 0043
 - [criterion:model-routing](knowledge/criteria/model-routing.yaml) (n/a): ハーネス席 — ADR 0031 / 0033 / 0037 / 0039 / 0040 / 0046 / 0047 / 0049
 - [criterion:security-policy](knowledge/criteria/security-policy.yaml) (n/a): ハーネス側の AI セキュリティ（ADR 0018）。
-- [cycle:required](knowledge/graph/required-cycle.json) (n/a): required 4 / optional 2
+- [cycle:required](knowledge/graph/required-cycle.json) (n/a): required 1 / optional 5
 
 ## human
 
@@ -52,13 +53,14 @@
 - [ADR-0048](knowledge/decisions/0048-uber-code-mode.md) (accepted): Uber code-mode＝bash 一括と要約
 - [ADR-0049](knowledge/decisions/0049-grok47-opus55-generation.md) (accepted): 世代ピン＝Grok 4.7 high / Opus 5.5 high（席は動かさない）
 - [ADR-0050](knowledge/decisions/0050-review-finding-classes.md) (proposed): レビュー指摘は3種、再レビューは1回
-- [skill:adversarial-review](.claude/skills/adversarial-review/SKILL.md) (n/a): 独立敵対レビューの起動手順（全変更のデフォルトゲート）と高リスク3体1周。実装完了後・前進判定の前に必ず使う。
+- [ADR-0051](knowledge/decisions/0051-correctness-is-a-contract.md) (proposed): 正解は型と振る舞いの契約
+- [skill:adversarial-review](.claude/skills/adversarial-review/SKILL.md) (n/a): 親が指摘を直す・検討・記録・却下に1回分ける。直すだけコードを変え、tsc --noEmit が緑なら止める。
 - [skill:code-mode](.claude/skills/code-mode/SKILL.md) (n/a): 照会 bash を1回の CLI にまとめ、中間出力を文脈に載せない（Uber code-mode / read_cache）。2本以上の git status
 - [skill:cycle](.claude/skills/cycle/SKILL.md) (n/a): 1周の skill 使用/省略をグラフに記録し、3指標を出す。ループ終了時に必ず使う。
-- [skill:harness-api-budget](.claude/skills/harness-api-budget/SKILL.md) (n/a): Ultraでもトークン効率と精度を同時に取る席ルーティング（Grok親・計画/レビューはFable・検証はOpus・Museは3体・照会はcode-mode・子
+- [skill:harness-api-budget](.claude/skills/harness-api-budget/SKILL.md) (n/a): 親は Grok。検証は契約と feature-gate を親が実行する。検証用 subagent は出さない。照会は code-mode、子へは packet。
 - [skill:harness-audit](.claude/skills/harness-audit/SKILL.md) (n/a): ハーネス健全性を決定的にスコア化し履歴に記録。実行するほど成長しているかを可視化する。
 - [skill:harness-grow](.claude/skills/harness-grow/SKILL.md) (n/a): 入場済み Feature だけ skill/rule/Rego に昇格し、判断を ADR/criteria に落とす。ハーネスを複利成長させる。
 - [skill:parallel-dispatch](.claude/skills/parallel-dispatch/SKILL.md) (n/a): 実装の並列展開判断と起動手順（Task並列 / 作業ツリー分離 / 読み取り専用）。親Grokが計画を subagent に配る時に使う。
 - [skill:plan-confirm](.claude/skills/plan-confirm/SKILL.md) (n/a): 並列展開前の計画確定レビュー（Fable 5.1 backend-architect）。writing-plans完了直後・parallel-dispatch前
-- [skill:reflect](.claude/skills/reflect/SKILL.md) (n/a): タスク後の内省（効いた/失敗/境界事例を言語化し learnings に追記）。自己成長ループ④の入口。
-- [skill:verify](.claude/skills/verify/SKILL.md) (n/a): 完了の定義を機械判定（feature-gate / opa test / cycle 指標 / secret）。タスク検証段で必ず使う。
+- [skill:reflect](.claude/skills/reflect/SKILL.md) (n/a): 内省は親が learnings に短く書く。reflector subagent は起動しない。
+- [skill:verify](.claude/skills/verify/SKILL.md) (n/a): 完了判定は親がスクリプトを実行する。verifier subagent は起動しない。

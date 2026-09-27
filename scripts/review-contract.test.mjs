@@ -10,17 +10,17 @@ function read(rel) {
 	return readFileSync(join(ROOT, rel), 'utf8');
 }
 
-test('敵対レビューは指摘を3種に分け、再レビューは項目と修正差分の1回', () => {
+test('親は4分類を1回行い、直すだけコードを変える', () => {
 	const skill = read('.claude/skills/adversarial-review/SKILL.md');
-	assert.match(skill, /差し戻す指摘/);
-	assert.match(skill, /記録だけ/);
-	assert.match(skill, /確認できない指摘/);
-	assert.match(skill, /差し戻した項目と修正差分だけ/);
-	assert.match(skill, /3体のやり直しはしない/);
-	assert.match(skill, /同じ指摘が2回/);
-	assert.match(skill, /Markdown だけでもモード2/);
-	assert.doesNotMatch(skill, /問題が見つからない場合のみ承認/);
-	assert.doesNotMatch(skill, /同じ手順で新しい文脈/);
+	assert.match(skill, /tsc --noEmit/);
+	assert.match(skill, /検証用の subagent は起動しない/);
+	assert.match(skill, /直す/);
+	assert.match(skill, /検討/);
+	assert.match(skill, /記録/);
+	assert.match(skill, /却下/);
+	assert.match(skill, /二周目は開かない/);
+	assert.doesNotMatch(skill, /3体/);
+	assert.doesNotMatch(skill, /モード2/);
 });
 
 test('feature-gate の CI は契約テストを実行する', () => {
@@ -28,19 +28,16 @@ test('feature-gate の CI は契約テストを実行する', () => {
 	assert.match(workflow, /scripts\/review-contract\.test\.mjs/);
 });
 
-test('席ルーティングは文書を Task にせず、小さい修正は Fable 1回', () => {
+test('席ルーティングは検証 subagent を出さない', () => {
 	const budget = read('.claude/skills/harness-api-budget/SKILL.md');
-	assert.match(budget, /議論・文書・用語/);
-	assert.match(budget, /最も重い方/);
-	assert.match(budget, /Markdown だけでもモード2/);
-	assert.match(budget, /canon 以外の小さい修正/);
-	assert.match(budget, /3体のやり直しはしない/);
+	assert.match(budget, /verifier \/ reflector \/ 3体は起動しない/);
+	assert.match(budget, /新しい周で1回まで/);
+	assert.match(budget, /新しい周で0回/);
 });
 
-test('security-reviewer の出力は3種で、不確実を差し戻しにしない', () => {
+test('security-reviewer は毎タスクでは起動しない', () => {
 	const agent = read('.claude/agents/security-reviewer.md');
-	assert.match(agent, /差し戻す指摘/);
-	assert.match(agent, /記録だけ/);
-	assert.match(agent, /確認できない指摘/);
-	assert.doesNotMatch(agent, /不確実は承認にしない/);
+	assert.match(agent, /毎タスクでは起動しない/);
+	assert.match(agent, /直す以外はコードを変えない/);
+	assert.doesNotMatch(agent, /必ず使う/);
 });

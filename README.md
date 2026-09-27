@@ -11,7 +11,7 @@ Cursor ハーネスの**テンプレート**。対象は席・正本・ゲート
 
 ## 何をするか
 
-- 席: 親 Grok 4.7 high / 計画・レビューは Fable 5.1 / 検証は Opus 5.5 high / Muse Spark 1.3 は**高リスク3体多数決のみ**
+- 席: 親 Grok 4.7 high。検証は親が契約と feature-gate を実行する。検証用の subagent は出さない
 - 正本: [`knowledge/features/F-NNNN-*.yaml`](knowledge/features/README.md)。GitHub Issues / Spec Kit は正本にしない（[ADR 0033](knowledge/decisions/0033-harness-api-budget-routing.md)）
 - ゲート: OPA `node scripts/feature-gate.mjs`（自己改善ループそのものではない）
 - 出生規則: Feature は `proposed` で起票する。**同一 PR で `admitted` / `approved` にしない**（[ADR 0038](knowledge/decisions/0038-feature-canon-opa-grow.md)）
@@ -40,13 +40,49 @@ node scripts/install-git-hooks.mjs
 成果は正本（skill / ADR / criteria / Rego）、フィードバックは cycle と learnings である。
 監査の主体は親 Grok 4.7 high である。Uber の Gateway や艦隊は置かない。OPA は canon 変更のゲートであり、自己改善ループそのものではない。
 
-旧 PNG は [`docs/architecture/`](docs/architecture/) に履歴として残す。正は下記 mermaid。
+図は [`docs/architecture/`](docs/architecture/) のアーキテクチャ図。実線は実行、破線は条件付きか判定のみ。編集する正は下記 mermaid。
+
+### モデルとレビュー
+
+常時動くのは親エージェント Grok 4.7 high だけ。型の正解は `tsc --noEmit`。品質の指摘は親が1回、4つに分ける。コードを変えるのは直すだけ。緑のあと二周目は開かない。Fable の backend-architect は並列展開の前だけ、security-reviewer は人が明示した1回だけ。verifier と reflector は起動せず、feature-gate が 0 回で拒否する。
+
+![モデルとレビュー](docs/architecture/review-overview.png)
+
+```mermaid
+flowchart TB
+  H["人間の依頼"] --> G["親 Grok 4.7"]
+  G --> IMP["実装"]
+  IMP --> NE["tsc --noEmit"]
+  NE -->|赤| IMP
+  NE -->|緑| CLS["親が1回分類"]
+  CLS --> FIX["直す"]
+  CLS --> HOLD["検討"]
+  CLS --> NOTE["記録"]
+  CLS --> DROP["却下"]
+  FIX --> EDIT["その項目だけ直す"]
+  EDIT --> NE2["tsc --noEmit"]
+  NE2 -->|緑| STOP["停止"]
+  HOLD --> STOP
+  NOTE --> STOP
+  DROP --> STOP
+  STOP --> FG["feature-gate"]
+  FG --> OPA["OPA 被覆"]
+  FG --> CAP["起動回数"]
+  FG --> BEH["契約の振る舞い"]
+  FG --> PR["PR"]
+  PR --> HM["人間マージ"]
+  G -.->|並列展開の前| BA["Fable backend-architect"]
+  G -.->|人が明示した1回| SR["Fable security-reviewer"]
+  CAP -->|0回| OFF["verifier と reflector は起動しない"]
+```
 
 ### 監査
 
-受付 → 監査（親）→ 計画 / 実装 / 敵対レビュー / 検証 / 内省 → 公開。
-辺は `required-cycle.json` と同じ（adversarial-review → verify → reflect）。
+受付 → 親が計画と実装 → 契約と feature-gate → 公開。
+必須の辺は無い。検証用の subagent は出さない。
 OPA / feature-gate は横の判定であり、正本へは書かない。正本へ入るのは人間マージだけ。
+
+![監査](docs/architecture/audit-overview.png)
 
 ```mermaid
 flowchart TB
@@ -60,11 +96,9 @@ flowchart TB
     CM["token効率化"]
     PK["packet"]
     PL["計画 writing-plans"]
-    IM["実装 Grok"]
-    AR["敵対レビュー Fable"]
-    VR["検証 verifier Opus"]
-    RF["内省 reflector Opus"]
-    TR["高リスク trio<br/>Fable / Grok / Muse"]
+    IM["実装 親 Grok"]
+    CT["契約と feature-gate"]
+    OFF["verifier / reflector は出さない"]
   end
 
   subgraph qa["品質ゲート"]
@@ -89,16 +123,9 @@ flowchart TB
   P --> PK
   P --> PL
   PK --> IM
-  PK --> AR
-  PK --> VR
-  PK --> RF
   IM --> HK
-  IM --> AR
-  AR --> VR
-  VR --> RF
-  AR -.-> TR
-  VR --> FG
-  RF --> FE
+  IM --> CT
+  CT --> FG
   P --> PR
   PR --> HM
   HM --> warehouse
@@ -109,15 +136,16 @@ flowchart TB
 席と強制の層。子へ渡すのは packet だけ。会話履歴と learnings 全文は継がない。
 hooks を踏むのは実装 Grok の commit。OPA は判定であり正本へは書かない。
 
+![ランタイム](docs/architecture/runtime-overview.png)
+
 ```mermaid
 flowchart LR
   subgraph seats["席"]
     direction TB
     G["親 Grok 4.7"]
-    IMP["実装 Grok"]
-    F["計画 / レビュー Fable 5.1"]
-    O["検証 / 内省 Opus 5.5"]
-    M["第3 Muse medium"]
+    IMP["実装と検証は親"]
+    BA["Fable は条件付き"]
+    OFF["verifier と reflector は起動しない"]
   end
 
   subgraph force["強制"]
@@ -134,12 +162,9 @@ flowchart LR
     Policy["Rego"]
   end
 
-  G -->|"packet"| F
-  G -->|"packet"| O
-  G -->|"trio のみ"| M
   G --> IMP
   IMP --> Hook
-  O --> Gate
+  IMP --> Gate
   Gate -.->|"判定のみ"| Packet
   HM["人間マージ"] --> Feat
   HM --> Skill
@@ -150,6 +175,8 @@ flowchart LR
 
 AI 実装 PR に省略・失敗・差し戻しが残ったときだけ回る。人間のマージが点火。
 cycle-after-merge は下書き PR までで、エージェントは自動起動しない。OPA は横のゲート。
+
+![再起的自己改善](docs/architecture/self-improve-flow.png)
 
 ```mermaid
 flowchart TD

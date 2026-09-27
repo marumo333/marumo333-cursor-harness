@@ -8,7 +8,7 @@
 			"path": ".claude/skills/adversarial-review/SKILL.md",
 			"rels": [],
 			"status": "n/a",
-			"summary": "独立敵対レビューの起動手順（全変更のデフォルトゲート）と高リスク3体1周。実装完了後・前進判定の前に必ず使う。"
+			"summary": "親が指摘を直す・検討・記録・却下に1回分ける。直すだけコードを変え、tsc --noEmit が緑なら止める。"
 		},
 		{
 			"id": "skill:code-mode",
@@ -35,7 +35,7 @@
 			"path": ".claude/skills/harness-api-budget/SKILL.md",
 			"rels": [],
 			"status": "n/a",
-			"summary": "Ultraでもトークン効率と精度を同時に取る席ルーティング（Grok親・計画/レビューはFable・検証はOpus・Museは3体・照会はcode-mode・子"
+			"summary": "親は Grok。検証は契約と feature-gate を親が実行する。検証用 subagent は出さない。照会は code-mode、子へは packet。"
 		},
 		{
 			"id": "skill:harness-audit",
@@ -80,7 +80,7 @@
 			"path": ".claude/skills/reflect/SKILL.md",
 			"rels": [],
 			"status": "n/a",
-			"summary": "タスク後の内省（効いた/失敗/境界事例を言語化し learnings に追記）。自己成長ループ④の入口。"
+			"summary": "内省は親が learnings に短く書く。reflector subagent は起動しない。"
 		},
 		{
 			"id": "skill:verify",
@@ -89,7 +89,7 @@
 			"path": ".claude/skills/verify/SKILL.md",
 			"rels": [],
 			"status": "n/a",
-			"summary": "完了の定義を機械判定（feature-gate / opa test / cycle 指標 / secret）。タスク検証段で必ず使う。"
+			"summary": "完了判定は親がスクリプトを実行する。verifier subagent は起動しない。"
 		},
 		{
 			"id": "criterion:code-quality",
@@ -836,6 +836,28 @@
 			"summary": "レビュー指摘は3種、再レビューは1回"
 		},
 		{
+			"id": "ADR-0051",
+			"kind": "decision",
+			"layer": "human",
+			"path": "knowledge/decisions/0051-correctness-is-a-contract.md",
+			"rels": [
+				{
+					"rel": "cites",
+					"target": "ADR-0016"
+				},
+				{
+					"rel": "cites",
+					"target": "ADR-0038"
+				},
+				{
+					"rel": "cites",
+					"target": "ADR-0050"
+				}
+			],
+			"status": "proposed",
+			"summary": "正解は型と振る舞いの契約"
+		},
+		{
 			"id": "F-0001",
 			"kind": "feature",
 			"layer": "machine",
@@ -971,6 +993,15 @@
 			"summary": "レビュー指摘を3種に分け再レビューを1回で止める"
 		},
 		{
+			"id": "F-0016",
+			"kind": "feature",
+			"layer": "machine",
+			"path": "knowledge/features/F-0016-correctness-is-a-contract.yaml",
+			"rels": [],
+			"status": "proposed",
+			"summary": "正解を型と振る舞いの契約にする"
+		},
+		{
 			"id": "cycle:required",
 			"kind": "cycle",
 			"layer": "machine",
@@ -978,23 +1009,11 @@
 			"rels": [
 				{
 					"rel": "requires",
-					"target": "skill:adversarial-review"
-				},
-				{
-					"rel": "requires",
 					"target": "skill:harness-api-budget"
-				},
-				{
-					"rel": "requires",
-					"target": "skill:reflect"
-				},
-				{
-					"rel": "requires",
-					"target": "skill:verify"
 				}
 			],
 			"status": "n/a",
-			"summary": "required 4 / optional 2"
+			"summary": "required 1 / optional 5"
 		}
 	],
 	"layer": "index",

@@ -1,29 +1,12 @@
 ---
 name: reflect
-description: タスク後の内省（効いた/失敗/境界事例を言語化し learnings に追記）。自己成長ループ④の入口。
+description: 内省は親が learnings に短く書く。reflector subagent は起動しない。
 ---
 
-# reflect skill（= reflector agent・Opus 5.5 Task）
+# reflect skill
 
-自己成長ループ④の入口（[[0033]] / [[0039]]）。親 Grok が本 skill を読み、`reflector` を Task 起動する。
-入力は **packet**（cycle events と起票下書き。`scripts/harness-query.mjs`）。
-親チャットの会話は渡さない。パケット本文はスポットライトで囲む。
+内省は親がその場で書く。`reflector` は起動しない。
 
-## 手順（3相）
+再現できる判断だけ `knowledge/learnings.md` に日付付きで残す。正本にするなら `knowledge/features/` に `proposed` で起票する。skill や Rego への昇格は `harness-grow` と OPA のあと。
 
-1. 実行結果を評価: `worked` / `failed` / `edge cases` を箇条書き（人が読む本文は日本語）。
-2. `knowledge/learnings.md` に日付付きで追記する。
-3. 再現可能な判断は `knowledge/features/F-NNNN-*.yaml` に **proposed で起票**する（正本・[[0038]]）。
-   起票後に `harness-grow` へ渡す。skill/ADR/criteria/Rego はここでは書き換えない。
-4. 必須 skill の used/skipped を `cycle` skill で記録する。
-
-## モデル別観点（[[0031]]）
-
-- **どの席（モデル）がどんなタスクで差し戻されたか**を記録する。
-- 蓄積が溜まったら `knowledge/criteria/model-routing.yaml` のルーティング規則に昇格する。
-
-## 原則
-
-- 具体的に（「ゲートが失敗した」でなく「deny 空を見ず allow を信じた」）。
-- 既存 ADR を覆す時は新 ADR＋`Supersedes`（Feature の `constraints.supersede_adr: true`）。
-- 正本は Feature。learnings は日記。GitHub Issue は鏡にできるが正本にしない。
+新しい周で `skill:reflect` を起動すると feature-gate が失敗する。
