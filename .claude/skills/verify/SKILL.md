@@ -1,29 +1,17 @@
 ---
 name: verify
-description: 完了の定義を機械判定（feature-gate / opa test / cycle 指標 / secret）。タスク検証段で必ず使う。
+description: 完了判定は親がスクリプトを実行する。verifier subagent は起動しない。
 ---
 
-# verify skill（= verifier agent の実体・Opus 5.5 Task）
+# verify skill
 
-親チャットは Grok 4.7 high 前提（[[0033]] / [[0037]] / [[0040]] / [[0049]]）。本 skill の判定主体は名前付き `verifier` で、Task の model は `claude-opus-5-5-high`。別モデルの代替は前進段にしない。
+完了は親が次を実行して決める。`verifier` は起動しない。出口コードが決まる処理を、別モデルに読み直させない。
 
-## チェック（全項目合格で「前進可能」・ADR0016）
+1. `node scripts/feature-gate.mjs`
+2. ハーネスにテストがある変更は `pnpm test`
+3. 挙動変更は TDD の失敗ログ、または `knowledge/criteria/code-quality.yaml` の `tdd_exceptions`
+4. 秘密は hook が拒否する
+5. 並列展開したときだけ、計画ファイルの `plan_confirm.status: approved`
+6. `node scripts/knowledge-catalog.mjs --check`（index を書いたあと）
 
-1. **`node scripts/feature-gate.mjs`**（[[0038]]）。canon 変更は被覆 Feature の OPA apply allow 必須。opa test と cycle 指標テストを含む。
-2. ハーネスにテストがある変更は `pnpm test`。
-3. **TDD 赤の証跡**（[[0013]] / `code-quality.yaml`）: 観測可能挙動の変更がある場合、
-   `node --test` の**失敗ログ**が検証記録にあること。無い場合は `tdd_exceptions`
-   （docs_only / style_only_no_behavior / snapshot_baseline_import / config_chore /
-   retrofit_with_human_ack）が明示されていること。どちらも無ければ前進不可。
-4. 秘密スキャン（`.claude/hooks/block_secret_write` と二重）。
-5. **並列展開案件**: 計画ファイルに `plan_confirm.status: approved` 証跡があること（[[0033]]）。
-6. 必須 skill の used/skipped を `cycle` に記録したこと（[[0039]]）。
-7. ADR / Feature / criteria / skill / `required-cycle.json` / `knowledge/index/` を触ったら
-   `node scripts/knowledge-catalog.mjs --write` のあと `--check`（[[0043]]）。
-8. **ディスパッチ packet（[[0045]]）**: ゲート Task に
-   `knowledge/graph/packets/C-NNNN.<node>.<seq>.json` が無い、または禁則キーがある → 不合格。
-   本文はスポットライト囲み。会話履歴をパケットにしない。
-
-## 出力
-
-各項目の合格/不合格。**1つでも不合格 → 前進不可**、担当 agent に最小再現付きで差し戻し。
+1つでも失敗なら、そのコマンドの出力を直す。別のモデルに再判定させない。

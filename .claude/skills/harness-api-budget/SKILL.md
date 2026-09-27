@@ -1,6 +1,6 @@
 ---
 name: harness-api-budget
-description: Ultraでもトークン効率と精度を同時に取る席ルーティング（Grok親・計画/レビューはFable・検証はOpus・Museは3体・照会はcode-mode・子へはpacket）。壁打ち〜検証の席判断で使う。
+description: 親は Grok。検証は契約と feature-gate を親が実行する。検証用 subagent は出さない。照会は code-mode、子へは packet。
 ---
 
 # harness-api-budget skill（[[0033]] / [[0037]] / [[0039]] / [[0040]] / [[0045]] / [[0046]] / [[0047]] / [[0048]] / [[0049]] / [[0050]]）
@@ -9,35 +9,33 @@ description: Ultraでもトークン効率と精度を同時に取る席ルー�
 
 | 席                   | いつ                                                                 |
 | -------------------- | -------------------------------------------------------------------- |
-| 親チャット **Grok 4.7 high** | 常時。壁打ち・調査・下書き・ディスパッチ操作・統合・cycle 記録    |
-| Task **Fable 5.1 high** | plan-confirm / 敵対レビュー（モード1を1回・trio 体1を1周） / 設計 / grow 前 |
-| Task **Opus 5.5 high**  | verifier / reflector                                                 |
-| Task **Grok 4.7 high**  | 明文化済みの実装並列展開 / 複数試行                                 |
-| Task **Muse Spark 1.3** | **高リスク3体の第3レンズのみ**（secret）。他では使わない。effort は medium |
+| 親チャット **Grok 4.7 high** | 常時。壁打ち・調査・実装・契約とゲートの実行・cycle 記録           |
+| Task **Fable 5.1 high** | 並列展開前の plan-confirm、または人が明示したレビュー1回、grow 前の設計 |
+| Task **Grok 4.7 high**  | ファイルが重ならない実装の並列展開                                 |
+| Task **Opus 5.5** / **Muse** | 起動しない。検証と内省は親が行う                                   |
 
 ## budget_guards（必ず守る）
 
 1. 親を Opus/Fable にピッカー切替しない。
 2. ゲート Task 入力は**成果物のみ**（計画 md / diff / 失敗ログ / ADR パス）。会話履歴の丸投げ禁止。
-3. Muse は `review_trio`（モード2）以外で起動しない。Sol / Terra / Luna は使わない。
-4. 3体多数決は高リスク（セキュリティ/入場/再起/アーキ、および席・正本・ゲート）の **1周** だけ。再レビューで 3体のやり直しはしない（[[0050]]）。
-5. plan-confirm は **並列展開前のみ**必須（単独小修正は省略可）。コード差分がある変更の敵対レビューは省略不可。議論・文書・用語だけで Task を出さないのは、席・正本・ゲート・セキュリティのパスに当たらないときだけ。それらのパスは Markdown だけでもモード2。
-6. ゲートは **名前付き agent 必須**。model 未指定の汎用 Task でゲート代替禁止。
-7. Fable と Opus を trio に同居させない（Claude 席は1系統・[[0037]]）。
-8. Fable のガードフォールバック（実効モデルが `fable_pin` でない）は failed。天井は extra-high / max の追加だけ。
-9. **1周の再注入**: 各席に渡すのは goal / feature / diff / 関連 ADR パス / 今周の事実だけ。
+3. Muse / Opus の検証 subagent は起動しない。Sol / Terra / Luna も使わない。
+4. 3体のレビューは起動しない。人が明示したレビューは Fable 1回で止める（[[0050]] / [[0051]]）。
+5. plan-confirm は並列展開の前だけ。単独の修正では出さない。
+6. 完了判定は `node scripts/feature-gate.mjs` の出口コード。名前付き agent に判定させない。
+7. 人が明示した Fable の実効モデルが `claude-fable-5-1-thinking-high` でなければ、その起動は failed。
+8. **1周の再注入**: 各席に渡すのは goal / feature / diff / 関連 ADR パス / 今周の事実だけ。
    `learnings.md` 全文と `decisions/` 全件を親と各 Task が読み直さない（同じ本文は1周1席）。
    これは入力トークン削減。pre-commit（[[0042]]）は回避防止であり、トークンは減らさない。
-10. **code-mode（[[0048]]）**: 照会 bash が2本以上なら `scripts/code-mode.mjs` 1回。
+9. **code-mode（[[0048]]）**: 照会 bash が2本以上なら `scripts/code-mode.mjs` 1回。
     中間出力は文脈に載せない。生の `&&` 照会連鎖は hook が deny。Ultra でも省略しない。
-11. **packet（[[0045]]）**: 子には `scripts/harness-query.mjs` が書いた JSON だけ。
+10. **packet（[[0045]]）**: 子には `scripts/harness-query.mjs` が書いた JSON だけ。
     会話・learnings 全文・ADR 全件は継がない。effort / escalate は親が cycle の dispatch 行に書く。
-    ゲートは isolated、Worker / reflector は packet。会話 fork は置かない。
-12. **作業分類を Task の前に1行で書く。** 当たったうち最も重い方を使う。席・正本・ゲート・セキュリティ（Markdown だけでもモード2）は 3体1周。それ以外の canon 以外の小さい修正は親が実装し、Fable の単独レビューを1回。議論・文書・用語でそれらのパスに当たらないときだけ親 Grok のみ。差し戻す指摘の再レビューは、その項目と修正差分の1回で止める。正解は契約の型と振る舞い（[[0051]]）。契約が緑の項目は周を開かない。`skill:adversarial-review` の起動が周あたり 4（初回3 + 再確認1）を、過去の周では記録済み回数を、超えたら feature-gate が拒否する。
+    子を出すときは packet。会話 fork は置かない。
+11. 正解は契約の型と振る舞い（[[0051]]）。親が `node scripts/contract-check.mjs` と `node scripts/feature-gate.mjs` を実行する。verifier / reflector / 3体は起動しない。人が明示した `skill:adversarial-review` は新しい周で1回まで。`skill:verify` と `skill:reflect` は新しい周で0回。過去の周は記録済み回数を超えて増やせない。超えたら feature-gate が拒否する。
 
 ## superpowers 接続
 
 `brainstorming`(親 Grok) → `writing-plans`(親 Grok) →
-`plan-confirm`(Fable Task, 並列展開時) → `parallel-dispatch` → `adversarial-review` → `verify` → `reflect`。
+`plan-confirm`(並列展開のときだけ) → 実装 → 契約と feature-gate（親が実行）。
 
 使ったら `cycle` skill で node/edge を記録する。

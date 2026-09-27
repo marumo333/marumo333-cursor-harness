@@ -11,7 +11,7 @@ Cursor ハーネスの**テンプレート**。対象は席・正本・ゲート
 
 ## 何をするか
 
-- 席: 親 Grok 4.7 high / 計画・レビューは Fable 5.1 / 検証は Opus 5.5 high / Muse Spark 1.3 は**高リスク3体多数決のみ**
+- 席: 親 Grok 4.7 high。検証は親が契約と feature-gate を実行する。検証用の subagent は出さない
 - 正本: [`knowledge/features/F-NNNN-*.yaml`](knowledge/features/README.md)。GitHub Issues / Spec Kit は正本にしない（[ADR 0033](knowledge/decisions/0033-harness-api-budget-routing.md)）
 - ゲート: OPA `node scripts/feature-gate.mjs`（自己改善ループそのものではない）
 - 出生規則: Feature は `proposed` で起票する。**同一 PR で `admitted` / `approved` にしない**（[ADR 0038](knowledge/decisions/0038-feature-canon-opa-grow.md)）
@@ -44,8 +44,8 @@ node scripts/install-git-hooks.mjs
 
 ### 監査
 
-受付 → 監査（親）→ 計画 / 実装 / 敵対レビュー / 検証 / 内省 → 公開。
-辺は `required-cycle.json` と同じ（adversarial-review → verify → reflect）。
+受付 → 親が計画と実装 → 契約と feature-gate → 公開。
+必須の辺は無い。検証用の subagent は出さない。
 OPA / feature-gate は横の判定であり、正本へは書かない。正本へ入るのは人間マージだけ。
 
 ```mermaid
@@ -60,11 +60,8 @@ flowchart TB
     CM["token効率化"]
     PK["packet"]
     PL["計画 writing-plans"]
-    IM["実装 Grok"]
-    AR["敵対レビュー Fable"]
-    VR["検証 verifier Opus"]
-    RF["内省 reflector Opus"]
-    TR["高リスク trio<br/>Fable / Grok / Muse"]
+    IM["実装 親 Grok"]
+    CT["契約と feature-gate"]
   end
 
   subgraph qa["品質ゲート"]
@@ -89,16 +86,9 @@ flowchart TB
   P --> PK
   P --> PL
   PK --> IM
-  PK --> AR
-  PK --> VR
-  PK --> RF
   IM --> HK
-  IM --> AR
-  AR --> VR
-  VR --> RF
-  AR -.-> TR
-  VR --> FG
-  RF --> FE
+  IM --> CT
+  CT --> FG
   P --> PR
   PR --> HM
   HM --> warehouse
@@ -114,10 +104,7 @@ flowchart LR
   subgraph seats["席"]
     direction TB
     G["親 Grok 4.7"]
-    IMP["実装 Grok"]
-    F["計画 / レビュー Fable 5.1"]
-    O["検証 / 内省 Opus 5.5"]
-    M["第3 Muse medium"]
+    IMP["実装と検証は親"]
   end
 
   subgraph force["強制"]
@@ -134,12 +121,9 @@ flowchart LR
     Policy["Rego"]
   end
 
-  G -->|"packet"| F
-  G -->|"packet"| O
-  G -->|"trio のみ"| M
   G --> IMP
   IMP --> Hook
-  O --> Gate
+  IMP --> Gate
   Gate -.->|"判定のみ"| Packet
   HM["人間マージ"] --> Feat
   HM --> Skill

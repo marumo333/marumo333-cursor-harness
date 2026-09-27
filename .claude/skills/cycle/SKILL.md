@@ -9,7 +9,9 @@ hooks から Task は起動しない。親が各 skill のあと（または Sto
 
 ## 必須ノード（`knowledge/graph/required-cycle.json`）
 
-`harness-api-budget` / `adversarial-review` / `verify` / `reflect`
+`harness-api-budget`
+
+`adversarial-review` / `verify` / `reflect` は必須ではない。新しい周で verify と reflect を起動すると feature-gate が失敗する。
 
 使ったら:
 

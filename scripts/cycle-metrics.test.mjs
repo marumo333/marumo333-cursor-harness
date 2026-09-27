@@ -14,7 +14,7 @@ test('全部省略なら Feature を起票する', () => {
 		edges: Object.fromEntries(required.edges.map((e) => [`${e.from}>${e.to}`, 'skipped']))
 	});
 	assert.equal(m.node_skip_rate, 1);
-	assert.equal(m.edge_skip_rate, 1);
+	assert.equal(m.edge_skip_rate, required.edges.length === 0 ? 0 : 1);
 	assert.equal(m.state_integrity, 1);
 	assert.equal(m.should_file_feature, true);
 });

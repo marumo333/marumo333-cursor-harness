@@ -15,8 +15,7 @@ description: 実装の並列展開判断と起動手順（Task並列 / 作業ツ
 
 ## 並列化の判断基準（この順で判定）
 
-1. **読み取り専用か？**（レビュー・探索・監査）→ **常に安全**。気軽に Task 並列起動してよい。
-   3体多数決（`adversarial-review` モード2）もここに含まれる。
+1. **読み取り専用か？**（探索）→ 親が調べる。レビュー用の subagent は並べない。
 2. **書き込みタスク同士が独立か？**（触るファイル群が重ならない）
    → **同一ワークスペースで Task 並列起動**。1メッセージで複数 subagent を同時に起動する。
 3. **同じファイル群に触る可能性がある / 同一タスクの複数試行（best-of-N）か？**
@@ -34,9 +33,8 @@ description: 実装の並列展開判断と起動手順（Task並列 / 作業ツ
 4. subagent への指示に必ず含める: 対象ファイル / 完了条件 / 読むべき ADR・criteria / 禁止事項。
    入力は **packet**（`scripts/harness-query.mjs`）。会話 fork は置かない。
    effort / escalate は親だけが cycle dispatch に書く。子が同じキーを返したら deny。
-5. 起動は 1メッセージにまとめる。完了後、**親 Grok が統合** → `adversarial-review` → `verify`。
-   **並列展開の出力をレビューなしでマージしない。**
-   ゲート席は isolated packet。パケットが無ければ起動しない。
+5. 起動は 1メッセージにまとめる。完了後、親が統合し、`node scripts/contract-check.mjs` と `node scripts/feature-gate.mjs` を実行する。
+   検証用の subagent は起動しない。
 
 ## アンチパターン
 

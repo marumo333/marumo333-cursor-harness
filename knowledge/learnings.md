@@ -514,3 +514,24 @@
 - 0050 の「再レビューは1回」は手順書の文だった。文が残っているかのテストは、5回目の起動を拒否しない。拒否は `review-cap` の回数比較に移した。
 - F-0016 は proposed のまま。被覆は F-0001。この票は入場しない。
 - 型検査は `typescript` 5.9.2 に依存する。振る舞いの実行は Node の型除去。CI は PR の workflow で `pnpm install` してから契約を見る。main の feature-gate が契約を呼ぶのは、この変更が main に入ってから。
+
+---
+
+## 2026-09-27 — 検証用 subagent を廃する
+
+**問い**
+
+- Cursor に、今のモデルへ不要な指示を洗う prompt-audit があるか。
+- 契約で正解を決めたあと、確認用の subagent はまだ要るか。
+
+**効いた**
+
+- Cursor の公式機能には prompt-audit が無い。当たるのは Claude Code の `/claude-api prompt-audit`（anthropics/skills の `claude-api`）で、Opus 5.5 を名指しできる。
+- その監査の Opus 5 節は、確認用 subagent と「もう一度確かめよ」を削除対象にする。足すと過検証になる、と書いてある。
+- 必須 cycle から adversarial-review / verify / reflect を外した。新しい周のレビューは人が明示した1回、verify と reflect は 0 回。超えると feature-gate が失敗する。
+- 判定は親が契約と feature-gate を実行する。3体は起動しない。
+
+**失敗 / リスク**
+
+- canon の入場は、これまで通り OPA が `adversarial_review: approved` を求める。毎タスクのレビューとは別で、親が自分で approved とは書かない。
+- 過去の周に既にある起動回数は、その回数を超えて増やせないだけで、遡って消さない。

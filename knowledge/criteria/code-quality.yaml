@@ -29,7 +29,7 @@ definition_of_done:
   - contract_typecheck_and_behaviors # 正解は契約。型は tsc、振る舞いは入力と出力の実行（ADR 0051）
   - tdd_red_evidence_or_exception
   - secret_scan_pass
-  - review_pass # 席・正本・ゲート・秘密。契約が緑の振る舞いには差し戻さない。起動は初回3 + 再確認1、超えたら feature-gate が拒否
+  - review_pass # 契約と feature-gate が判定する。レビュー subagent は起動しない。人が明示した1回を超えたら feature-gate が拒否
   - plan_confirm_if_fanout
   - learnings_appended
   - cycle_skills_recorded # 必須 skill の used/skipped（ADR 0039）

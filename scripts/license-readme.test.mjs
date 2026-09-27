@@ -66,12 +66,19 @@ test('README は mermaid 3図で監査と token効率化を示し PNG を正に�
 	const fences = [...readme.matchAll(/```mermaid\n([\s\S]*?)```/g)].map((m) => m[1]);
 	assert.equal(fences.length, 3, `mermaid 図は3つ: ${fences.length}`);
 	assert.ok(
-		fences.some((b) => /監査/.test(b) && /token効率化/.test(b) && /AR --> VR/.test(b) && /VR --> RF/.test(b) && /HM --> warehouse/.test(b)),
-		'監査図は cycle 辺と人間マージ入場を含む'
+		fences.some(
+			(b) =>
+				/監査/.test(b) &&
+				/token効率化/.test(b) &&
+				/契約と feature-gate/.test(b) &&
+				/HM --> warehouse/.test(b) &&
+				!/AR --> VR/.test(b)
+		),
+		'監査図は契約と人間マージを含み、レビュー周の辺を含まない'
 	);
 	assert.ok(
-		fences.some((b) => /実装 Grok/.test(b) && /IMP --> Hook/.test(b) && /判定のみ/.test(b)),
-		'ランタイム図は実装が hooks を踏み OPA は判定のみ'
+		fences.some((b) => /実装と検証は親/.test(b) && /IMP --> Hook/.test(b) && /判定のみ/.test(b)),
+		'ランタイム図は親が hooks を踏み OPA は判定のみ'
 	);
 	assert.ok(
 		fences.some((b) => /cycle-after-merge/.test(b) && /エージェントは自動起動しない/.test(b)),
