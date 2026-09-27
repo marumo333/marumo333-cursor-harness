@@ -40,11 +40,13 @@ node scripts/install-git-hooks.mjs
 成果は正本（skill / ADR / criteria / Rego）、フィードバックは cycle と learnings である。
 監査の主体は親 Grok 4.7 high である。Uber の Gateway や艦隊は置かない。OPA は canon 変更のゲートであり、自己改善ループそのものではない。
 
-旧 PNG は [`docs/architecture/`](docs/architecture/) に履歴として残す。正は下記 mermaid。
+図は [`docs/architecture/`](docs/architecture/) の画像。編集する正は下記 mermaid。
 
 ### モデルとレビュー
 
 親 Grok 4.7 が常時動く。型の正解は `tsc --noEmit`。品質の指摘は親が1回、4つに分ける。コードを変えるのは直すだけ。緑のあと二周目は開かない。Fable は並列展開の前か、人が明示した1回だけ。verifier と reflector の起動は feature-gate が 0 回で拒否する。監査は OPA の被覆、契約の実行、起動回数の比較。
+
+![モデルとレビュー](docs/architecture/model-review.png)
 
 ```mermaid
 flowchart TB
@@ -79,6 +81,8 @@ flowchart TB
 受付 → 親が計画と実装 → 契約と feature-gate → 公開。
 必須の辺は無い。検証用の subagent は出さない。
 OPA / feature-gate は横の判定であり、正本へは書かない。正本へ入るのは人間マージだけ。
+
+![監査](docs/architecture/audit-flow.png)
 
 ```mermaid
 flowchart TB
@@ -131,6 +135,8 @@ flowchart TB
 席と強制の層。子へ渡すのは packet だけ。会話履歴と learnings 全文は継がない。
 hooks を踏むのは実装 Grok の commit。OPA は判定であり正本へは書かない。
 
+![ランタイム](docs/architecture/harness-runtime-architecture.png)
+
 ```mermaid
 flowchart LR
   subgraph seats["席"]
@@ -166,6 +172,8 @@ flowchart LR
 
 AI 実装 PR に省略・失敗・差し戻しが残ったときだけ回る。人間のマージが点火。
 cycle-after-merge は下書き PR までで、エージェントは自動起動しない。OPA は横のゲート。
+
+![再起的自己改善](docs/architecture/harness-self-improve-architecture.png)
 
 ```mermaid
 flowchart TD

@@ -42,7 +42,7 @@ test('package.json の license は MIT である', () => {
 	assert.equal(pkg.license, 'MIT');
 });
 
-test('README は mermaid 3図で監査と token効率化を示し PNG を正にしない', () => {
+test('README は mermaid を編集の正にし、docs の画像を示す', () => {
 	const readme = readFileSync(join(ROOT, 'README.md'), 'utf8');
 	assert.match(readme, /### 監査/);
 	assert.match(readme, /token効率化/);
@@ -56,8 +56,10 @@ test('README は mermaid 3図で監査と token効率化を示し PNG を正に�
 	assert.doesNotMatch(readme, /正本倉庫/);
 	assert.doesNotMatch(readme, /出荷/);
 	assert.doesNotMatch(readme, /原料/);
-	assert.doesNotMatch(readme, /harness-runtime-architecture\.png/);
-	assert.doesNotMatch(readme, /harness-self-improve-architecture\.png/);
+	assert.match(readme, /docs\/architecture\/model-review\.png/);
+	assert.match(readme, /docs\/architecture\/audit-flow\.png/);
+	assert.match(readme, /docs\/architecture\/harness-runtime-architecture\.png/);
+	assert.match(readme, /docs\/architecture\/harness-self-improve-architecture\.png/);
 	assert.doesNotMatch(readme, /欠落 PNG/);
 	assert.doesNotMatch(readme, /FG --> warehouse/);
 	assert.doesNotMatch(readme, /Gate --> Feat/);
