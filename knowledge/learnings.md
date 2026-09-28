@@ -570,4 +570,5 @@
 **失敗 / リスク**
 
 - 契約ステップをゲートの後ろに足しただけでは、ゲート自身の呼び出しは先に走る。導入はその前。
-- 導入を先にしても、Actions の ubuntu には `rg` が無い。`search-lines` は `spawn rg` が ENOENT だと終了コード 1 で、stderr が空だとテストは `1 !== 0` としか出さない。CI は単体テストの前に `ripgrep` を入れる。起動できないときは理由を stderr に残す。
+- 導入を先にしても、Actions の ubuntu には `rg` が無い。`apt-get` で足すと取得方法が OPA と揃わない。`ensure-rg.mjs` が ripgrep 15.2.0 を tarball とバイナリの digest で `.tools/rg` に置く。PATH は見ない。
+- 単体テストのファイル一覧を `package.json` と workflow に並べると、片方だけ更新される。一覧は `scripts/` 直下の `*.test.mjs`（`*.opa.test.mjs` を除く）を `run-harness-tests.mjs` が走査し、両方ともそのコマンドを呼ぶ。

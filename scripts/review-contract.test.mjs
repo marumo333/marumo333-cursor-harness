@@ -23,9 +23,11 @@ test('親は4分類を1回行い、直すだけコードを変える', () => {
 	assert.doesNotMatch(skill, /モード2/);
 });
 
-test('feature-gate の CI は契約テストを実行する', () => {
+test('feature-gate の CI は同じ単体テストコマンドを実行する', () => {
 	const workflow = read('.github/workflows/feature-gate.yml');
-	assert.match(workflow, /scripts\/review-contract\.test\.mjs/);
+	assert.match(workflow, /node scripts\/run-harness-tests\.mjs/);
+	assert.equal(workflow.includes('node --test scripts/'), false);
+	assert.equal(workflow.includes('apt-get install -y ripgrep'), false);
 });
 
 test('CI は feature-gate より前に pnpm install する', () => {
@@ -35,9 +37,6 @@ test('CI は feature-gate より前に pnpm install する', () => {
 	assert.ok(installAt >= 0, 'pnpm install が workflow に無い');
 	assert.ok(gateAt >= 0, 'main の feature-gate 起動が workflow に無い');
 	assert.ok(installAt < gateAt, 'feature-gate は contract-check を呼ぶ。typescript は先に入れる');
-	const rgAt = workflow.indexOf('apt-get install -y ripgrep');
-	const unitAt = workflow.indexOf('scripts/read-guard.test.mjs');
-	assert.ok(rgAt >= 0 && unitAt >= 0 && rgAt < unitAt, 'search-lines は rg を使う。単体テストの前に入れる');
 });
 
 test('席ルーティングは検証 subagent を出さない', () => {
