@@ -71,8 +71,8 @@ test('README は mermaid を編集の正にし、docs の画像を示す', () =>
 	const fences = [...readme.matchAll(/```mermaid\n([\s\S]*?)```/g)].map((m) => m[1]);
 	assert.equal(fences.length, 4, `mermaid 図は4つ: ${fences.length}`);
 	assert.ok(
-		fences.some((b) => /直す/.test(b) && /検討/.test(b) && /記録/.test(b) && /却下/.test(b) && /tsc --noEmit/.test(b)),
-		'モデル図は4分類と noEmit を含む'
+		fences.some((b) => /直す/.test(b) && /検討/.test(b) && /記録/.test(b) && /却下/.test(b) && /tsc --noEmit/.test(b) && /OPA判定/.test(b) && !/被覆/.test(b)),
+		'モデル図は4分類と noEmit と OPA判定を含む'
 	);
 	assert.ok(
 		fences.some(
