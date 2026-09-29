@@ -66,7 +66,7 @@ flowchart TB
   NOTE --> STOP
   DROP --> STOP
   STOP --> FG["feature-gate"]
-  FG --> OPA["OPA 被覆"]
+  FG --> OPA["OPA判定"]
   FG --> CAP["起動回数"]
   FG --> BEH["契約の振る舞い"]
   FG --> PR["PR"]
