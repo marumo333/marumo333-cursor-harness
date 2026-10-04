@@ -8,8 +8,26 @@ import { pathToFileURL } from 'node:url';
 const SCAFFOLD = {
 	'AGENTS.md': '# 作業合意\n\n短い合意だけを書く。\n',
 	'GLOSSARY.md': '# 名詞\n\n## Object type\n\n## Property\n\n## Link type\n',
-	'ACTIONS.md':
-		'# 動詞\n\n## Action type\n\n### Parameters\n\n### Submission criteria\n\n### Ontology edits\n\n### Side effects\n\n## Function\n'
+	'ACTIONS.md': `# 動詞
+
+## Action type
+
+### Parameters
+
+### Submission criteria
+
+提出前に基準を満たさないとき、状態は変わらない。
+
+### Ontology edits
+
+書き戻しが失敗したとき、状態は変わらない。
+
+### Side effects
+
+状態が変わったあと、副作用だけが失敗することがある。
+
+## Function
+`
 };
 
 const HEADINGS = ['AGENTS.md', 'GLOSSARY.md', 'ACTIONS.md'];

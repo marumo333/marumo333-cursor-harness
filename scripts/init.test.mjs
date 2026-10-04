@@ -116,8 +116,12 @@ test('実行は依存のあとコピーと見出しで、二度目は上書き�
 	assert.equal(readFileSync(join(dir, '.env'), 'utf8'), 'A=1\n');
 	assert.equal(readFileSync(join(dir, 'AGENTS.md'), 'utf8'), '残す\n');
 	assert.match(readFileSync(join(dir, 'GLOSSARY.md'), 'utf8'), /## Object type/);
-	assert.match(readFileSync(join(dir, 'ACTIONS.md'), 'utf8'), /### Submission criteria/);
-	assert.match(readFileSync(join(dir, 'ACTIONS.md'), 'utf8'), /## Function/);
+	const actions = readFileSync(join(dir, 'ACTIONS.md'), 'utf8');
+	assert.match(actions, /### Submission criteria/);
+	assert.match(actions, /## Function/);
+	assert.match(actions, /提出前に基準を満たさない/);
+	assert.match(actions, /書き戻しが失敗/);
+	assert.match(actions, /副作用だけが失敗/);
 	assert.equal(existsSync(join(dir, 'design.md')), false);
 	assert.equal(existsSync(join(dir, 'knowledge/features')), false);
 	assert.equal(existsSync(join(dir, 'knowledge/decisions')), false);

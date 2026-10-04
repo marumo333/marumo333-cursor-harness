@@ -6,6 +6,9 @@ import { pathToFileURL } from 'node:url';
 import { planInit } from './init.mjs';
 
 const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+export const BEHAVIOR_TEST_MARKER =
+	"assert.fail('WHEN / THE SYSTEM SHALL を実装するテストに置き換える')";
 const READY = ['AGENTS.md', 'GLOSSARY.md', 'ACTIONS.md'];
 
 function requirements(slug) {
@@ -13,7 +16,11 @@ function requirements(slug) {
 }
 
 function tasks(slug) {
-	return `# ${slug}\n\n- [ ] 振る舞いを requirements.md に書く\n- [ ] その振る舞いが失敗するテストを書く\n- [ ] テストが通るまで実装する\n`;
+	return `# ${slug}\n\n- [ ] 振る舞いを requirements.md に書く\n- [ ] ${slug}.test.mjs の失敗を、その振る舞いのテストに置き換える\n- [ ] テストが通るまで実装する\n`;
+}
+
+function behaviorTest(slug) {
+	return `import { test } from 'node:test';\nimport assert from 'node:assert/strict';\n\ntest('${slug}', () => {\n\t${BEHAVIOR_TEST_MARKER};\n});\n`;
 }
 
 function designDoc(slug) {
@@ -51,7 +58,8 @@ export function runStartFeature(root, opts = {}) {
 	/** @type {[string, string][]} */
 	const files = [
 		['requirements.md', requirements(slug)],
-		['tasks.md', tasks(slug)]
+		['tasks.md', tasks(slug)],
+		[`${slug}.test.mjs`, behaviorTest(slug)]
 	];
 	if (design) files.push(['design.md', designDoc(slug)]);
 	/** @type {string[]} */
