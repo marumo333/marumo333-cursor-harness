@@ -33,12 +33,14 @@ git は clone のときにリポジトリ内のスクリプトを実行しない
    - `AGENTS.md` は短い作業合意だけ。
    - `GLOSSARY.md` は Object type、Property、Link type。
    - `ACTIONS.md` は Parameters、Submission criteria、Ontology edits、Side effects。Function は動詞に混ぜない。
-5. `design.md`、`requirements.md`、`tasks.md` は、機能の作業が始まるまで作らない。機能を始めるコマンドは `node scripts/start-feature.mjs <slug>` で、`features/<slug>/requirements.md` と `tasks.md` だけを作る。`design.md` は `--design` のときだけ作る。二度目は上書きしない。見出しが無いときはこのコマンドを拒否し、先に `node scripts/init.mjs` を求める。このハーネスでは機能ファイルを作らない。
+5. `design.md`、`requirements.md`、`tasks.md` は、機能の作業が始まるまで作らない。機能を始めるコマンドは `node scripts/start-feature.mjs <slug>` で、`features/<slug>/requirements.md` と `tasks.md` と、失敗する `features/<slug>/<slug>.test.mjs` を作る。`design.md` は `--design` のときだけ作る。二度目は上書きしない。見出しが無いときはこのコマンドを拒否し、先に `node scripts/init.mjs` を求める。このハーネスでは機能ファイルを作らない。確認は `node scripts/check-behavior.mjs` で、振る舞いが空のときと、テストが置き換え前のままのときは失敗する。
 6. 入れた依存、作ったファイル名、次に叩くコマンド（`npm run dev` か、既にある test）を1画面で出す。
 
 初期化がやらないことは、ADR と Feature の起票、モデル名の指定、既存ファイルの上書き、秘密の生成、このハーネスの OPA をアプリへコピーすることである。
 
-このハーネスリポジトリを clone したあとは、いまどおり `pnpm install` である。`prepare` が git hooks を入れる。`TEMPLATE.md` はまだ、clone のあとに ADR と Feature を起票すると書いている。アプリの初期化はそちらへ寄せない。`TEMPLATE.md` は canon なので、この文書では書き換えない。
+このハーネスリポジトリを clone したあとは、いまどおり `pnpm install` である。`prepare` が git hooks を入れる。アプリの始め方は `TEMPLATE.md` の「アプリを始める」にあり、ハーネスの ADR 手順とは別である。
+
+`ACTIONS.md` の初期見出しには、動詞の3つの失敗を書いておく。提出を拒むときと書き戻しが失敗するときは状態を変えず、状態のあとで副作用だけが失敗することがある。
 
 ## 失敗
 

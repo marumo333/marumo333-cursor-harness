@@ -44,8 +44,10 @@ test('slug の振る舞いと作業だけを作り、design は作らない', ()
 	assert.equal(existsSync(join(dir, 'knowledge/decisions')), false);
 	assert.deepEqual(result.created, [
 		'features/checkout/requirements.md',
-		'features/checkout/tasks.md'
+		'features/checkout/tasks.md',
+		'features/checkout/checkout.test.mjs'
 	]);
+	assert.match(readFileSync(join(dir, 'features/checkout/checkout.test.mjs'), 'utf8'), /assert\.fail/);
 });
 
 test('--design のときだけ構成と失敗時に残るものを書く', () => {

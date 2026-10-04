@@ -36,6 +36,20 @@ git push -u origin main
 
 GitHub Issue / Spec Kit は正本にしない（[[0033]]）。
 
+## アプリを始める
+
+この節は Next.js などのアプリ用である。席・正本・ゲートはアプリへコピーしない。アプリでは ADR と Feature 票を作らない。
+
+clone の次に、この順で叩く。
+
+```bash
+node scripts/init.mjs
+node scripts/start-feature.mjs <slug>
+node scripts/check-behavior.mjs
+```
+
+`init` は依存と、無いときだけの `AGENTS.md`、`GLOSSARY.md`、`ACTIONS.md` を置く。`start-feature` は `features/<slug>/` に振る舞いと作業と、失敗するテストだけを置く。`design.md` は `--design` のときだけ。`check-behavior` は、振る舞いが空でなく、テストが置き換えられているときだけ成功する。二度目は既存ファイルを上書きしない。
+
 ## 1周（ハーネス改善も同じ）
 
 1. 親は Grok 4.7 high。検証と内省は親が行う。検証用の subagent は出さない。
