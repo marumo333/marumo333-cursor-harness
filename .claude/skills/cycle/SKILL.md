@@ -39,11 +39,10 @@ hooks から Task は起動しない。親が各 skill のあと（または Sto
 
 `node scripts/cycle-metrics.mjs --cycle C-0001`
 
-`should_file_feature=true` なら reflector が Feature を proposed で起票する（直接 skill を書き換えない）。
+`should_file_feature=true` でも Feature 票は作らない。reflector は起動しない。
 token_ledger は観測項だけ。3指標と再起条件は変えない。
 
 ## 再起
 
-人間が PR をマージしたあと `cycle-after-merge` が次票を起票する。
-省略/失敗が無い、未マージの `cycle/*` PR がある、続きの Feature が残っている、
-または `gh` で確認できないときは止める。`human_approved` は CLI から書かない。
+人間が PR をマージしたあと `cycle-after-merge` は承認だけを記録し、Feature は起票しない。
+`human_approved` は CLI から書かない。

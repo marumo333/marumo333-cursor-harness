@@ -12,11 +12,10 @@ Cursor ハーネスの**テンプレート**。対象は席・正本・ゲート
 ## 何をするか
 
 - 席: 親 Grok 4.7 high。検証は親が契約と feature-gate を実行する。検証用の subagent は出さない
-- 正本: [`knowledge/features/F-NNNN-*.yaml`](knowledge/features/README.md)。GitHub Issues / Spec Kit は正本にしない（[ADR 0033](knowledge/decisions/0033-harness-api-budget-routing.md)）
+- 機能の正本は `features/<slug>/` の振る舞いとテスト。機能ごとに ADR、レビュー、proposed、admitted は作らない
 - ゲート: OPA `node scripts/feature-gate.mjs`（自己改善ループそのものではない）
-- 出生規則: Feature は `proposed` で起票する。**同一 PR で `admitted` / `approved` にしない**（[ADR 0038](knowledge/decisions/0038-feature-canon-opa-grow.md)）
 - 管理: skill の使用/省略を `knowledge/graph/` に書き、ノード / 辺 / 状態の3指標で計る
-- 再起的自己改善: AI 実装 PR に省略・失敗・差し戻しが残ったとき、人間がマージしたあと次 Feature の下書き PR を開く（エージェントは自動起動しない）。戻る先は Feature 起票であり、clone からやり直さない
+- 再起: 人間がマージしたあと次の Feature 票は開かない。エージェントは自動起動しない
 - パッケージ: pnpm（[ADR 0041](knowledge/decisions/0041-pnpm-package-manager.md)）
 - commit: hook 必須。主語は `feat:` / `fix:` / `docs:` 等 + 日本語（[ADR 0042](knowledge/decisions/0042-always-on-precommit-ja-conventional.md)）
 
@@ -24,7 +23,7 @@ Cursor ハーネスの**テンプレート**。対象は席・正本・ゲート
 
 ## 最初にやること
 
-Cursor のクラウドでリポを開き、実装には入らない。hook を入れてから ADR → Feature 起票へ進む。
+Cursor のクラウドでリポを開く。このリポジトリの clone 後は `pnpm install`。プロダクトは `node scripts/init.mjs` から始める。機能ごとに ADR は起票しない。
 
 ```bash
 node scripts/install-git-hooks.mjs
@@ -173,30 +172,16 @@ flowchart LR
 
 ### 再起的自己改善
 
-AI 実装 PR に省略・失敗・差し戻しが残ったときだけ回る。人間のマージが点火。
-cycle-after-merge は下書き PR までで、エージェントは自動起動しない。OPA は横のゲート。
+人間のマージが点火する。cycle-after-merge は承認を記録し、Feature 票は作らない。エージェントは自動起動しない。
 
 ![再起的自己改善](docs/architecture/self-improve-flow.png)
 
 ```mermaid
 flowchart TD
-  AIPR["AI 実装 PR"] --> Q{"省略 / 失敗 / 差し戻し?"}
-  Q -->|残る| Merge1["人間がマージ"]
-  Q -->|無い| Merge2["人間がマージ"]
+  AIPR["AI 実装 PR"] --> Merge1["人間がマージ"]
   Merge1 --> CAM["cycle-after-merge"]
-  CAM --> Draft["次 Feature の下書き PR"]
-  Draft --> Stop["エージェントは自動起動しない"]
-  Merge2 --> Grow["正本に定着"]
-  Grow --> Next["次周は人間が開く"]
-  Draft --> Next
-  L["learnings"] --> FP["Feature proposed"]
-  FP --> HM2["人間マージ"]
-  HM2 --> Adm["admitted"]
-  Adm --> Allow["OPA allow"]
-  Allow --> HG["harness-grow"]
-  HG --> PR3["apply PR"]
-  PR3 --> HM3["人間マージ"]
-  HM3 --> CanonOut["skill / ADR / criteria / Rego"]
+  CAM --> Stop["エージェントは自動起動しない"]
+  CAM --> NoFeat["Feature 票は作らない"]
 ```
 
 ## 構成
