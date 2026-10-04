@@ -1,6 +1,6 @@
 # cursor-harness
 
-Cursor ハーネスの**テンプレート**。対象は席・正本・ゲート・cycle（[ADR 0039](knowledge/decisions/0039-harness-template-cycle-graph.md)）。
+Cursor ハーネスの**テンプレート**。対象は席・正本・ゲート・cycle（[ADR 0039](docs/decisions/0039-harness-template-cycle-graph.md)）。
 ライセンスは [MIT](LICENSE)（Copyright (c) 2026 marumo333）。
 
 ## 実行環境
@@ -15,9 +15,9 @@ Cursor ハーネスの**テンプレート**。対象は席・正本・ゲート
 - 機能の正本は `features/<slug>/` の振る舞いとテスト。機能ごとに ADR、レビュー、proposed、admitted は作らない
 - ゲート: OPA `node scripts/feature-gate.mjs`（自己改善ループそのものではない）
 - 管理: skill の使用/省略を `knowledge/graph/` に書き、ノード / 辺 / 状態の3指標で計る
-- 再起: 人間がマージしたあと次の Feature 票は開かない。エージェントは自動起動しない
-- パッケージ: pnpm（[ADR 0041](knowledge/decisions/0041-pnpm-package-manager.md)）
-- commit: hook 必須。主語は `feat:` / `fix:` / `docs:` 等 + 日本語（[ADR 0042](knowledge/decisions/0042-always-on-precommit-ja-conventional.md)）
+- 再起: 人間がマージすると次の cycle が開く。Feature 票は開かない。エージェントは自動起動しない
+- パッケージ: pnpm（[ADR 0041](docs/decisions/0041-pnpm-package-manager.md)）
+- commit: hook 必須。主語は `feat:` / `fix:` / `docs:` 等 + 日本語（[ADR 0042](docs/decisions/0042-always-on-precommit-ja-conventional.md)）
 
 手順の本体は [TEMPLATE.md](TEMPLATE.md)。
 
@@ -30,7 +30,7 @@ node scripts/install-git-hooks.mjs
 ```
 
 空リポへ載せる手順は [TEMPLATE.md](TEMPLATE.md)。
-前進の確認はクラウドまたは Actions 上で `node scripts/feature-gate.mjs`（[ADR 0016](knowledge/decisions/0016-definition-of-done.md)）。ハーネスにテストがある変更は `pnpm test`。
+前進の確認はクラウドまたは Actions 上で `node scripts/feature-gate.mjs`（[ADR 0016](docs/decisions/0016-definition-of-done.md)）。ハーネスにテストがある変更は `pnpm test`。
 
 ## アーキテクチャ
 
@@ -172,7 +172,7 @@ flowchart LR
 
 ### 再起的自己改善
 
-人間のマージが点火する。cycle-after-merge は承認を記録し、Feature 票は作らない。エージェントは自動起動しない。
+人間のマージが点火する。cycle-after-merge は承認を記録し、次の cycle を開く。Feature 票は作らない。エージェントは自動起動しない。
 
 ![再起的自己改善](docs/architecture/self-improve-flow.png)
 
@@ -181,6 +181,7 @@ flowchart TD
   AIPR["AI 実装 PR"] --> Merge1["人間がマージ"]
   Merge1 --> CAM["cycle-after-merge"]
   CAM --> Stop["エージェントは自動起動しない"]
+  CAM --> Next["次の cycle"]
   CAM --> NoFeat["Feature 票は作らない"]
 ```
 
@@ -189,7 +190,9 @@ flowchart TD
 ```
 .claude/          エージェント / skill / hook
 .cursor/          Cursor の hook
-knowledge/        ADR / 判断基準 / Feature / グラフ / 内省
+docs/decisions/   人の判断
+docs/learnings.md 実行のメモ
+knowledge/        cycle の記録とゲートの被覆
 policy/           OPA（ゲートと cycle）
 scripts/          feature-gate / cycle-* / githooks / commit-msg
 ```

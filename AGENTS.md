@@ -1,6 +1,6 @@
 # AGENTS.md
 
-このリポジトリは Cursor ハーネスのテンプレート。対象は席・正本・ゲート・cycle。運用規約の正本は [`.claude/CLAUDE.md`](.claude/CLAUDE.md) と [`.claude/AGENTS.md`](.claude/AGENTS.md)、手順は [`TEMPLATE.md`](TEMPLATE.md)。
+このリポジトリは Cursor ハーネスのテンプレート。対象は席・正本・ゲート・cycle。手順は [`TEMPLATE.md`](TEMPLATE.md)、エージェント向けの規約は [`.claude/AGENTS.md`](.claude/AGENTS.md)。人の判断は [`docs/decisions/`](docs/decisions/) と [`docs/learnings.md`](docs/learnings.md) に残す。
 
 ## Cursor Cloud specific instructions
 

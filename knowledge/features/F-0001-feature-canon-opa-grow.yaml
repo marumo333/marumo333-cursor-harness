@@ -7,7 +7,7 @@ feature:
   created: '2026-08-14'
   bootstrap: false
   learning_refs:
-    - knowledge/learnings.md
+    - docs/learnings.md
   problem: >
     自己成長ループは learnings 追記と skill/ADR の直接書き換えで閉じており、
     作業項目の正本が無い。昇格可否は LLM が YAML/Markdown を解釈するため揺れる。

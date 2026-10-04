@@ -8,7 +8,7 @@ import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { ensureOpa } from './ensure-opa.mjs';
-import { computeMetrics, foldCycle, latestOpenCycle } from './lib/cycle-metrics.mjs';
+import { computeMetrics, foldCycle, latestOpenCycle, nextCycleId } from './lib/cycle-metrics.mjs';
 
 const ROOT = process.env.HARNESS_ROOT || join(dirname(fileURLToPath(import.meta.url)), '..');
 const FEATURES = join(ROOT, 'knowledge', 'features');
@@ -133,5 +133,23 @@ mkdirSync(dirname(EVENTS), { recursive: true });
 const next = [...evs];
 if (humanApproved) next.push(rec);
 
+if (!recurse) {
+	writeFileSync(EVENTS, `${next.map((e) => JSON.stringify(e)).join('\n')}\n`);
+	console.error(`[cycle-after-merge] 次周は開かない: ${JSON.stringify(deny)}`);
+	process.exit(0);
+}
+
+const nxt = nextCycleId(cycleId);
+if (!CYCLE_RE.test(nxt)) {
+	console.error(`[cycle-after-merge] 次 cycle id が不正: ${nxt}`);
+	process.exit(1);
+}
+next.push({
+	t: new Date().toISOString(),
+	type: 'cycle_open',
+	cycle: nxt,
+	source: 'after-merge',
+	from: cycleId
+});
 writeFileSync(EVENTS, `${next.map((e) => JSON.stringify(e)).join('\n')}\n`);
-console.error('[cycle-after-merge] Feature は起票しない');
+console.error(`[cycle-after-merge] ${nxt} を開いた。Feature は起票しない`);

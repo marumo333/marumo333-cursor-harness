@@ -32,7 +32,7 @@ actions:
       - not_born_admitted_or_approved
 
 not_canon:
-  - knowledge/learnings.md
+  - docs/learnings.md
   - knowledge/benchmarks/
 
 bootstrap:

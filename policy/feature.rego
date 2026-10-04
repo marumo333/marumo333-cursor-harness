@@ -42,6 +42,13 @@ learning_refs_prefixed if {
 	}
 }
 
+learning_refs_prefixed if {
+	has_learning_refs
+	every ref in feature.learning_refs {
+		startswith(ref, "docs/")
+	}
+}
+
 has_paths if {
 	is_array(feature.proposed_change.paths)
 	count(feature.proposed_change.paths) > 0
@@ -70,7 +77,7 @@ deny contains "feature.source は human|reflector|audit" if not has_source
 
 deny contains "feature.learning_refs は空でない配列" if not has_learning_refs
 
-deny contains "learning_ref は knowledge/ で始まる" if {
+deny contains "learning_ref は knowledge/ または docs/ で始まる" if {
 	has_learning_refs
 	not learning_refs_prefixed
 }

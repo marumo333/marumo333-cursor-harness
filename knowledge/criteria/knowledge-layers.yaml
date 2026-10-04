@@ -24,8 +24,8 @@ layers:
     audience: human
     form: markdown
     examples:
-      - knowledge/decisions/
-      - knowledge/learnings.md
+      - docs/decisions/
+      - docs/learnings.md
       - .claude/skills/
 
 # 実 ADR は「# ADR NNNN:」+「- 背景:」箇条書き。required_headings 検証は v1 対象外。

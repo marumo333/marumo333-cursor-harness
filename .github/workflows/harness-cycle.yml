@@ -14,7 +14,7 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.merge_commit_sha }}
-      - name: 承認を記録する。Feature は起票しない
+      - name: 承認を記録し、次の cycle を開く。Feature は起票しない
         env:
           MERGE_SHA: ${{ github.event.pull_request.merge_commit_sha }}
           PR_NUMBER: ${{ github.event.pull_request.number }}

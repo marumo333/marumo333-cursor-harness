@@ -71,7 +71,7 @@ test('search-lines は PATH の rg を使わない', () => {
 });
 
 test('learnings の席記述は当時と現行ピンを分ける', () => {
-	const text = readFileSync(join(ROOT, 'knowledge/learnings.md'), 'utf8');
+	const text = readFileSync(join(ROOT, 'docs/learnings.md'), 'utf8');
 	const line = text.split('\n').find((l) => l.includes('席は親 Grok 4.6'));
 	assert.ok(line);
 	assert.match(line, /当時/);

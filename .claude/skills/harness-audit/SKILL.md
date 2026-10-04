@@ -7,7 +7,7 @@ description: ハーネス健全性を決定的にスコア化し履歴に記録�
 
 ## スコア項目（決定的・0-100）
 
-- ルール網羅: CLAUDE.md の禁止が hooks/agent で強制されているか。
+- ルール網羅: `.claude/AGENTS.md` の禁止が hooks で強制されているか。
 - knowledge 充足: ADR に未解決の重要判断が残っていないか・criteria が最新か。
 - **席割当の整合（[[0033]] / [[0049]] / [[0051]]）**: `model-routing.yaml` の chat_orchestrator=Grok。検証用 subagent は空。AGENTS / skills が verifier や 3体の起動を必須にしていないか。
 - **ハーネス制約（[[0039]] / [[0051]]）**: 席は親 Grok。検証は契約と feature-gate。機能ごとに ADR、レビュー、proposed、admitted は作らない。
