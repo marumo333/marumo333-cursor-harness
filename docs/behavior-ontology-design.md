@@ -20,7 +20,29 @@
 | `GLOSSARY.md` | Object type、Property、Link type | Foundry の名詞（objects, properties, links） |
 | `ACTIONS.md` | Parameters、Submission criteria、Ontology edits、Side effects | Foundry の動詞（actions）。Logic の Function は動詞に混ぜない |
 
-失敗は3つに書く。
+## clone の直後
+
+git は clone のときにリポジトリ内のスクリプトを実行しない。初期化は、clone の次に一度だけ叩く `node scripts/init.mjs` である。二度目も同じコマンドで、既存ファイルは上書きしない。
+
+この順で行う。
+
+1. ロックファイルを見る。`package-lock.json` なら `npm ci`。`pnpm-lock.yaml` なら `pnpm install`。`requirements.txt` または `pyproject.toml` ならその依存を入れる。両方あるリポジトリは両方入れる。
+2. `.env.example` があり `.env` が無いときだけコピーする。`.env` はコミットしない。
+3. `prisma/schema.prisma` があるときだけ `prisma generate`。
+4. 次が無いときだけ、空の見出しを作る。あるファイルは開いて終わらせる。
+   - `AGENTS.md` は短い作業合意だけ。
+   - `GLOSSARY.md` は Object type、Property、Link type。
+   - `ACTIONS.md` は Parameters、Submission criteria、Ontology edits、Side effects。Function は動詞に混ぜない。
+5. `design.md`、`requirements.md`、`tasks.md` は、機能の作業が始まるまで作らない。
+6. 入れた依存、作ったファイル名、次に叩くコマンド（`npm run dev` か、既にある test）を1画面で出す。
+
+初期化がやらないことは、ADR と Feature の起票、モデル名の指定、既存ファイルの上書き、秘密の生成、このハーネスの OPA をアプリへコピーすることである。
+
+このハーネスリポジトリを clone したあとは、いまどおり `pnpm install` である。`prepare` が git hooks を入れる。`TEMPLATE.md` はまだ、clone のあとに ADR と Feature を起票すると書いている。アプリの初期化はそちらへ寄せない。`TEMPLATE.md` は canon なので、この文書では書き換えない。
+
+## 失敗
+
+動詞の失敗は3つに書く。
 
 1. 提出前に基準を満たさず、状態は変わらない。
 2. 書き戻しが失敗し、状態は変わらない。
@@ -34,6 +56,7 @@ Connect から Automate の5語は、Ontology の定義ではなく、2023年の
 - [Kiro Feature Specs](https://kiro.dev/docs/specs/feature-specs/)（ページ更新 2026-08-04）は `requirements.md`、`design.md`、`tasks.md`。振る舞いは EARS。探索的なコーディングとバグには向かないと公式が書く。
 - [OaK](https://arxiv.org/abs/2608.22974) は、もっともらしいだけのオントロジーは決定に必要な関係を欠く、と要約で書く。スキーマと型付き関数を判定で直すときだけ成績が上がる。
 - エージェントハーネスの利得はツール、ファイル窓、テストにある。散文の指示を増やすと遵守は落ちる。ADR の件数そのものがリードタイムを伸ばす計測は無い。
+- [Anthropic の長時間ハーネス](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) は、clone 後にエージェントが `init.sh` を走らせて依存と起動を確認する。git 自体は clone 時にそのスクリプトを実行しない。
 
 ## このリポジトリとの境界
 
