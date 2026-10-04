@@ -7,8 +7,8 @@ feature:
   created: '2026-08-14'
   bootstrap: false
   learning_refs:
-    # main のゲートは knowledge/ 始まりだけを認める。本文の置き場は knowledge/README.md が指す docs/learnings.md。
-    - knowledge/README.md
+    # 本文は docs/learnings.md。main のゲートは knowledge/ 始まりの参照だけを認める。
+    - knowledge/learnings.md
   problem: >
     自己成長ループは learnings 追記と skill/ADR の直接書き換えで閉じており、
     作業項目の正本が無い。昇格可否は LLM が YAML/Markdown を解釈するため揺れる。
