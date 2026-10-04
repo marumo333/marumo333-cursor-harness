@@ -34,9 +34,9 @@ node scripts/install-git-hooks.mjs
 
 ## アーキテクチャ
 
-このハーネスは席・正本・ゲート・cycle で回る。入力は人間の依頼と Feature、
+このハーネスは席・ゲート・cycle で回る。入力は人間の依頼と `features/<slug>/` の振る舞い、
 実行は席、token効率化は code-mode と packet、品質ゲートは hooks / OPA / feature-gate、
-成果は正本（skill / ADR / criteria / Rego）、フィードバックは cycle と learnings である。
+成果は振る舞いのテストと `docs/decisions/` と policy、フィードバックは次の cycle である。
 監査の主体は親 Grok 4.7 high である。Uber の Gateway や艦隊は置かない。OPA は canon 変更のゲートであり、自己改善ループそのものではない。
 
 図は [`docs/architecture/`](docs/architecture/) のアーキテクチャ図。実線は実行、破線は条件付きか判定のみ。編集する正は下記 mermaid。
@@ -70,6 +70,8 @@ flowchart TB
   FG --> BEH["契約の振る舞い"]
   FG --> PR["PR"]
   PR --> HM["人間マージ"]
+  HM --> CY["次の cycle"]
+  HM --> DC["docs/decisions"]
   G -.->|並列展開の前| BA["Fable backend-architect"]
   G -.->|人が明示した1回| SR["Fable security-reviewer"]
   CAP -->|0回| OFF["verifier と reflector は起動しない"]
@@ -87,7 +89,7 @@ OPA / feature-gate は横の判定であり、正本へは書かない。正本�
 flowchart TB
   subgraph inbound["受付"]
     H["人間の依頼"]
-    FE["Feature proposed"]
+    BH["features/slug の振る舞い"]
   end
 
   subgraph plant["実行"]
@@ -107,7 +109,7 @@ flowchart TB
 
   subgraph warehouse["正本"]
     SK["skills / agents"]
-    AD["ADR / criteria / Feature"]
+    AD["docs/decisions と design.md"]
     PO["policy Rego"]
   end
 
@@ -117,7 +119,7 @@ flowchart TB
   end
 
   H --> P
-  FE --> P
+  BH --> P
   P --> CM
   P --> PK
   P --> PL
@@ -132,7 +134,7 @@ flowchart TB
 
 ### ランタイム
 
-席と強制の層。子へ渡すのは packet だけ。会話履歴と learnings 全文は継がない。
+席と強制の層。子へ渡すのは packet だけ。会話履歴と `docs/learnings.md` の全文は継がない。
 hooks を踏むのは実装 Grok の commit。OPA は判定であり正本へは書かない。
 
 ![ランタイム](docs/architecture/runtime-overview.png)
@@ -156,8 +158,8 @@ flowchart LR
 
   subgraph canon["正本"]
     direction TB
-    Feat["Feature YAML"]
-    Skill["skills"]
+    Beh["features/slug"]
+    Docs["docs/decisions"]
     Policy["Rego"]
   end
 
@@ -165,8 +167,8 @@ flowchart LR
   IMP --> Hook
   IMP --> Gate
   Gate -.->|"判定のみ"| Packet
-  HM["人間マージ"] --> Feat
-  HM --> Skill
+  HM["人間マージ"] --> Beh
+  HM --> Docs
   HM --> Policy
 ```
 
@@ -197,4 +199,4 @@ policy/           OPA（ゲートと cycle）
 scripts/          feature-gate / cycle-* / githooks / commit-msg
 ```
 
-Feature の起票手順は [`knowledge/features/README.md`](knowledge/features/README.md)。
+プロダクトの始め方は [TEMPLATE.md](TEMPLATE.md) の「プロダクトを始める」。人の判断は [`docs/decisions/`](docs/decisions/)。

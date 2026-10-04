@@ -90,7 +90,13 @@ test('README は mermaid を編集の正にし、docs の画像を示す', () =>
 		'ランタイム図は親が hooks を踏み OPA は判定のみ'
 	);
 	assert.ok(
-		fences.some((b) => /cycle-after-merge/.test(b) && /エージェントは自動起動しない/.test(b)),
-		'自己改善図は cycle-after-merge と自動起動しないを含む'
+		fences.some((b) => /cycle-after-merge/.test(b) && /エージェントは自動起動しない/.test(b) && /次の cycle/.test(b)),
+		'自己改善図は cycle-after-merge と次の cycle と自動起動しないを含む'
 	);
+	for (const fence of fences) {
+		assert.doesNotMatch(fence, /Feature proposed/);
+		assert.doesNotMatch(fence, /Feature YAML/);
+		assert.doesNotMatch(fence, /次 Feature/);
+		assert.doesNotMatch(fence, /admitted/);
+	}
 });
