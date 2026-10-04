@@ -11,7 +11,7 @@ tools: Read, Grep, Glob, Write, Edit
 ハーネス テンプレートの設計を決める。機能ごとに ADR は起票しない。対象は席・正本・ゲート・cycle（[[0039]]）。
 
 ## 責務
-- Feature 正本 / OPA 入場 / cycle グラフの境界と不変条件。
+- ゲートと cycle の境界と不変条件。機能ごとの票は作らない。
 - 重要判断を機能ごとの ADR にしない。振る舞いは `features/<slug>/requirements.md` に書く。
 - 並列展開前の plan-confirm（計画 md のみ・実装禁止）。
 

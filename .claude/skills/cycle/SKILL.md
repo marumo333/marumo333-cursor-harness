@@ -27,7 +27,7 @@ hooks から Task は起動しない。親が各 skill のあと（または Sto
 
 親が子を起動する直前:
 
-`node scripts/harness-query.mjs --cycle C-NNNN --node skill:verify --context-mode isolated --feature F-NNNN --adr knowledge/decisions/0045-dispatch-context-packet.md`
+`node scripts/harness-query.mjs --cycle C-NNNN --node skill:verify --context-mode isolated --feature F-NNNN --adr docs/decisions/0045-dispatch-context-packet.md`
 
 `node scripts/cycle-record.mjs --type dispatch --cycle C-NNNN --node skill:verify --seq 1 --seat opus --escalate stay --sha256 <packetのsha256>`
 
@@ -39,8 +39,8 @@ hooks から Task は起動しない。親が各 skill のあと（または Sto
 
 `node scripts/cycle-metrics.mjs --cycle C-0001`
 
-`should_file_feature=true` でも Feature 票は作らない。reflector は起動しない。
-token_ledger は観測項だけ。3指標と再起条件は変えない。
+`degraded=true` は指標が落ちた印である。Feature 票は作らない。reflector は起動しない。
+token_ledger は観測項だけ。3指標には入れない。
 
 ## 再起
 

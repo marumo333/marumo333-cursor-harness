@@ -21,7 +21,14 @@ test_scripts_and_hooks_are_canon if {
 
 test_learnings_and_benchmarks_are_not_canon if {
 	not canon.canon_path("knowledge/learnings.md")
+	not canon.canon_path("docs/learnings.md")
 	not canon.canon_path("knowledge/benchmarks/audit-4.json")
 	not canon.canon_path("knowledge/graph/events.jsonl")
 	not canon.canon_path("knowledge/graph/README.md")
+	not canon.canon_path("knowledge/decisions/0016-definition-of-done.md")
+	not canon.canon_path(".claude/CLAUDE.md")
+}
+
+test_living_decisions_are_canon if {
+	canon.canon_path("docs/decisions/0016-definition-of-done.md")
 }

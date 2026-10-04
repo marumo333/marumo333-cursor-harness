@@ -62,7 +62,7 @@ function loadFeatures() {
 }
 
 function collect() {
-	const decisions = listFiles(join(ROOT, 'knowledge', 'decisions'), (n) => /^\d{4}-.+\.md$/.test(n)).map((p) => ({
+	const decisions = listFiles(join(ROOT, 'docs', 'decisions'), (n) => /^\d{4}-.+\.md$/.test(n)).map((p) => ({
 		filename: p.split(/[\\/]/).pop(),
 		path: rel(p),
 		text: readFileSync(p, 'utf8')

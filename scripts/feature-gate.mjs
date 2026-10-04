@@ -217,9 +217,15 @@ function diffPaths(resolved) {
 }
 
 function existingAdrs(mb) {
-	return gitLines(['ls-tree', '-r', '--name-only', mb, 'knowledge/decisions'], {
-		required: true
-	}).filter((p) => p.endsWith('.md') && p !== 'knowledge/decisions/README.md');
+	const roots = ['docs/decisions', 'knowledge/decisions'];
+	const out = [];
+	for (const root of roots) {
+		for (const p of gitLines(['ls-tree', '-r', '--name-only', mb, root], { required: true })) {
+			if (!p.endsWith('.md') || p.endsWith('/README.md')) continue;
+			out.push(p);
+		}
+	}
+	return out;
 }
 
 function relFeature(file) {

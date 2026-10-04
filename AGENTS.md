@@ -8,7 +8,7 @@
 
 ### 何のリポか
 
-Node.js 製のガバナンスハーネス。npm 依存パッケージは無い（`package.json` に `dependencies` なし）。「アプリ」= `scripts/` の Node スクリプト群 + OPA によるポリシーゲート。
+Node.js 製のガバナンスハーネス。npm 依存パッケージは無い（`package.json` に `dependencies` なし）。中身は `scripts/` の Node スクリプト群と OPA によるポリシーゲート。
 
 ### 実行環境
 
@@ -21,9 +21,9 @@ Node.js 製のガバナンスハーネス。npm 依存パッケージは無い�
 ### コマンド（lint / test / build / run に相当）
 
 - 依存導入 + git hooks 設定: `pnpm install`（`prepare` が `core.hooksPath=scripts/githooks` を設定）。
-- 自動テスト: `pnpm test`（`node --test`、77 件）。
+- 自動テスト: `pnpm test`（`node --test`）。
 - ポリシー lint / test（OPA のみ）: `node scripts/feature-gate.mjs --test`。
-- 正本ゲート本体（build/run 相当）: `node scripts/feature-gate.mjs`。canon パス（`scripts/` `policy/` `.claude/skills/` `knowledge/features/` など、正本は `policy/canon.rego`）を変更する場合は Feature 起票 + OPA allow が必要。
+- 正本ゲート本体（build/run 相当）: `node scripts/feature-gate.mjs`。canon パス（`scripts/` `policy/` `.claude/skills/` `docs/decisions/` `knowledge/features/` など、正本は `policy/canon.rego`）を変えるときも新しい Feature 票は作らない。被覆は既存の F-0001。
 
 ### 非自明な落とし穴
 

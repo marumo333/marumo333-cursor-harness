@@ -41,7 +41,7 @@ export function computeMetrics(required, cycle) {
 		state_integrity,
 		has_failed,
 		human_approved: cycle.human_approved === true,
-		should_file_feature: node_skip_rate > 0 || edge_skip_rate > 0 || has_failed || state_integrity < 1
+		degraded: node_skip_rate > 0 || edge_skip_rate > 0 || has_failed || state_integrity < 1
 	};
 }
 

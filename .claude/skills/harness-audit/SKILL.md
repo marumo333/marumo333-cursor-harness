@@ -14,11 +14,11 @@ description: ハーネス健全性を決定的にスコア化し履歴に記録�
 - **cycle 整合（[[0039]]）**: required-cycle の必須ノードが記録され、3指標が出せるか。
 - セキュリティ: security-policy.yaml 各項目（OWASP LLM/Agentic Top10）。
 - 学習: learnings が更新されているか。機能ごとの票は増えていないか。
-- **feature/OPA 整合**: `opa test policy/` 緑、`knowledge/features/` が型を満たす、canon 差分が票で被覆されているか。
+- **feature/OPA 整合**: `opa test policy/` が緑。`knowledge/features/` に新しい票は無い。canon 差分は既存の被覆で通る。
 
 ## 実行席
 
-監査の集計・文書突合は親 Grok で可。判定に迷う項目は Opus Task。
+監査の集計・文書突合・判定は親 Grok。Opus の Task は出さない。
 
 ## 出力
 

@@ -21,13 +21,11 @@ canon_path(p) if startswith(p, "knowledge/features/")
 # events.jsonl は追記ログ（状態）。正本は必須集合だけ。
 canon_path(p) if p == "knowledge/graph/required-cycle.json"
 
-canon_path(p) if p == ".claude/CLAUDE.md"
-
 canon_path(p) if p == ".claude/AGENTS.md"
 
 canon_path(p) if p == ".claude/settings.json"
 
-canon_path(p) if startswith(p, "knowledge/decisions/")
+canon_path(p) if startswith(p, "docs/decisions/")
 
 canon_path(p) if startswith(p, "knowledge/criteria/")
 

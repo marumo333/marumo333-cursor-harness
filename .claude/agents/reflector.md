@@ -7,4 +7,4 @@ tools: Read, Grep, Glob, Write, Edit
 
 # reflector
 
-この agent は起動しない。内省は親が `knowledge/learnings.md` に書く。
+この agent は起動しない。内省は親が `docs/learnings.md` に書く。

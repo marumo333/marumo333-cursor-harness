@@ -171,17 +171,17 @@ test_deny_apply_when_done if {
 test_deny_silent_adr_rewrite if {
 	not admission.allow with input as {
 		"action": "apply",
-		"feature": object.union(base, {"proposed_change": {"mutates_canon": true, "paths": ["knowledge/decisions/"]}}),
+		"feature": object.union(base, {"proposed_change": {"mutates_canon": true, "paths": ["docs/decisions/"]}}),
 		"feature_in_merge_base": true,
 		"f0001_in_merge_base": true,
-		"diff_paths": ["knowledge/decisions/0016-definition-of-done.md"],
-		"existing_adrs": ["knowledge/decisions/0016-definition-of-done.md"],
+		"diff_paths": ["docs/decisions/0016-definition-of-done.md"],
+		"existing_adrs": ["docs/decisions/0016-definition-of-done.md"],
 	}
 }
 
 test_allow_adr_amend_when_flagged if {
 	feat := object.union(base, {
-		"proposed_change": {"mutates_canon": true, "paths": ["knowledge/decisions/"]},
+		"proposed_change": {"mutates_canon": true, "paths": ["docs/decisions/"]},
 		"constraints": {"supersede_adr": true},
 	})
 	admission.allow with input as {
@@ -189,8 +189,8 @@ test_allow_adr_amend_when_flagged if {
 		"feature": feat,
 		"feature_in_merge_base": true,
 		"f0001_in_merge_base": true,
-		"diff_paths": ["knowledge/decisions/0016-definition-of-done.md"],
-		"existing_adrs": ["knowledge/decisions/0016-definition-of-done.md"],
+		"diff_paths": ["docs/decisions/0016-definition-of-done.md"],
+		"existing_adrs": ["docs/decisions/0016-definition-of-done.md"],
 	}
 }
 

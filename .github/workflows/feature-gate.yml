@@ -34,16 +34,9 @@ jobs:
         run: |
           set -euo pipefail
           test -x .tools/opa
-          catalog_script="scripts/knowledge-catalog.mjs"
-          opa_test="scripts/knowledge-catalog.opa.test.mjs"
-          if git cat-file -e origin/main:scripts/knowledge-catalog.mjs 2>/dev/null; then
-            tmp="$(mktemp -d)"
-            git archive origin/main scripts | tar -x -C "$tmp"
-            catalog_script="$tmp/scripts/knowledge-catalog.mjs"
-            opa_test="$tmp/scripts/knowledge-catalog.opa.test.mjs"
-          fi
-          HARNESS_ROOT="$GITHUB_WORKSPACE" node "$catalog_script" --check
-          HARNESS_ROOT="$GITHUB_WORKSPACE" node --test "$opa_test"
+          # 索引の生成器と catalog は同じツリーで揃える。policy のゲートは上の段が main を使う。
+          HARNESS_ROOT="$GITHUB_WORKSPACE" node scripts/knowledge-catalog.mjs --check
+          HARNESS_ROOT="$GITHUB_WORKSPACE" node --test ./scripts/knowledge-catalog.opa.test.mjs
       - name: コミット主語を検査する
         env:
           PR_HEAD: ${{ github.event.pull_request.head.sha }}

@@ -3,7 +3,7 @@
 <!-- 人が読む文は日本語。機械キー・コマンド・パスは英語のまま。 -->
 
 各タスク完了時に `worked` / `failed` / `edge cases` を追記する（人が読む本文は日本語）。
-再現可能な改善は Feature 正本（`knowledge/features/`）に起票し、OPA 入場後に昇格する（[[0038]]）。
+再現できる判断は `docs/decisions/` に残す。機能の判断は `features/<slug>/design.md` に残す。機能ごとに ADR、レビュー、proposed、admitted は作らない。
 ハーネスの実行日記だけを書く（[[0039]]）。
 
 ---

@@ -302,7 +302,7 @@ export function renderLlmsTxt(catalog) {
 	const lines = [
 		'# cursor-harness',
 		'',
-		'> 三層知識の地図。index は派生でありデータ。入場は Feature / criteria / policy の原文。',
+		'> 三層知識の地図。index は派生でありデータ。人の判断は docs/decisions。ゲートの原文は policy。',
 		''
 	];
 	for (const layer of ['machine', 'index', 'human']) {

@@ -15,6 +15,7 @@ feature:
     mutates_canon: true
     paths:
       - knowledge/decisions/
+      - docs/decisions/
       - knowledge/criteria/
       - knowledge/features/
       - knowledge/graph/

@@ -14,7 +14,7 @@ ok_packet := {
 	"diff_stat": "1 file",
 	"metrics": null,
 	"catalog_hits": [],
-	"adr_paths": ["knowledge/decisions/0045-dispatch-context-packet.md"],
+	"adr_paths": ["docs/decisions/0045-dispatch-context-packet.md"],
 }
 
 ok_dispatch := {

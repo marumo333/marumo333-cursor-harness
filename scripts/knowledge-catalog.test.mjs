@@ -1,8 +1,9 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, writeFileSync, mkdirSync, symlinkSync } from 'node:fs';
+import { mkdtempSync, readFileSync, writeFileSync, mkdirSync, symlinkSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import {
 	FEATURE_NAME,
 	sanitizeSummary,
@@ -264,6 +265,19 @@ test('フラグは check か write の一方だけ', () => {
 
 test('並びはコードポイント順で Z が a より前', () => {
 	assert.ok(cmpStr('skill:Zeta', 'skill:alphabeta') < 0);
+});
+
+test('catalog の判断は docs/decisions を指す', () => {
+	const root = join(dirname(fileURLToPath(import.meta.url)), '..');
+	const catalog = JSON.parse(readFileSync(join(root, 'knowledge/index/catalog.json'), 'utf8'));
+	const decisions = catalog.entities.filter((e) => e.kind === 'decision');
+	assert.ok(decisions.length > 0);
+	for (const e of decisions) {
+		assert.match(e.path, /^docs\/decisions\/\d{4}-.+\.md$/);
+	}
+	const llms = readFileSync(join(root, 'knowledge/index/llms.txt'), 'utf8');
+	assert.match(llms, /人の判断は docs\/decisions/);
+	assert.doesNotMatch(llms, /入場は Feature/);
 });
 
 test('cycle ノード id 欠落は deny', () => {

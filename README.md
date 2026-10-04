@@ -23,11 +23,7 @@ Cursor ハーネスの**テンプレート**。対象は席・正本・ゲート
 
 ## 最初にやること
 
-Cursor のクラウドでリポを開く。このリポジトリの clone 後は `pnpm install`。プロダクトは `node scripts/init.mjs` から始める。機能ごとに ADR は起票しない。
-
-```bash
-node scripts/install-git-hooks.mjs
-```
+Cursor のクラウドでリポを開く。このリポジトリの clone 後は `pnpm install`（hooks も入る）。プロダクトの始め方は [TEMPLATE.md](TEMPLATE.md) の「プロダクトを始める」。機能ごとに ADR は起票しない。
 
 空リポへ載せる手順は [TEMPLATE.md](TEMPLATE.md)。
 前進の確認はクラウドまたは Actions 上で `node scripts/feature-gate.mjs`（[ADR 0016](docs/decisions/0016-definition-of-done.md)）。ハーネスにテストがある変更は `pnpm test`。

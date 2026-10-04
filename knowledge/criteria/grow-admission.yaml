@@ -1,4 +1,4 @@
-# Feature 正本 + OPA grow 入場 — ハーネス/reflector/verify が参照。出典: ADR 0038
+# ゲートがまだ持つ入場規則の写し。新しい票は作らない。出典: ADR 0038
 # パス集合の正本は policy/canon.rego。ここにリストを複製しない。
 canon: knowledge/features
 canon_paths_source: policy/canon.rego

@@ -1,6 +1,6 @@
 # knowledge/index/ — 三層知識の地図（[[0043]]）
 
-派生。canon ではない。入場・被覆・不変条件は Feature / criteria / policy の原文を読む。
+派生。canon ではない。人の判断は `docs/decisions/`。ゲートの原文は `policy/`。
 
 | ファイル | 役割 |
 | --- | --- |
