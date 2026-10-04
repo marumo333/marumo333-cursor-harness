@@ -176,3 +176,5 @@
 {"t":"2026-09-29T15:31:58.616Z","type":"token_ledger","cycle":"C-0016","seat":"grok","effort":"medium","packet_bytes":0,"tasks":1,"zero_value_reinject":false}
 {"t":"2026-09-29T15:34:11.401Z","type":"human_approved","cycle":"C-0016","merge_sha":"22519e2b9bf8721a512697f15edc277d81b6f72b","pr":"20"}
 {"t":"2026-09-29T15:35:48.717Z","type":"human_approved","cycle":"C-0016","merge_sha":"a8d15ca7076ad413f74f8534b00b77a656a480ba","pr":"21"}
+{"t":"2026-10-04T05:03:18.637Z","type":"cycle_open","cycle":"C-0017","source":"manual"}
+{"t":"2026-10-04T05:03:18.662Z","type":"node_state","cycle":"C-0017","node":"skill:harness-api-budget","state":"used"}
