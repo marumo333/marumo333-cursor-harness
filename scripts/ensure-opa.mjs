@@ -4,6 +4,7 @@
  */
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
+import { curlFetch } from './lib/curl-fetch.mjs';
 import { chmodSync, existsSync, mkdirSync, readFileSync, unlinkSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -58,7 +59,7 @@ export function ensureOpa() {
 	}
 	mkdirSync(TOOLS, { recursive: true });
 	const url = `https://github.com/open-policy-agent/opa/releases/download/v${OPA_VERSION}/opa_linux_amd64_static`;
-	execFileSync('curl', ['-fsSL', '-o', local, url], { stdio: 'inherit' });
+	curlFetch(url, local);
 	chmodSync(local, 0o755);
 	return acceptPinned(local, expected);
 }
