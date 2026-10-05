@@ -18,6 +18,7 @@ test('機能ごとの ADR と proposed と admitted を作る手順が残って�
 	assert.doesNotMatch(workflow, /knowledge\/features/);
 	assert.doesNotMatch(workflow, /gh pr create/);
 	assert.equal(existsSync(join(ROOT, 'knowledge')), false);
+	assert.equal(existsSync(join(ROOT, 'docs/superpowers')), false);
 	assert.equal(existsSync(join(ROOT, 'policy/grow.rego')), false);
 	assert.equal(existsSync(join(ROOT, 'policy/feature.rego')), false);
 	assert.equal(existsSync(join(ROOT, 'scripts/knowledge-catalog.mjs')), false);
