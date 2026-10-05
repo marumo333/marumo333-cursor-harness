@@ -127,7 +127,7 @@ test_deny_uncovered_canon_path if {
 		"feature": base,
 		"feature_in_merge_base": true,
 		"f0001_in_merge_base": true,
-		"diff_paths": [".claude/skills/example/SKILL.md", "knowledge/criteria/code-quality.yaml"],
+		"diff_paths": [".claude/skills/example/SKILL.md", "cycle/code-quality.yaml"],
 		"existing_adrs": [],
 	}
 }
@@ -138,7 +138,7 @@ test_cover_paths_allows_partial_feature if {
 		"feature": base,
 		"feature_in_merge_base": true,
 		"f0001_in_merge_base": true,
-		"diff_paths": [".claude/skills/example/SKILL.md", "knowledge/criteria/code-quality.yaml"],
+		"diff_paths": [".claude/skills/example/SKILL.md", "cycle/code-quality.yaml"],
 		"cover_paths": [".claude/skills/example/SKILL.md"],
 		"existing_adrs": [],
 	}

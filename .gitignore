@@ -6,9 +6,8 @@ node_modules/
 !.cursor/hooks/**
 !.cursor/log_subagent_model.mjs
 .claude/settings.local.json
-knowledge/state.sqlite
-knowledge/graph/packets/**
-!knowledge/graph/packets/.gitkeep
+cycle/packets/**
+!cycle/packets/.gitkeep
 .tools/
 .env
 .env.*

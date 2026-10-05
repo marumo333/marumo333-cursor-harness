@@ -1,13 +1,13 @@
 #!/usr/bin/env node
-/** knowledge/graph/events.jsonl にグラフイベントを1件追記する */
+/** cycle/events.jsonl にグラフイベントを1件追記する */
 import { appendFileSync, existsSync, mkdirSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { assertDispatchPolicy, countCanonPaths } from './lib/packet-policy.mjs';
 
 const ROOT = process.env.HARNESS_ROOT || join(dirname(fileURLToPath(import.meta.url)), '..');
-const EVENTS = join(ROOT, 'knowledge', 'graph', 'events.jsonl');
-const REQUIRED = join(ROOT, 'knowledge', 'graph', 'required-cycle.json');
+const EVENTS = join(ROOT, 'cycle', 'events.jsonl');
+const REQUIRED = join(ROOT, 'cycle', 'required-cycle.json');
 const CYCLE_RE = /^C-\d{4}$/;
 const NODE_STATES = new Set(['used', 'skipped', 'failed', 'approved']);
 const EDGE_STATES = new Set(['taken', 'skipped', 'failed']);

@@ -46,7 +46,7 @@ export function effortAllowFor(role) {
 }
 
 export function loadRequiredCycle(root) {
-	const abs = join(root, 'knowledge', 'graph', 'required-cycle.json');
+	const abs = join(root, 'cycle', 'required-cycle.json');
 	if (!existsSync(abs)) throw new Error('required-cycle.json が無い');
 	return JSON.parse(readFileSync(abs, 'utf8'));
 }
@@ -134,7 +134,7 @@ export function assertDispatchPolicy({ root, policyDir, dispatch, canon_path_cou
 	const graph = loadRequiredCycle(root);
 	if (!knownNodes(graph).has(dispatch.node)) throw new Error(`未知のノード ${dispatch.node}`);
 	const required_mode = requiredModeFor(graph, dispatch.node);
-	const rel = `knowledge/graph/packets/${packetFileName(dispatch)}`;
+	const rel = `cycle/packets/${packetFileName(dispatch)}`;
 	const abs = join(root, rel);
 	if (!existsSync(abs)) throw new Error(`packet が無い: ${rel}`);
 	const raw = readFileSync(abs);

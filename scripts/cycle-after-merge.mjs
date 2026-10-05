@@ -12,7 +12,7 @@ import { computeMetrics, foldCycle, latestOpenCycle, nextCycleId } from './lib/c
 
 const ROOT = process.env.HARNESS_ROOT || join(dirname(fileURLToPath(import.meta.url)), '..');
 const FEATURES = join(ROOT, 'knowledge', 'features');
-const EVENTS = join(ROOT, 'knowledge', 'graph', 'events.jsonl');
+const EVENTS = join(ROOT, 'cycle', 'events.jsonl');
 const POLICY = process.env.OPA_POLICY_DIR || join(ROOT, 'policy');
 const CYCLE_RE = /^C-\d{4}$/;
 
@@ -95,7 +95,7 @@ function openCyclePrExists() {
 const evs = events();
 const rawCycle = process.env.CYCLE_ID || latestOpenCycle(evs);
 const cycleId = CYCLE_RE.test(rawCycle) ? rawCycle : 'C-0001';
-const required = JSON.parse(readFileSync(join(ROOT, 'knowledge/graph/required-cycle.json'), 'utf8'));
+const required = JSON.parse(readFileSync(join(ROOT, 'cycle/required-cycle.json'), 'utf8'));
 const folded = foldCycle(evs, cycleId);
 const metrics = computeMetrics(required, folded);
 const pending = pendingFeatures();

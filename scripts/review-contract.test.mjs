@@ -33,9 +33,9 @@ test('feature-gate の CI は同じ単体テストコマンドを実行する', 
 test('CI は feature-gate より前に pnpm install する', () => {
 	const workflow = read('.github/workflows/feature-gate.yml');
 	const installAt = workflow.indexOf('pnpm install --frozen-lockfile');
-	const gateAt = workflow.indexOf('node "$tmp/scripts/feature-gate.mjs"');
+	const gateAt = workflow.indexOf('node scripts/feature-gate.mjs');
 	assert.ok(installAt >= 0, 'pnpm install が workflow に無い');
-	assert.ok(gateAt >= 0, 'main の feature-gate 起動が workflow に無い');
+	assert.ok(gateAt >= 0, 'feature-gate の起動が workflow に無い');
 	assert.ok(installAt < gateAt, 'feature-gate は contract-check を呼ぶ。typescript は先に入れる');
 });
 

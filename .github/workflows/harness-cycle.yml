@@ -25,7 +25,7 @@ jobs:
           node scripts/cycle-after-merge.mjs
           git config user.name "harness-cycle"
           git config user.email "harness-cycle@users.noreply.github.com"
-          git add knowledge/graph/events.jsonl
+          git add cycle/events.jsonl
           if git diff --cached --quiet; then
             echo "イベントの変更なし"
             exit 0

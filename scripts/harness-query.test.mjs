@@ -18,7 +18,7 @@ import {
 
 function tmpRoot() {
 	const root = mkdtempSync(join(tmpdir(), 'harness-query-'));
-	mkdirSync(join(root, 'knowledge', 'graph', 'packets'), { recursive: true });
+	mkdirSync(join(root, 'cycle', 'packets'), { recursive: true });
 	return root;
 }
 
@@ -141,7 +141,7 @@ test('正当なパケットを書き sha256 を返す', () => {
 		adr_paths: ['docs/decisions/0045-dispatch-context-packet.md']
 	});
 	const written = writePacket({ root, packet });
-	const rel = 'knowledge/graph/packets/C-0010.skill-verify.1.json';
+	const rel = 'cycle/packets/C-0010.skill-verify.1.json';
 	assert.equal(written.path, rel);
 	assert.equal(existsSync(join(root, rel)), true);
 	const raw = readFileSync(join(root, rel));

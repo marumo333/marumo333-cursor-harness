@@ -15,8 +15,8 @@ export const FORBIDDEN_KEYS = new Set([
 const CYCLE_RE = /^C-\d{4}$/;
 const MODES = new Set(['isolated', 'packet']);
 
-const ADR_RE = /^(docs\/decisions|knowledge\/criteria|knowledge\/features)\/[A-Za-z0-9._/-]+$/;
-const ADR_ERROR = '--adr は docs/decisions または knowledge/criteria|features 配下の相対パス';
+const ADR_RE = /^docs\/decisions\/[A-Za-z0-9._/-]+$/;
+const ADR_ERROR = '--adr は docs/decisions 配下の相対パス';
 
 export function assertAdrPaths(root, paths) {
 	const rootReal = realpathSync(root);
@@ -133,7 +133,7 @@ export function encodePacket(packet, maxBytes = PACKET_MAX_BYTES) {
 
 export function writePacket({ root, packet }) {
 	const raw = encodePacket(packet);
-	const rel = `knowledge/graph/packets/${packetFileName(packet)}`;
+	const rel = `cycle/packets/${packetFileName(packet)}`;
 	const abs = join(root, rel);
 	mkdirSync(dirname(abs), { recursive: true });
 	try {

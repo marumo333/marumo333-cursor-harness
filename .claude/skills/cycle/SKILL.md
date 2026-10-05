@@ -7,7 +7,7 @@ description: 1周の skill 使用/省略をグラフに記録し、3指標を出
 
 hooks から Task は起動しない。親が各 skill のあと（または Stop 前）に記録する。
 
-## 必須ノード（`knowledge/graph/required-cycle.json`）
+## 必須ノード（`cycle/required-cycle.json`）
 
 `harness-api-budget`
 

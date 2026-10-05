@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { computeMetrics, foldCycle, foldTokenLedger, latestOpenCycle, nextCycleId } from './lib/cycle-metrics.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
-const required = JSON.parse(readFileSync(join(ROOT, 'knowledge/graph/required-cycle.json'), 'utf8'));
+const required = JSON.parse(readFileSync(join(ROOT, 'cycle/required-cycle.json'), 'utf8'));
 
 test('全部省略なら指標は落ちる。票は作らない', () => {
 	const m = computeMetrics(required, {

@@ -5,6 +5,6 @@ description: 機能ごとに ADR、レビュー、proposed、admitted を作ら�
 
 # harness-grow skill
 
-機能ごとに ADR、レビュー、proposed、admitted は作らない。`knowledge/features/` に新しい票を足さない。`feature-gate --admit` で status を進めない。
+機能ごとに ADR、レビュー、proposed、admitted は作らない。Feature 票は作らない。`feature-gate --admit` は拒否する。
 
 プロダクトの始め方は `TEMPLATE.md` の「プロダクトを始める」。

@@ -14,7 +14,7 @@ Cursor ハーネスの**テンプレート**。対象は席・正本・ゲート
 - 席: 親 Grok 4.7 high。検証は親が契約と feature-gate を実行する。検証用の subagent は出さない
 - 機能の正本は `features/<slug>/` の振る舞いとテスト。機能ごとに ADR、レビュー、proposed、admitted は作らない
 - ゲート: OPA `node scripts/feature-gate.mjs`（自己改善ループそのものではない）
-- 管理: skill の使用/省略を `knowledge/graph/` に書き、ノード / 辺 / 状態の3指標で計る
+- 管理: skill の使用/省略を `cycle/` に書き、ノード / 辺 / 状態の3指標で計る
 - 再起: 人間がマージすると次の cycle が開く。Feature 票は開かない。エージェントは自動起動しない
 - パッケージ: pnpm（[ADR 0041](docs/decisions/0041-pnpm-package-manager.md)）
 - commit: hook 必須。主語は `feat:` / `fix:` / `docs:` 等 + 日本語（[ADR 0042](docs/decisions/0042-always-on-precommit-ja-conventional.md)）
@@ -190,7 +190,7 @@ flowchart TD
 .cursor/          Cursor の hook
 docs/decisions/   人の判断
 docs/learnings.md 実行のメモ
-knowledge/        cycle の記録とゲートの被覆
+cycle/            cycle の記録と席のピン
 policy/           OPA（ゲートと cycle）
 scripts/          feature-gate / cycle-* / githooks / commit-msg
 ```

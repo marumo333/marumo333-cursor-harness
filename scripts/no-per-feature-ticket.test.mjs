@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readdirSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -17,11 +17,5 @@ test('機能ごとの ADR と proposed と admitted を作る手順が残って�
 	const workflow = readFileSync(join(ROOT, '.github/workflows/harness-cycle.yml'), 'utf8');
 	assert.doesNotMatch(workflow, /knowledge\/features/);
 	assert.doesNotMatch(workflow, /gh pr create/);
-	const names = readdirSync(join(ROOT, 'knowledge/features')).filter((name) => name.endsWith('.yaml'));
-	assert.deepEqual(names, ['F-0001-feature-canon-opa-grow.yaml']);
-	for (const name of names) {
-		const text = readFileSync(join(ROOT, 'knowledge/features', name), 'utf8');
-		assert.doesNotMatch(text, /status:\s*proposed/);
-		assert.doesNotMatch(text, /status:\s*admitted/);
-	}
+	assert.equal(existsSync(join(ROOT, 'knowledge')), false);
 });

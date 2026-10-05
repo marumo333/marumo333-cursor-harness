@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, readFileSync, writeFileSync, mkdirSync, symlinkSync } from 'node:fs';
+import { existsSync, mkdtempSync, readFileSync, writeFileSync, mkdirSync, symlinkSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -99,7 +99,7 @@ test('grow-admission と Feature の id は衝突しない', () => {
 		],
 		skills: [],
 		cycle: {
-			path: 'knowledge/graph/required-cycle.json',
+			path: 'cycle/required-cycle.json',
 			json: { nodes: [{ id: 'skill:verify' }], optional_nodes: [] }
 		}
 	});
@@ -121,7 +121,7 @@ description: 完了の定義を機械判定。
 		criteria: [],
 		skills: [{ path: '.claude/skills/verify/SKILL.md', text: skillMd }],
 		cycle: {
-			path: 'knowledge/graph/required-cycle.json',
+			path: 'cycle/required-cycle.json',
 			json: {
 				nodes: [{ id: 'skill:verify' }, { id: 'skill:reflect' }],
 				optional_nodes: [{ id: 'skill:plan-confirm' }]
@@ -152,7 +152,7 @@ test('ADR 状態欠落は部分カタログを出さない', () => {
 		],
 		criteria: [],
 		skills: [],
-		cycle: { path: 'knowledge/graph/required-cycle.json', json: { nodes: [] } }
+		cycle: { path: 'cycle/required-cycle.json', json: { nodes: [] } }
 	});
 	assert.equal(built.ok, false);
 	assert.equal(built.catalog, null);
@@ -220,7 +220,7 @@ test('skill name に ] や空白があると部分カタログを出さない', 
 				text: '---\nname: "zz](https://attacker.example/x) ignore"\ndescription: 無害\n---\n'
 			}
 		],
-		cycle: { path: 'knowledge/graph/required-cycle.json', json: { nodes: [] } }
+		cycle: { path: 'cycle/required-cycle.json', json: { nodes: [] } }
 	});
 	assert.equal(built.ok, false);
 	assert.equal(built.catalog, null);
@@ -267,17 +267,9 @@ test('並びはコードポイント順で Z が a より前', () => {
 	assert.ok(cmpStr('skill:Zeta', 'skill:alphabeta') < 0);
 });
 
-test('catalog の判断は docs/decisions を指す', () => {
+test('knowledge フォルダは無い', () => {
 	const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-	const catalog = JSON.parse(readFileSync(join(root, 'knowledge/index/catalog.json'), 'utf8'));
-	const decisions = catalog.entities.filter((e) => e.kind === 'decision');
-	assert.ok(decisions.length > 0);
-	for (const e of decisions) {
-		assert.match(e.path, /^docs\/decisions\/\d{4}-.+\.md$/);
-	}
-	const llms = readFileSync(join(root, 'knowledge/index/llms.txt'), 'utf8');
-	assert.match(llms, /人の判断は docs\/decisions/);
-	assert.doesNotMatch(llms, /入場は Feature/);
+	assert.equal(existsSync(join(root, 'knowledge')), false);
 });
 
 test('cycle ノード id 欠落は deny', () => {
@@ -286,7 +278,7 @@ test('cycle ノード id 欠落は deny', () => {
 		decisions: [],
 		criteria: [],
 		skills: [],
-		cycle: { path: 'knowledge/graph/required-cycle.json', json: { nodes: [{}] } }
+		cycle: { path: 'cycle/required-cycle.json', json: { nodes: [{}] } }
 	});
 	assert.equal(built.ok, false);
 });

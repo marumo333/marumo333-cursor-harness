@@ -23,7 +23,7 @@ Node.js 製のガバナンスハーネス。npm 依存パッケージは無い�
 - 依存導入 + git hooks 設定: `pnpm install`（`prepare` が `core.hooksPath=scripts/githooks` を設定）。
 - 自動テスト: `pnpm test`（`node --test`）。
 - ポリシー lint / test（OPA のみ）: `node scripts/feature-gate.mjs --test`。
-- 正本ゲート本体（build/run 相当）: `node scripts/feature-gate.mjs`。canon パス（`scripts/` `policy/` `.claude/skills/` `docs/decisions/` `knowledge/features/` など、正本は `policy/canon.rego`）を変えるときも新しい Feature 票は作らない。被覆は既存の F-0001。
+- 正本ゲート本体（build/run 相当）: `node scripts/feature-gate.mjs`。見る範囲は `policy/canon.rego`。Feature 票は作らない。
 
 ### 非自明な落とし穴
 
