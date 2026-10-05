@@ -18,10 +18,9 @@ const WORKSPACE = join(dirname(fileURLToPath(import.meta.url)), '..');
 
 function tmpRoot() {
 	const root = mkdtempSync(join(tmpdir(), 'packet-policy-'));
-	mkdirSync(join(root, 'knowledge', 'graph', 'packets'), { recursive: true });
-	mkdirSync(join(root, 'knowledge', 'graph'), { recursive: true });
+	mkdirSync(join(root, 'cycle', 'packets'), { recursive: true });
 	writeFileSync(
-		join(root, 'knowledge', 'graph', 'required-cycle.json'),
+		join(root, 'cycle', 'required-cycle.json'),
 		JSON.stringify({
 			nodes: [
 				{ id: 'skill:verify', kind: 'skill', context_mode: 'isolated' },

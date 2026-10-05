@@ -12,7 +12,7 @@ description: 並列展開前の計画確定レビュー（Fable 5.1 backend-arch
 
 1. superpowers `writing-plans` で計画 md を用意する（親 Grok）。
 2. **C トリガ判定**: 次のいずれかなら設計レビュー必須。
-   - Feature 正本 / OPA / cycle 再起条件の変更
+   - policy / cycle の再起 / 正本パスの変更
    - 複数 skill・policy にまたがる横断変更
    - hooks や GitHub Actions の強制点
 3. `backend-architect` を **Task（Fable 5.1 high・新しい文脈）**で起動。入力は**計画 md のみ**（＋必要なら関連 ADR パス）。

@@ -19,7 +19,7 @@ test('node_modules と .tools のパスは読む前に止める', () => {
 	assert.equal(isBlockedDependencyPath('.tools/opa'), true);
 	assert.equal(isBlockedDependencyPath('pkg/node_modules/x'), true);
 	assert.equal(isBlockedDependencyPath('scripts/lib/code-mode.mjs'), false);
-	assert.equal(isBlockedDependencyPath('knowledge/criteria/model-routing.yaml'), false);
+	assert.equal(isBlockedDependencyPath('cycle/model-routing.yaml'), false);
 });
 
 test('依存ディレクトリを開くシェルは止め、文中の語は通す', () => {
@@ -71,11 +71,11 @@ test('search-lines は PATH の rg を使わない', () => {
 });
 
 test('learnings の席記述は当時と現行ピンを分ける', () => {
-	const text = readFileSync(join(ROOT, 'knowledge/learnings.md'), 'utf8');
+	const text = readFileSync(join(ROOT, 'docs/learnings.md'), 'utf8');
 	const line = text.split('\n').find((l) => l.includes('席は親 Grok 4.6'));
 	assert.ok(line);
 	assert.match(line, /当時/);
 	assert.match(line, /grok-4\.7-high/);
-	const routing = readFileSync(join(ROOT, 'knowledge/criteria/model-routing.yaml'), 'utf8');
+	const routing = readFileSync(join(ROOT, 'cycle/model-routing.yaml'), 'utf8');
 	assert.match(routing, /chat_orchestrator: grok-4\.7-high/);
 });

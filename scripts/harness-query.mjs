@@ -3,7 +3,7 @@ import { execFileSync } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { assertAdrPaths, buildPacket, nextDispatchSeq, queryCatalogHits, writePacket } from './lib/harness-query.mjs';
+import { assertAdrPaths, buildPacket, nextDispatchSeq, writePacket } from './lib/harness-query.mjs';
 import { knownNodes, loadRequiredCycle, requiredModeFor } from './lib/packet-policy.mjs';
 
 const ROOT = process.env.HARNESS_ROOT || join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -32,14 +32,8 @@ function gitDiffStat() {
 	}
 }
 
-function loadJson(rel) {
-	const abs = join(ROOT, rel);
-	if (!existsSync(abs)) return null;
-	return JSON.parse(readFileSync(abs, 'utf8'));
-}
-
 function loadEvents() {
-	const abs = join(ROOT, 'knowledge', 'graph', 'events.jsonl');
+	const abs = join(ROOT, 'cycle', 'events.jsonl');
 	if (!existsSync(abs)) return [];
 	return readFileSync(abs, 'utf8')
 		.split('\n')
@@ -64,8 +58,7 @@ try {
 	const events = loadEvents();
 	seq = String(seq ? nextDispatchSeq(events, cycle, node, Number(seq)) : nextDispatchSeq(events, cycle, node));
 	if (diff_stat == null) diff_stat = gitDiffStat();
-	const catalog = loadJson('knowledge/index/catalog.json');
-	const catalog_hits = catalog ? queryCatalogHits(catalog, { feature, paths: adr_paths }) : [];
+	const catalog_hits = [];
 	const packet = buildPacket({
 		cycle,
 		node,

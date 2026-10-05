@@ -1,6 +1,6 @@
 # cursor-harness
 
-Cursor ハーネスの**テンプレート**。対象は席・正本・ゲート・cycle（[ADR 0039](knowledge/decisions/0039-harness-template-cycle-graph.md)）。
+Cursor ハーネスの**テンプレート**。対象は席・正本・ゲート・cycle（[ADR 0039](docs/decisions/0039-harness-template-cycle-graph.md)）。
 ライセンスは [MIT](LICENSE)（Copyright (c) 2026 marumo333）。
 
 ## 実行環境
@@ -12,33 +12,28 @@ Cursor ハーネスの**テンプレート**。対象は席・正本・ゲート
 ## 何をするか
 
 - 席: 親 Grok 4.7 high。検証は親が契約と feature-gate を実行する。検証用の subagent は出さない
-- 正本: [`knowledge/features/F-NNNN-*.yaml`](knowledge/features/README.md)。GitHub Issues / Spec Kit は正本にしない（[ADR 0033](knowledge/decisions/0033-harness-api-budget-routing.md)）
+- 機能の正本は `features/<slug>/` の振る舞いとテスト。機能ごとに ADR、レビュー、proposed、admitted は作らない
 - ゲート: OPA `node scripts/feature-gate.mjs`（自己改善ループそのものではない）
-- 出生規則: Feature は `proposed` で起票する。**同一 PR で `admitted` / `approved` にしない**（[ADR 0038](knowledge/decisions/0038-feature-canon-opa-grow.md)）
-- 管理: skill の使用/省略を `knowledge/graph/` に書き、ノード / 辺 / 状態の3指標で計る
-- 再起的自己改善: AI 実装 PR に省略・失敗・差し戻しが残ったとき、人間がマージしたあと次 Feature の下書き PR を開く（エージェントは自動起動しない）。戻る先は Feature 起票であり、clone からやり直さない
-- パッケージ: pnpm（[ADR 0041](knowledge/decisions/0041-pnpm-package-manager.md)）
-- commit: hook 必須。主語は `feat:` / `fix:` / `docs:` 等 + 日本語（[ADR 0042](knowledge/decisions/0042-always-on-precommit-ja-conventional.md)）
+- 管理: skill の使用/省略を `cycle/` に書き、ノード / 辺 / 状態の3指標で計る
+- 再起: 人間がマージすると次の cycle が開く。Feature 票は開かない。エージェントは自動起動しない
+- パッケージ: pnpm（[ADR 0041](docs/decisions/0041-pnpm-package-manager.md)）
+- commit: hook 必須。主語は `feat:` / `fix:` / `docs:` 等 + 日本語（[ADR 0042](docs/decisions/0042-always-on-precommit-ja-conventional.md)）
 
 手順の本体は [TEMPLATE.md](TEMPLATE.md)。
 
 ## 最初にやること
 
-Cursor のクラウドでリポを開き、実装には入らない。hook を入れてから ADR → Feature 起票へ進む。
-
-```bash
-node scripts/install-git-hooks.mjs
-```
+Cursor のクラウドでリポを開く。このリポジトリの clone 後は `pnpm install`（hooks も入る）。プロダクトの始め方は [TEMPLATE.md](TEMPLATE.md) の「プロダクトを始める」。機能ごとに ADR は起票しない。
 
 空リポへ載せる手順は [TEMPLATE.md](TEMPLATE.md)。
-前進の確認はクラウドまたは Actions 上で `node scripts/feature-gate.mjs`（[ADR 0016](knowledge/decisions/0016-definition-of-done.md)）。ハーネスにテストがある変更は `pnpm test`。
+完了はクラウドまたは Actions 上で `node scripts/feature-gate.mjs` が緑であること。ハーネスにテストがある変更は `pnpm test` が緑であること（[ADR 0016](docs/decisions/0016-definition-of-done.md)）。
 
 ## アーキテクチャ
 
-このハーネスは席・正本・ゲート・cycle で回る。入力は人間の依頼と Feature、
+このハーネスは席・ゲート・cycle で回る。入力は人間の依頼と `features/<slug>/` の振る舞い、
 実行は席、token効率化は code-mode と packet、品質ゲートは hooks / OPA / feature-gate、
-成果は正本（skill / ADR / criteria / Rego）、フィードバックは cycle と learnings である。
-監査の主体は親 Grok 4.7 high である。Uber の Gateway や艦隊は置かない。OPA は canon 変更のゲートであり、自己改善ループそのものではない。
+成果は振る舞いのテストと `docs/decisions/` と policy、フィードバックは次の cycle である。
+監査の主体は親 Grok 4.7 high である。Uber の Gateway や艦隊は置かない。feature-gate は OPA の検査と契約とレビュー上限を実行する。canon の一覧は opa test が検査し、差分の被覆には使わない。正本へは書かない。
 
 図は [`docs/architecture/`](docs/architecture/) のアーキテクチャ図。実線は実行、破線は条件付きか判定のみ。編集する正は下記 mermaid。
 
@@ -71,6 +66,8 @@ flowchart TB
   FG --> BEH["契約の振る舞い"]
   FG --> PR["PR"]
   PR --> HM["人間マージ"]
+  HM --> CY["次の cycle"]
+  HM --> DC["docs/decisions"]
   G -.->|並列展開の前| BA["Fable backend-architect"]
   G -.->|人が明示した1回| SR["Fable security-reviewer"]
   CAP -->|0回| OFF["verifier と reflector は起動しない"]
@@ -80,7 +77,7 @@ flowchart TB
 
 受付 → 親が計画と実装 → 契約と feature-gate → 公開。
 必須の辺は無い。検証用の subagent は出さない。
-OPA / feature-gate は横の判定であり、正本へは書かない。正本へ入るのは人間マージだけ。
+feature-gate は判定であり、正本へは書かない。正本へ入るのは人間マージだけ。
 
 ![監査](docs/architecture/audit-overview.png)
 
@@ -88,7 +85,7 @@ OPA / feature-gate は横の判定であり、正本へは書かない。正本�
 flowchart TB
   subgraph inbound["受付"]
     H["人間の依頼"]
-    FE["Feature proposed"]
+    BH["features/slug の振る舞い"]
   end
 
   subgraph plant["実行"]
@@ -103,12 +100,11 @@ flowchart TB
 
   subgraph qa["品質ゲート"]
     HK["hooks / commit-msg"]
-    FG["feature-gate / OPA"]
   end
 
   subgraph warehouse["正本"]
     SK["skills / agents"]
-    AD["ADR / criteria / Feature"]
+    AD["docs/decisions と design.md"]
     PO["policy Rego"]
   end
 
@@ -118,14 +114,13 @@ flowchart TB
   end
 
   H --> P
-  FE --> P
+  BH --> P
   P --> CM
   P --> PK
   P --> PL
   PK --> IM
   IM --> HK
   IM --> CT
-  CT --> FG
   P --> PR
   PR --> HM
   HM --> warehouse
@@ -133,8 +128,9 @@ flowchart TB
 
 ### ランタイム
 
-席と強制の層。子へ渡すのは packet だけ。会話履歴と learnings 全文は継がない。
-hooks を踏むのは実装 Grok の commit。OPA は判定であり正本へは書かない。
+席と強制の層。子へ渡すのは packet だけ。会話履歴と `docs/learnings.md` の全文は継がない。
+hooks を踏むのは実装の commit。feature-gate は判定であり正本へは書かない。
+`packet.canon` の deny は `cycle-record` が dispatch を書くときに評価する。
 
 ![ランタイム](docs/architecture/runtime-overview.png)
 
@@ -144,6 +140,7 @@ flowchart LR
     direction TB
     G["親 Grok 4.7"]
     IMP["実装と検証は親"]
+    Rec["cycle-record"]
     BA["Fable は条件付き"]
     OFF["verifier と reflector は起動しない"]
   end
@@ -157,46 +154,35 @@ flowchart LR
 
   subgraph canon["正本"]
     direction TB
-    Feat["Feature YAML"]
-    Skill["skills"]
+    Beh["features/slug"]
+    Docs["docs/decisions"]
     Policy["Rego"]
   end
 
   G --> IMP
   IMP --> Hook
   IMP --> Gate
-  Gate -.->|"判定のみ"| Packet
-  HM["人間マージ"] --> Feat
-  HM --> Skill
+  Gate -.->|"判定のみ"| Policy
+  G --> Rec
+  Rec --> Packet["packet.canon deny"]
+  HM["人間マージ"] --> Beh
+  HM --> Docs
   HM --> Policy
 ```
 
 ### 再起的自己改善
 
-AI 実装 PR に省略・失敗・差し戻しが残ったときだけ回る。人間のマージが点火。
-cycle-after-merge は下書き PR までで、エージェントは自動起動しない。OPA は横のゲート。
+人間のマージが点火する。cycle-after-merge は承認を記録し、次の cycle を開く。Feature 票は作らない。エージェントは自動起動しない。
 
 ![再起的自己改善](docs/architecture/self-improve-flow.png)
 
 ```mermaid
 flowchart TD
-  AIPR["AI 実装 PR"] --> Q{"省略 / 失敗 / 差し戻し?"}
-  Q -->|残る| Merge1["人間がマージ"]
-  Q -->|無い| Merge2["人間がマージ"]
+  AIPR["AI 実装 PR"] --> Merge1["人間がマージ"]
   Merge1 --> CAM["cycle-after-merge"]
-  CAM --> Draft["次 Feature の下書き PR"]
-  Draft --> Stop["エージェントは自動起動しない"]
-  Merge2 --> Grow["正本に定着"]
-  Grow --> Next["次周は人間が開く"]
-  Draft --> Next
-  L["learnings"] --> FP["Feature proposed"]
-  FP --> HM2["人間マージ"]
-  HM2 --> Adm["admitted"]
-  Adm --> Allow["OPA allow"]
-  Allow --> HG["harness-grow"]
-  HG --> PR3["apply PR"]
-  PR3 --> HM3["人間マージ"]
-  HM3 --> CanonOut["skill / ADR / criteria / Rego"]
+  CAM --> Stop["エージェントは自動起動しない"]
+  CAM --> Next["次の cycle"]
+  CAM --> NoFeat["Feature 票は作らない"]
 ```
 
 ## 構成
@@ -204,9 +190,11 @@ flowchart TD
 ```
 .claude/          エージェント / skill / hook
 .cursor/          Cursor の hook
-knowledge/        ADR / 判断基準 / Feature / グラフ / 内省
+docs/decisions/   人の判断
+docs/learnings.md 実行のメモ
+cycle/            cycle の記録と席のピン
 policy/           OPA（ゲートと cycle）
 scripts/          feature-gate / cycle-* / githooks / commit-msg
 ```
 
-Feature の起票手順は [`knowledge/features/README.md`](knowledge/features/README.md)。
+プロダクトの始め方は [TEMPLATE.md](TEMPLATE.md) の「プロダクトを始める」。人の判断は [`docs/decisions/`](docs/decisions/)。

@@ -8,7 +8,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 
 /**
- * scripts 直下の *.test.mjs。OPA 突合（*.opa.test.mjs）は feature-gate の後段だけ。
+ * scripts 直下の *.test.mjs。*.opa.test.mjs はここから外す。
  * @param {string} [root]
  */
 export function harnessTestFiles(root = ROOT) {

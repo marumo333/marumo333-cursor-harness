@@ -12,7 +12,7 @@ import { computeMetrics, foldCycle, latestOpenCycle, nextCycleId } from './lib/c
 
 const ROOT = process.env.HARNESS_ROOT || join(dirname(fileURLToPath(import.meta.url)), '..');
 const FEATURES = join(ROOT, 'knowledge', 'features');
-const EVENTS = join(ROOT, 'knowledge', 'graph', 'events.jsonl');
+const EVENTS = join(ROOT, 'cycle', 'events.jsonl');
 const POLICY = process.env.OPA_POLICY_DIR || join(ROOT, 'policy');
 const CYCLE_RE = /^C-\d{4}$/;
 
@@ -59,17 +59,6 @@ function pendingFollowups() {
 	}).length;
 }
 
-function nextFeatureId() {
-	const ids = existsSync(FEATURES)
-		? readdirSync(FEATURES)
-				.map((n) => n.match(/^F-(\d{4})-/))
-				.filter(Boolean)
-				.map((m) => Number(m[1]))
-		: [];
-	const n = (ids.length ? Math.max(...ids) : 0) + 1;
-	return `F-${String(n).padStart(4, '0')}`;
-}
-
 function evalDeny(input) {
 	const opa = ensureOpa();
 	const dir = join(ROOT, '.tools');
@@ -106,7 +95,7 @@ function openCyclePrExists() {
 const evs = events();
 const rawCycle = process.env.CYCLE_ID || latestOpenCycle(evs);
 const cycleId = CYCLE_RE.test(rawCycle) ? rawCycle : 'C-0001';
-const required = JSON.parse(readFileSync(join(ROOT, 'knowledge/graph/required-cycle.json'), 'utf8'));
+const required = JSON.parse(readFileSync(join(ROOT, 'cycle/required-cycle.json'), 'utf8'));
 const folded = foldCycle(evs, cycleId);
 const metrics = computeMetrics(required, folded);
 const pending = pendingFeatures();
@@ -146,7 +135,7 @@ if (humanApproved) next.push(rec);
 
 if (!recurse) {
 	writeFileSync(EVENTS, `${next.map((e) => JSON.stringify(e)).join('\n')}\n`);
-	console.error(`[cycle-after-merge] 再起しない: ${JSON.stringify(deny)}`);
+	console.error(`[cycle-after-merge] 次周は開かない: ${JSON.stringify(deny)}`);
 	process.exit(0);
 }
 
@@ -163,37 +152,4 @@ next.push({
 	from: cycleId
 });
 writeFileSync(EVENTS, `${next.map((e) => JSON.stringify(e)).join('\n')}\n`);
-
-const id = nextFeatureId();
-const slug = `${id}-cycle-followup.yaml`;
-const body = `feature:
-  id: ${id}
-  title: 人間承認後のサイクル続き（${cycleId} から ${nxt}）
-  kind: harness-grow
-  status: proposed
-  source: audit
-  created: '${new Date().toISOString().slice(0, 10)}'
-  learning_refs:
-    - knowledge/learnings.md
-  problem: >
-    前サイクル ${cycleId} がマージされた（sha ${mergeSha || '不明'}）。
-    ノード省略率=${metrics.node_skip_rate} 辺省略率=${metrics.edge_skip_rate}
-    状態完全性=${metrics.state_integrity} 失敗あり=${metrics.has_failed}。
-    省略または失敗した必須 skill を再実行する。
-  proposed_change:
-    mutates_canon: false
-    paths:
-      - knowledge/graph/
-      - knowledge/learnings.md
-  evidence:
-    adversarial_review: not_required
-    review_agent: none
-    verification: pending
-    opa_decision: pending
-  constraints:
-    supersede_adr: false
-    no_jp_code_merge_write: true
-    supersedes: []
-`;
-writeFileSync(join(FEATURES, slug), body);
-console.error(`[cycle-after-merge] ${slug} を起票し ${nxt} を開いた`);
+console.error(`[cycle-after-merge] ${nxt} を開いた。Feature は起票しない`);

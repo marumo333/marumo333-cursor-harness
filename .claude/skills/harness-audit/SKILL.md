@@ -7,20 +7,19 @@ description: ハーネス健全性を決定的にスコア化し履歴に記録�
 
 ## スコア項目（決定的・0-100）
 
-- ルール網羅: CLAUDE.md の禁止が hooks/agent で強制されているか。
-- knowledge 充足: ADR に未解決の重要判断が残っていないか・criteria が最新か。
+- ルール網羅: `.claude/AGENTS.md` の禁止が hooks で強制されているか。
+- 判断の置き場: 人の判断が `docs/decisions/` にあり、実行メモが `docs/learnings.md` にあるか。
 - **席割当の整合（[[0033]] / [[0049]] / [[0051]]）**: `model-routing.yaml` の chat_orchestrator=Grok。検証用 subagent は空。AGENTS / skills が verifier や 3体の起動を必須にしていないか。
-- **ハーネス制約（[[0039]] / [[0051]]）**: 席は親 Grok。検証は契約と feature-gate。正本は Feature。ゲートは OPA。
+- **ハーネス制約（[[0039]] / [[0051]]）**: 席は親 Grok。検証は契約と feature-gate。機能ごとに ADR、レビュー、proposed、admitted は作らない。
 - **cycle 整合（[[0039]]）**: required-cycle の必須ノードが記録され、3指標が出せるか。
-- セキュリティ: security-policy.yaml 各項目（OWASP LLM/Agentic Top10）。
-- 学習: learnings が更新され、再現可能な改善が Feature 正本に起票され、OPA allow のうえ成功経路が昇格されているか（[[0038]]）。
-- **feature/OPA 整合**: `opa test policy/` 緑、`knowledge/features/` が型を満たす、canon 差分が票で被覆されているか。
+- セキュリティ: hooks が秘密の読取と外部送信を止めているか。
+- 学習: learnings が更新されているか。機能ごとの票は増えていないか。
+- **OPA 整合**: `opa test policy/` が緑。Feature 票は無い。
 
 ## 実行席
 
-監査の集計・文書突合は親 Grok で可。判定に迷う項目は Opus Task。
+監査の集計・文書突合・判定は親 Grok。Opus の Task は出さない。
 
 ## 出力
 
-合計スコア＋内訳を `knowledge/benchmarks/audit-<n>.json` に追記（`Date.now` は使わずカウンタ連番）。
-前回比の増減を報告。**下降時は原因（劣化した項目）を明示**。
+合計スコアと内訳を、その周の報告に書く。前回比の増減を報告。下降時は原因を明示する。

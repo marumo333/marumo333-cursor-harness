@@ -25,14 +25,14 @@ test_deny_when_cycle_pr_open if {
 	not admission.allow with input as object.union(base, {"open_cycle_pr": true})
 }
 
-test_deny_when_no_skips_or_fails if {
-	not admission.allow with input as object.union(base, {
+test_allow_when_no_skips_or_fails if {
+	admission.allow with input as object.union(base, {
 		"metrics": {"node_skip_rate": 0, "edge_skip_rate": 0, "state_integrity": 1, "has_failed": false},
 	})
 }
 
-test_deny_when_incomplete_but_no_skips if {
-	not admission.allow with input as object.union(base, {
+test_allow_when_incomplete_but_no_skips if {
+	admission.allow with input as object.union(base, {
 		"metrics": {"node_skip_rate": 0, "edge_skip_rate": 0, "state_integrity": 0, "has_failed": false},
 	})
 }

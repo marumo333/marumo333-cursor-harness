@@ -9,8 +9,8 @@ const cycleId = process.argv.includes('--cycle')
 	? process.argv[process.argv.indexOf('--cycle') + 1]
 	: 'C-0001';
 
-const required = JSON.parse(readFileSync(join(ROOT, 'knowledge/graph/required-cycle.json'), 'utf8'));
-const raw = readFileSync(join(ROOT, 'knowledge/graph/events.jsonl'), 'utf8')
+const required = JSON.parse(readFileSync(join(ROOT, 'cycle/required-cycle.json'), 'utf8'));
+const raw = readFileSync(join(ROOT, 'cycle/events.jsonl'), 'utf8')
 	.split('\n')
 	.filter(Boolean)
 	.map((l) => JSON.parse(l));

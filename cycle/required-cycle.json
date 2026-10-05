@@ -8,6 +8,6 @@
 		{ "id": "skill:verify", "kind": "skill", "context_mode": "isolated", "when": "retired" },
 		{ "id": "skill:reflect", "kind": "skill", "context_mode": "packet", "when": "retired" },
 		{ "id": "skill:plan-confirm", "kind": "skill", "when": "fanout", "context_mode": "isolated" },
-		{ "id": "skill:harness-grow", "kind": "skill", "when": "feature_proposed", "context_mode": "isolated" }
+		{ "id": "skill:harness-grow", "kind": "skill", "when": "retired", "context_mode": "isolated" }
 	]
 }

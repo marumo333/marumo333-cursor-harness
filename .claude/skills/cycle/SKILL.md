@@ -7,7 +7,7 @@ description: 1周の skill 使用/省略をグラフに記録し、3指標を出
 
 hooks から Task は起動しない。親が各 skill のあと（または Stop 前）に記録する。
 
-## 必須ノード（`knowledge/graph/required-cycle.json`）
+## 必須ノード（`cycle/required-cycle.json`）
 
 `harness-api-budget`
 
@@ -27,9 +27,9 @@ hooks から Task は起動しない。親が各 skill のあと（または Sto
 
 親が子を起動する直前:
 
-`node scripts/harness-query.mjs --cycle C-NNNN --node skill:verify --context-mode isolated --feature F-NNNN --adr knowledge/decisions/0045-dispatch-context-packet.md`
+`node scripts/harness-query.mjs --cycle C-NNNN --node skill:harness-api-budget --context-mode packet --adr docs/decisions/0045-dispatch-context-packet.md`
 
-`node scripts/cycle-record.mjs --type dispatch --cycle C-NNNN --node skill:verify --seq 1 --seat opus --escalate stay --sha256 <packetのsha256>`
+`node scripts/cycle-record.mjs --type dispatch --cycle C-NNNN --node skill:harness-api-budget --seq 1 --seat grok --escalate stay --sha256 <packetのsha256>`
 
 周の観測（`$` は書かない。`need_rerun` に足さない）:
 
@@ -39,11 +39,10 @@ hooks から Task は起動しない。親が各 skill のあと（または Sto
 
 `node scripts/cycle-metrics.mjs --cycle C-0001`
 
-`should_file_feature=true` なら reflector が Feature を proposed で起票する（直接 skill を書き換えない）。
-token_ledger は観測項だけ。3指標と再起条件は変えない。
+`degraded=true` は指標が落ちた印である。Feature 票は作らない。reflector は起動しない。
+token_ledger は観測項だけ。3指標には入れない。
 
 ## 再起
 
-人間が PR をマージしたあと `cycle-after-merge` が次票を起票する。
-省略/失敗が無い、未マージの `cycle/*` PR がある、続きの Feature が残っている、
-または `gh` で確認できないときは止める。`human_approved` は CLI から書かない。
+人間が PR をマージしたあと `cycle-after-merge` は承認を記録し、次の cycle を `after-merge` で開く。Feature は起票しない。
+`human_approved` は CLI から書かない。

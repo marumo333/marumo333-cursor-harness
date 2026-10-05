@@ -79,24 +79,4 @@ deny contains "未処理の cycle-followup Feature があるので再起しな�
 	input.pending_followups > 0
 }
 
-need_rerun if {
-	has_metrics
-	input.metrics.node_skip_rate > 0
-}
-
-need_rerun if {
-	has_metrics
-	input.metrics.edge_skip_rate > 0
-}
-
-need_rerun if {
-	has_metrics
-	input.metrics.has_failed == true
-}
-
-# 省略/失敗が無い周は再起しない（空サイクルの integrity=0 で量産しない）。
-deny contains "必須 skill の省略/失敗が無いので再起しない" if {
-	input.action == "open_next"
-	has_metrics
-	not need_rerun
-}
+# 人間がマージした周は、省略が無くても次周を開く。1マージで1周。

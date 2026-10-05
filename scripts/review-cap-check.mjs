@@ -31,16 +31,21 @@ function mergeBase() {
 	return null;
 }
 
-function baseEvents(mb) {
+function showAt(mb, path) {
 	try {
-		const text = execFileSync('git', [...GIT, 'show', `${mb}:knowledge/graph/events.jsonl`], {
+		return execFileSync('git', [...GIT, 'show', `${mb}:${path}`], {
 			encoding: 'utf8',
-			cwd: ROOT
+			cwd: ROOT,
+			stdio: ['ignore', 'pipe', 'ignore']
 		});
-		return parseJsonl(text);
 	} catch {
-		return [];
+		return null;
 	}
+}
+
+function baseEvents(mb) {
+	const text = showAt(mb, 'cycle/events.jsonl') ?? showAt(mb, 'knowledge/graph/events.jsonl');
+	return text ? parseJsonl(text) : [];
 }
 
 const mb = mergeBase();
@@ -49,7 +54,7 @@ if (!mb) {
 	process.exit(1);
 }
 
-const headPath = join(ROOT, 'knowledge/graph/events.jsonl');
+const headPath = join(ROOT, 'cycle/events.jsonl');
 const head = existsSync(headPath) ? parseJsonl(readFileSync(headPath, 'utf8')) : [];
 const excess = reviewExcess(head, baseEvents(mb));
 if (excess.length) {

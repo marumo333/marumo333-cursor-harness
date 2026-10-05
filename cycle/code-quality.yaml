@@ -38,5 +38,5 @@ definition_of_done:
 naming:
   files: kebab-case
   types: PascalCase
-  features: 'F-NNNN-slug.yaml'
+  features: 'features/<slug>/'
   cycles: 'C-NNNN'

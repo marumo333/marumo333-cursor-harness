@@ -1,6 +1,6 @@
 # AGENTS.md
 
-このリポジトリは Cursor ハーネスのテンプレート。対象は席・正本・ゲート・cycle。運用規約の正本は [`.claude/CLAUDE.md`](.claude/CLAUDE.md) と [`.claude/AGENTS.md`](.claude/AGENTS.md)、手順は [`TEMPLATE.md`](TEMPLATE.md)。
+このリポジトリは Cursor ハーネスのテンプレート。対象は席・正本・ゲート・cycle。手順は [`TEMPLATE.md`](TEMPLATE.md)、エージェント向けの規約は [`.claude/AGENTS.md`](.claude/AGENTS.md)。人の判断は [`docs/decisions/`](docs/decisions/) と [`docs/learnings.md`](docs/learnings.md) に残す。
 
 ## Cursor Cloud specific instructions
 
@@ -8,25 +8,25 @@
 
 ### 何のリポか
 
-Node.js 製のガバナンスハーネス。npm 依存パッケージは無い（`package.json` に `dependencies` なし）。「アプリ」= `scripts/` の Node スクリプト群 + OPA によるポリシーゲート。
+Node.js 製のガバナンスハーネス。npm 依存パッケージは無い（`package.json` に `dependencies` なし）。中身は `scripts/` の Node スクリプト群と OPA によるポリシーゲート。
 
 ### 実行環境
 
 - Node.js 22 系 + pnpm 10.33.3（corepack 経由）。追加の言語ランタイムは不要。
 - ゲート（feature-gate / OPA）は **Linux amd64 専用**。`scripts/ensure-opa.mjs` が OPA v1.8.0 を `.tools/opa` に digest 検証付きで取得する（`.tools/` は gitignore）。macOS / Windows / Linux arm64 では動かない。
 - 一致行検索の `rg` も同じ。`scripts/ensure-rg.mjs` が ripgrep 15.2.0 の musl バイナリを `.tools/rg` に tarball とバイナリの digest で固定する。PATH の `rg` と `apt-get` は使わない。
-- `scripts/feature-gate.mjs` は末尾で `scripts/contract-check.mjs` を呼ぶ。契約は `node_modules/typescript` が要る。CI は `pnpm install` を feature-gate より前に置く。PR のゲート段は `origin/main` の `feature-gate.mjs` を `/tmp` から実行するので、PR 側のゲートだけ直しても先には直らない。
+- `scripts/feature-gate.mjs` は末尾で `scripts/contract-check.mjs` と `scripts/review-cap-check.mjs` を呼ぶ。契約は `node_modules/typescript` が要る。CI は `pnpm install` のあと、チェックアウトした `node scripts/feature-gate.mjs` を実行する。コミット主語の検査だけ `origin/main` の lint を使う。
 - OPA バイナリの取得には GitHub Releases への外向き通信が必要。初回の `node scripts/feature-gate.mjs` 実行時に遅延ダウンロードされる。
 
 ### コマンド（lint / test / build / run に相当）
 
 - 依存導入 + git hooks 設定: `pnpm install`（`prepare` が `core.hooksPath=scripts/githooks` を設定）。
-- 自動テスト: `pnpm test`（`node --test`、77 件）。
+- 自動テスト: `pnpm test`（`node --test`）。
 - ポリシー lint / test（OPA のみ）: `node scripts/feature-gate.mjs --test`。
-- 正本ゲート本体（build/run 相当）: `node scripts/feature-gate.mjs`。canon パス（`scripts/` `policy/` `.claude/skills/` `knowledge/features/` など、正本は `policy/canon.rego`）を変更する場合は Feature 起票 + OPA allow が必要。
+- 正本ゲート本体（build/run 相当）: `node scripts/feature-gate.mjs`。見る範囲は `policy/canon.rego`。Feature 票は作らない。
 
 ### 非自明な落とし穴
 
 - Cursor の `beforeShellExecution` ガード（`.cursor/hooks/pre-commit.mjs` → `scripts/lib/commit-guard.mjs`）は、**シェルコマンド文字列に `git config ... hooksPath` が含まれるだけで（読み取り目的でも）拒否する**。hooksPath を確認したいときは `.git/config` を読む（例: `grep hooksPath .git/config`）。同様に `git commit --no-verify` / `-n` も拒否される。
 - コミットメッセージは conventional prefix + 日本語主語が必須（`feat:` / `fix:` / `docs:` / `chore:` など）。英語のみの主語や prefix 無しは commit-msg hook に落とされる。`--no-verify` は禁止。
-- ルートの `AGENTS.md` は canon ではない（canon は `.claude/AGENTS.md`）。ここの編集はゲートで Feature を要求しない。
+- ルートの `AGENTS.md` は canon ではない（canon は `.claude/AGENTS.md`）。どのパスも Feature 票は要らない。

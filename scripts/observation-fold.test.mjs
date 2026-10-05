@@ -33,7 +33,7 @@ test('古い再実行できる検索だけを 1 行にし、ファイルは残�
 test('再実行できない検索とファイルは畳まない', () => {
 	const items = [
 		{ kind: 'search', rerunnable: false, cmd: 'curl https://example.test', text: 'body' },
-		file('read knowledge/criteria/model-routing.yaml', 'chat_orchestrator: grok-4.7-high\n')
+		file('read cycle/model-routing.yaml', 'chat_orchestrator: grok-4.7-high\n')
 	];
 	const got = foldObservations(items, 5);
 	assert.equal(got[0].folded, false);

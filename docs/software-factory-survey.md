@@ -2,7 +2,7 @@
 
 調査日: 2026-10-04。対象は GitHub アカウント `marumo333` に、この実行のトークンから見えた公開リポジトリ。調査は親と、読み取り専用の3調査に分けた。
 
-この文書は正本ではない。席・正本・ゲート・cycle の正本は `.claude/CLAUDE.md` と `knowledge/features/` のまま。ここにあるのは、個人開発の実リポジトリに工場を合わせたときのレーン分けである。
+この文書は調査記録である。人の判断は `docs/decisions/` と `docs/learnings.md`、機能の判断は `features/<slug>/design.md` に残す。ここにあるのは、個人開発の実リポジトリに工場を合わせたときのレーン分けである。
 
 ## 見え方
 
@@ -69,7 +69,7 @@
 
 ## ガバナンス
 
-`marumo333-cursor-harness` の対象は席・正本・ゲート・cycle である。依存は TypeScript と OPA。script は `test`、`opa:test`、`opa:gate`、`opa:admit`。workflow は `feature-gate.yml` と `harness-cycle.yml`。ここを Next のひな型にすると、製品の依存とゲートの依存が混ざる。
+`marumo333-cursor-harness` の対象は席・正本・ゲート・cycle である。依存は TypeScript と OPA。script は `test`、`opa:test`、`opa:gate`。workflow は `feature-gate.yml` と `harness-cycle.yml`。ここを Next のひな型にすると、製品の依存とゲートの依存が混ざる。
 
 ## 工場の外
 

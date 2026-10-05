@@ -4,6 +4,7 @@
  */
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
+import { curlFetch } from './lib/curl-fetch.mjs';
 import {
 	chmodSync,
 	copyFileSync,
@@ -75,7 +76,7 @@ function download(dest) {
 	const staging = join(TOOLS, `rg.${process.pid}`);
 	try {
 		const url = `https://github.com/BurntSushi/ripgrep/releases/download/${RG_VERSION}/${ASSET}`;
-		execFileSync('curl', ['-fsSL', '-o', tarPath, url], { stdio: 'inherit' });
+		curlFetch(url, tarPath);
 		const tarDigest = sha256(tarPath);
 		if (tarDigest !== TARBALL_DIGEST) {
 			throw new Error(`[ensure-rg] tarball digest 不一致: 実際 ${tarDigest} 期待 ${TARBALL_DIGEST}`);

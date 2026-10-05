@@ -14,7 +14,7 @@ test('単体テストは scripts 直下の *.test.mjs で、OPA 突合は含め�
 		.map((name) => `scripts/${name}`);
 	assert.deepEqual(harnessTestFiles(ROOT), onDisk);
 	assert.ok(onDisk.includes('scripts/review-contract.test.mjs'));
-	assert.equal(onDisk.includes('scripts/knowledge-catalog.opa.test.mjs'), false);
+	assert.equal(onDisk.some((name) => name.endsWith('.opa.test.mjs')), false);
 });
 
 test('package.json と CI は同じ単体テストコマンドを使う', () => {

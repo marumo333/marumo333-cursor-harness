@@ -6,9 +6,9 @@ import { fileURLToPath } from 'node:url';
 import { computeMetrics, foldCycle, foldTokenLedger, latestOpenCycle, nextCycleId } from './lib/cycle-metrics.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
-const required = JSON.parse(readFileSync(join(ROOT, 'knowledge/graph/required-cycle.json'), 'utf8'));
+const required = JSON.parse(readFileSync(join(ROOT, 'cycle/required-cycle.json'), 'utf8'));
 
-test('全部省略なら Feature を起票する', () => {
+test('全部省略なら指標は落ちる。票は作らない', () => {
 	const m = computeMetrics(required, {
 		nodes: Object.fromEntries(required.nodes.map((n) => [n.id, 'skipped'])),
 		edges: Object.fromEntries(required.edges.map((e) => [`${e.from}>${e.to}`, 'skipped']))
@@ -16,7 +16,7 @@ test('全部省略なら Feature を起票する', () => {
 	assert.equal(m.node_skip_rate, 1);
 	assert.equal(m.edge_skip_rate, required.edges.length === 0 ? 0 : 1);
 	assert.equal(m.state_integrity, 1);
-	assert.equal(m.should_file_feature, true);
+	assert.equal(m.degraded, true);
 });
 
 test('全部使用なら緑', () => {
@@ -28,7 +28,7 @@ test('全部使用なら緑', () => {
 	assert.equal(m.edge_skip_rate, 0);
 	assert.equal(m.state_integrity, 1);
 	assert.equal(m.has_failed, false);
-	assert.equal(m.should_file_feature, false);
+	assert.equal(m.degraded, false);
 });
 
 test('全部失敗は緑ではない', () => {
@@ -38,13 +38,13 @@ test('全部失敗は緑ではない', () => {
 	});
 	assert.equal(m.has_failed, true);
 	assert.equal(m.node_skip_rate, 0);
-	assert.equal(m.should_file_feature, true);
+	assert.equal(m.degraded, true);
 });
 
 test('状態欠落は完全性を下げる', () => {
 	const m = computeMetrics(required, { nodes: { 'skill:verify': 'used' }, edges: {} });
 	assert.ok(m.state_integrity < 1);
-	assert.equal(m.should_file_feature, true);
+	assert.equal(m.degraded, true);
 });
 
 test('foldCycle は jsonl を読む', () => {
@@ -143,7 +143,7 @@ test('token_ledger は need_rerun 相当の3指標を変えない', () => {
 		}
 	];
 	const m = computeMetrics(required, foldCycle(events, 'C-0010'));
-	assert.equal(m.should_file_feature, false);
+	assert.equal(m.degraded, false);
 	assert.equal(m.has_failed, false);
 	assert.equal(m.node_skip_rate, 0);
 });

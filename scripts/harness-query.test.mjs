@@ -18,7 +18,7 @@ import {
 
 function tmpRoot() {
 	const root = mkdtempSync(join(tmpdir(), 'harness-query-'));
-	mkdirSync(join(root, 'knowledge', 'graph', 'packets'), { recursive: true });
+	mkdirSync(join(root, 'cycle', 'packets'), { recursive: true });
 	return root;
 }
 
@@ -137,11 +137,11 @@ test('正当なパケットを書き sha256 を返す', () => {
 		context_mode: 'isolated',
 		feature: 'F-0007',
 		diff_stat: '1 file changed',
-		catalog_hits: [{ id: 'ADR-0045', path: 'knowledge/decisions/0045-dispatch-context-packet.md' }],
-		adr_paths: ['knowledge/decisions/0045-dispatch-context-packet.md']
+		catalog_hits: [{ id: 'ADR-0045', path: 'docs/decisions/0045-dispatch-context-packet.md' }],
+		adr_paths: ['docs/decisions/0045-dispatch-context-packet.md']
 	});
 	const written = writePacket({ root, packet });
-	const rel = 'knowledge/graph/packets/C-0010.skill-verify.1.json';
+	const rel = 'cycle/packets/C-0010.skill-verify.1.json';
 	assert.equal(written.path, rel);
 	assert.equal(existsSync(join(root, rel)), true);
 	const raw = readFileSync(join(root, rel));
@@ -160,7 +160,7 @@ test('catalog_hits は最大20件、adr_paths は最大12件', () => {
 		{
 			entities: Array.from({ length: 30 }, (_, i) => ({
 				id: `E-${i}`,
-				path: `knowledge/decisions/${String(i).padStart(4, '0')}.md`
+				path: `docs/decisions/${String(i).padStart(4, '0')}.md`
 			}))
 		},
 		{}
@@ -173,7 +173,7 @@ test('catalog_hits は最大20件、adr_paths は最大12件', () => {
 		context_mode: 'packet',
 		feature: 'F-0007',
 		catalog_hits: hits,
-		adr_paths: Array.from({ length: 20 }, (_, i) => `knowledge/decisions/${i}.md`)
+		adr_paths: Array.from({ length: 20 }, (_, i) => `docs/decisions/${i}.md`)
 	});
 	assert.equal(packet.catalog_hits.length, 20);
 	assert.equal(packet.adr_paths.length, 12);
@@ -207,16 +207,17 @@ test('既存 packet は上書きしない', () => {
 	);
 });
 
-test('--adr は knowledge 配下の実在パスだけ', () => {
+test('--adr は docs/decisions だけ', () => {
 	const root = tmpRoot();
-	mkdirSync(join(root, 'knowledge', 'decisions'), { recursive: true });
-	writeFileSync(join(root, 'knowledge', 'decisions', '0045-dispatch-context-packet.md'), 'x');
-	assert.throws(() => assertAdrPaths(root, ['/etc/passwd']), /knowledge/);
-	assert.throws(() => assertAdrPaths(root, ['knowledge/learnings.md']), /decisions|criteria|features/);
-	assertAdrPaths(root, ['knowledge/decisions/0045-dispatch-context-packet.md']);
+	mkdirSync(join(root, 'docs', 'decisions'), { recursive: true });
+	writeFileSync(join(root, 'docs', 'decisions', '0045-dispatch-context-packet.md'), 'x');
+	assert.throws(() => assertAdrPaths(root, ['/etc/passwd']), /docs\/decisions/);
+	assert.throws(() => assertAdrPaths(root, ['knowledge/decisions/0045-dispatch-context-packet.md']), /docs\/decisions/);
+	assert.throws(() => assertAdrPaths(root, ['knowledge/learnings.md']), /docs\/decisions/);
+	assertAdrPaths(root, ['docs/decisions/0045-dispatch-context-packet.md']);
 	symlinkSync(
-		join(root, 'knowledge', 'decisions', '0045-dispatch-context-packet.md'),
-		join(root, 'knowledge', 'decisions', 'evil.md')
+		join(root, 'docs', 'decisions', '0045-dispatch-context-packet.md'),
+		join(root, 'docs', 'decisions', 'evil.md')
 	);
-	assert.throws(() => assertAdrPaths(root, ['knowledge/decisions/evil.md']), /symlink/);
+	assert.throws(() => assertAdrPaths(root, ['docs/decisions/evil.md']), /symlink/);
 });

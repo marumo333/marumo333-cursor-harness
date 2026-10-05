@@ -9,9 +9,8 @@ description: 完了判定は親がスクリプトを実行する。verifier suba
 
 1. `node scripts/feature-gate.mjs`
 2. ハーネスにテストがある変更は `pnpm test`
-3. 挙動変更は TDD の失敗ログ、または `knowledge/criteria/code-quality.yaml` の `tdd_exceptions`
+3. 挙動変更は TDD の失敗ログ、または `cycle/code-quality.yaml` の `tdd_exceptions`
 4. 秘密は hook が拒否する
 5. 並列展開したときだけ、計画ファイルの `plan_confirm.status: approved`
-6. `node scripts/knowledge-catalog.mjs --check`（index を書いたあと）
 
 1つでも失敗なら、そのコマンドの出力を直す。別のモデルに再判定させない。

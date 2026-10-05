@@ -15,14 +15,15 @@ export const FORBIDDEN_KEYS = new Set([
 const CYCLE_RE = /^C-\d{4}$/;
 const MODES = new Set(['isolated', 'packet']);
 
-const ADR_RE = /^knowledge\/(decisions|criteria|features)\/[A-Za-z0-9._/-]+$/;
+const ADR_RE = /^docs\/decisions\/[A-Za-z0-9._/-]+$/;
+const ADR_ERROR = '--adr は docs/decisions 配下の相対パス';
 
 export function assertAdrPaths(root, paths) {
-	const knowledge = join(root, 'knowledge');
+	const rootReal = realpathSync(root);
 	for (const p of paths ?? []) {
 		const rel = String(p).replaceAll('\\', '/');
 		if (rel.includes('..') || rel.startsWith('/') || !ADR_RE.test(rel)) {
-			throw new Error('--adr は knowledge/decisions|criteria|features 配下の相対パス');
+			throw new Error(ADR_ERROR);
 		}
 		const abs = join(root, rel);
 		if (!existsSync(abs)) throw new Error(`--adr が存在しない: ${rel}`);
@@ -31,9 +32,9 @@ export function assertAdrPaths(root, paths) {
 			throw new Error('--adr は実在する通常ファイルだけ（symlink / ディレクトリは拒否）');
 		}
 		const real = realpathSync(abs);
-		const fromKnowledge = relative(realpathSync(knowledge), real).replaceAll('\\', '/');
-		if (fromKnowledge.startsWith('..') || !/^(decisions|criteria|features)\//.test(fromKnowledge)) {
-			throw new Error('--adr は knowledge/decisions|criteria|features 配下の相対パス');
+		const fromRoot = relative(rootReal, real).replaceAll('\\', '/');
+		if (fromRoot.startsWith('..') || fromRoot !== rel) {
+			throw new Error('--adr は実在する通常ファイルだけ（symlink / ディレクトリは拒否）');
 		}
 	}
 }
@@ -132,7 +133,7 @@ export function encodePacket(packet, maxBytes = PACKET_MAX_BYTES) {
 
 export function writePacket({ root, packet }) {
 	const raw = encodePacket(packet);
-	const rel = `knowledge/graph/packets/${packetFileName(packet)}`;
+	const rel = `cycle/packets/${packetFileName(packet)}`;
 	const abs = join(root, rel);
 	mkdirSync(dirname(abs), { recursive: true });
 	try {

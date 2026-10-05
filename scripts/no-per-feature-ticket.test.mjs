@@ -1,0 +1,38 @@
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { existsSync, readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
+
+test('機能ごとの ADR と proposed と admitted を作る手順が残っていない', () => {
+	const template = readFileSync(join(ROOT, 'TEMPLATE.md'), 'utf8');
+	assert.match(template, /機能ごとに ADR、レビュー、proposed、admitted は作らない/);
+	assert.doesNotMatch(template, /status: proposed/);
+	assert.doesNotMatch(template, /status を `admitted`/);
+	const merge = readFileSync(join(ROOT, 'scripts/cycle-after-merge.mjs'), 'utf8');
+	assert.doesNotMatch(merge, /status: proposed/);
+	assert.match(merge, /Feature は起票しない/);
+	const workflow = readFileSync(join(ROOT, '.github/workflows/harness-cycle.yml'), 'utf8');
+	assert.doesNotMatch(workflow, /knowledge\/features/);
+	assert.doesNotMatch(workflow, /gh pr create/);
+	assert.equal(existsSync(join(ROOT, 'knowledge')), false);
+	assert.equal(existsSync(join(ROOT, 'docs/superpowers')), false);
+	assert.equal(existsSync(join(ROOT, 'policy/grow.rego')), false);
+	assert.equal(existsSync(join(ROOT, 'policy/feature.rego')), false);
+	assert.equal(existsSync(join(ROOT, 'scripts/knowledge-catalog.mjs')), false);
+	const pkg = JSON.parse(readFileSync(join(ROOT, 'package.json'), 'utf8'));
+	assert.equal(pkg.scripts['opa:admit'], undefined);
+	const verify = readFileSync(join(ROOT, '.claude/skills/verify/SKILL.md'), 'utf8');
+	assert.doesNotMatch(verify, /knowledge-catalog/);
+	const dispatch = readFileSync(join(ROOT, '.claude/skills/parallel-dispatch/SKILL.md'), 'utf8');
+	assert.doesNotMatch(dispatch, /claude-opus/);
+	const cycle = readFileSync(join(ROOT, '.claude/skills/cycle/SKILL.md'), 'utf8');
+	assert.doesNotMatch(cycle, /--seat opus/);
+	assert.doesNotMatch(cycle, /--feature F-/);
+	const gateWorkflow = readFileSync(join(ROOT, '.github/workflows/feature-gate.yml'), 'utf8');
+	assert.doesNotMatch(gateWorkflow, /contract-check\.mjs/);
+	assert.doesNotMatch(gateWorkflow, /review-cap-check\.mjs/);
+	assert.doesNotMatch(gateWorkflow, /knowledge-catalog/);
+});
