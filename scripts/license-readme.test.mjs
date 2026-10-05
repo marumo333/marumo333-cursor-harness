@@ -86,9 +86,19 @@ test('README は mermaid を編集の正にし、docs の画像を示す', () =>
 		'監査図は契約と人間マージを含み、レビュー周の辺を含まない'
 	);
 	assert.ok(
-		fences.some((b) => /実装と検証は親/.test(b) && /IMP --> Hook/.test(b) && /判定のみ/.test(b)),
-		'ランタイム図は親が hooks を踏み OPA は判定のみ'
+		fences.some(
+			(b) =>
+				/実装と検証は親/.test(b) &&
+				/IMP --> Hook/.test(b) &&
+				/判定のみ/.test(b) &&
+				/cycle-record/.test(b) &&
+				/Rec --> Packet/.test(b) &&
+				!/Gate -.->\|"判定のみ"\| Packet/.test(b)
+		),
+		'ランタイム図は feature-gate を判定のみにし、packet deny は cycle-record が評価する'
 	);
+	assert.doesNotMatch(readme, /canon 変更のゲート/);
+	assert.equal(fences.some((b) => /CT --> FG/.test(b)), false);
 	assert.ok(
 		fences.some((b) => /cycle-after-merge/.test(b) && /エージェントは自動起動しない/.test(b) && /次の cycle/.test(b)),
 		'自己改善図は cycle-after-merge と次の cycle と自動起動しないを含む'

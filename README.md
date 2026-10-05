@@ -26,14 +26,14 @@ Cursor ハーネスの**テンプレート**。対象は席・正本・ゲート
 Cursor のクラウドでリポを開く。このリポジトリの clone 後は `pnpm install`（hooks も入る）。プロダクトの始め方は [TEMPLATE.md](TEMPLATE.md) の「プロダクトを始める」。機能ごとに ADR は起票しない。
 
 空リポへ載せる手順は [TEMPLATE.md](TEMPLATE.md)。
-前進の確認はクラウドまたは Actions 上で `node scripts/feature-gate.mjs`（[ADR 0016](docs/decisions/0016-definition-of-done.md)）。ハーネスにテストがある変更は `pnpm test`。
+完了はクラウドまたは Actions 上で `node scripts/feature-gate.mjs` が緑であること。ハーネスにテストがある変更は `pnpm test` が緑であること（[ADR 0016](docs/decisions/0016-definition-of-done.md)）。
 
 ## アーキテクチャ
 
 このハーネスは席・ゲート・cycle で回る。入力は人間の依頼と `features/<slug>/` の振る舞い、
 実行は席、token効率化は code-mode と packet、品質ゲートは hooks / OPA / feature-gate、
 成果は振る舞いのテストと `docs/decisions/` と policy、フィードバックは次の cycle である。
-監査の主体は親 Grok 4.7 high である。Uber の Gateway や艦隊は置かない。OPA は canon 変更のゲートであり、自己改善ループそのものではない。
+監査の主体は親 Grok 4.7 high である。Uber の Gateway や艦隊は置かない。feature-gate は OPA の検査と契約とレビュー上限を実行する。canon の一覧は opa test が検査し、差分の被覆には使わない。正本へは書かない。
 
 図は [`docs/architecture/`](docs/architecture/) のアーキテクチャ図。実線は実行、破線は条件付きか判定のみ。編集する正は下記 mermaid。
 
@@ -77,7 +77,7 @@ flowchart TB
 
 受付 → 親が計画と実装 → 契約と feature-gate → 公開。
 必須の辺は無い。検証用の subagent は出さない。
-OPA / feature-gate は横の判定であり、正本へは書かない。正本へ入るのは人間マージだけ。
+feature-gate は判定であり、正本へは書かない。正本へ入るのは人間マージだけ。
 
 ![監査](docs/architecture/audit-overview.png)
 
@@ -100,7 +100,6 @@ flowchart TB
 
   subgraph qa["品質ゲート"]
     HK["hooks / commit-msg"]
-    FG["feature-gate / OPA"]
   end
 
   subgraph warehouse["正本"]
@@ -122,7 +121,6 @@ flowchart TB
   PK --> IM
   IM --> HK
   IM --> CT
-  CT --> FG
   P --> PR
   PR --> HM
   HM --> warehouse
@@ -131,7 +129,8 @@ flowchart TB
 ### ランタイム
 
 席と強制の層。子へ渡すのは packet だけ。会話履歴と `docs/learnings.md` の全文は継がない。
-hooks を踏むのは実装 Grok の commit。OPA は判定であり正本へは書かない。
+hooks を踏むのは実装の commit。feature-gate は判定であり正本へは書かない。
+`packet.canon` の deny は `cycle-record` が dispatch を書くときに評価する。
 
 ![ランタイム](docs/architecture/runtime-overview.png)
 
@@ -141,6 +140,7 @@ flowchart LR
     direction TB
     G["親 Grok 4.7"]
     IMP["実装と検証は親"]
+    Rec["cycle-record"]
     BA["Fable は条件付き"]
     OFF["verifier と reflector は起動しない"]
   end
@@ -162,7 +162,9 @@ flowchart LR
   G --> IMP
   IMP --> Hook
   IMP --> Gate
-  Gate -.->|"判定のみ"| Packet
+  Gate -.->|"判定のみ"| Policy
+  G --> Rec
+  Rec --> Packet["packet.canon deny"]
   HM["人間マージ"] --> Beh
   HM --> Docs
   HM --> Policy
