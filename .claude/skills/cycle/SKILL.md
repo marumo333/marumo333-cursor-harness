@@ -27,9 +27,9 @@ hooks から Task は起動しない。親が各 skill のあと（または Sto
 
 親が子を起動する直前:
 
-`node scripts/harness-query.mjs --cycle C-NNNN --node skill:verify --context-mode isolated --feature F-NNNN --adr docs/decisions/0045-dispatch-context-packet.md`
+`node scripts/harness-query.mjs --cycle C-NNNN --node skill:harness-api-budget --context-mode packet --adr docs/decisions/0045-dispatch-context-packet.md`
 
-`node scripts/cycle-record.mjs --type dispatch --cycle C-NNNN --node skill:verify --seq 1 --seat opus --escalate stay --sha256 <packetのsha256>`
+`node scripts/cycle-record.mjs --type dispatch --cycle C-NNNN --node skill:harness-api-budget --seq 1 --seat grok --escalate stay --sha256 <packetのsha256>`
 
 周の観測（`$` は書かない。`need_rerun` に足さない）:
 

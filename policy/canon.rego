@@ -2,7 +2,7 @@ package harness.canon
 
 import rego.v1
 
-# canon パスの正本（ADR 0038）。JS ゲートはこのパッケージを問い合わせる。
+# canon パスの一覧。opa test が検査する。差分の被覆には使わない。
 
 canon_path(p) if startswith(p, ".claude/skills/")
 

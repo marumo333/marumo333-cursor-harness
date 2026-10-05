@@ -207,7 +207,7 @@ test('既存 packet は上書きしない', () => {
 	);
 });
 
-test('--adr は docs/decisions か knowledge の基準と票だけ', () => {
+test('--adr は docs/decisions だけ', () => {
 	const root = tmpRoot();
 	mkdirSync(join(root, 'docs', 'decisions'), { recursive: true });
 	writeFileSync(join(root, 'docs', 'decisions', '0045-dispatch-context-packet.md'), 'x');

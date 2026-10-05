@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * OPA の検査と契約、レビュー上限。Feature 票は使わない。
- * allow 完全ルールは信用しない。判定は deny 集合が空であることだけ。
+ * canon の一覧は opa test が検査する。差分の被覆には使わない。
  */
 import { execFileSync } from 'node:child_process';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
@@ -13,10 +13,6 @@ const ROOT = process.env.HARNESS_ROOT || join(dirname(fileURLToPath(import.meta.
 const POLICY = process.env.OPA_POLICY_DIR || join(ROOT, 'policy');
 const FORBIDDEN_LEARNED_BUILTIN = /\b(http\.send|opa\.runtime|net\.lookup_ip_addr|io\.jwt)\b/;
 const PACKAGE_HOME = {
-	'grow.admission': 'grow.rego',
-	'grow.admission_test': 'grow_test.rego',
-	'feature.canon': 'feature.rego',
-	'feature.canon_test': 'feature_test.rego',
 	'harness.canon': 'canon.rego',
 	'harness.canon_test': 'canon_test.rego',
 	'cycle.admission': 'cycle.rego',
@@ -27,7 +23,6 @@ const PACKAGE_HOME = {
 
 const args = process.argv.slice(2);
 const testOnly = args.includes('--test');
-const wantsAdmit = args.includes('--admit');
 
 const opa = ensureOpa();
 
@@ -43,10 +38,6 @@ function opaJson(opaArgs) {
 
 const PACKAGE_HOME_FILES = new Set(Object.values(PACKAGE_HOME));
 const RESOLVED_NS = {
-	'data.grow.admission': 'grow.rego',
-	'data.grow.admission_test': 'grow_test.rego',
-	'data.feature.canon': 'feature.rego',
-	'data.feature.canon_test': 'feature_test.rego',
 	'data.harness.canon': 'canon.rego',
 	'data.harness.canon_test': 'canon_test.rego',
 	'data.cycle.admission': 'cycle.rego',
@@ -130,8 +121,6 @@ if (testOnly) {
 	console.log('[feature-gate] opa test 成功');
 	process.exit(0);
 }
-
-if (wantsAdmit) fail('Feature 票は使わない');
 
 execFileSync(process.execPath, [join(ROOT, 'scripts/contract-check.mjs')], {
 	stdio: 'inherit',

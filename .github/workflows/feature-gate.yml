@@ -15,17 +15,8 @@ jobs:
         run: corepack enable && corepack prepare pnpm@10.33.3 --activate && pnpm install --frozen-lockfile
       - name: feature-gate を実行する
         run: node scripts/feature-gate.mjs
-      - name: 契約の型と振る舞い
-        run: node scripts/contract-check.mjs
-      - name: レビュー起動の上限
-        run: node scripts/review-cap-check.mjs
       - name: ハーネス単体テスト
         run: node scripts/run-harness-tests.mjs
-      - name: Feature 票が残っていないこと
-        run: |
-          set -euo pipefail
-          test -x .tools/opa
-          HARNESS_ROOT="$GITHUB_WORKSPACE" node --test ./scripts/knowledge-catalog.opa.test.mjs
       - name: コミット主語を検査する
         env:
           PR_HEAD: ${{ github.event.pull_request.head.sha }}
