@@ -35,43 +35,13 @@ Cursor のクラウドでリポを開く。このリポジトリの clone 後は
 成果は振る舞いのテストと `docs/decisions/` と policy、フィードバックは次の cycle である。
 監査の主体は親 Grok 4.7 high である。Uber の Gateway や艦隊は置かない。feature-gate は OPA の検査と契約とレビュー上限を実行する。canon の一覧は opa test が検査し、差分の被覆には使わない。正本へは書かない。
 
-図は [`docs/architecture/`](docs/architecture/) のアーキテクチャ図。実線は実行、破線は条件付きか判定のみ。編集する正は下記 mermaid。
+図は [`docs/architecture/`](docs/architecture/) のアーキテクチャ概要。実線は実行、破線は条件付きか判定のみ。編集する正は同ディレクトリの mermaid（[`review-overview.mmd`](docs/architecture/review-overview.mmd) ほか）。README には画像だけを出す。
 
 ### モデルとレビュー
 
 常時動くのは親エージェント Grok 4.7 high だけ。型の正解は `tsc --noEmit`。品質の指摘は親が1回、4つに分ける。コードを変えるのは直すだけ。緑のあと二周目は開かない。Fable の backend-architect は並列展開の前だけ、security-reviewer は人が明示した1回だけ。verifier と reflector は起動せず、feature-gate が 0 回で拒否する。
 
 ![モデルとレビュー](docs/architecture/review-overview.png)
-
-```mermaid
-flowchart TB
-  H["人間の依頼"] --> G["親 Grok 4.7"]
-  G --> IMP["実装"]
-  IMP --> NE["tsc --noEmit"]
-  NE -->|赤| IMP
-  NE -->|緑| CLS["親が1回分類"]
-  CLS --> FIX["直す"]
-  CLS --> HOLD["検討"]
-  CLS --> NOTE["記録"]
-  CLS --> DROP["却下"]
-  FIX --> EDIT["その項目だけ直す"]
-  EDIT --> NE2["tsc --noEmit"]
-  NE2 -->|緑| STOP["停止"]
-  HOLD --> STOP
-  NOTE --> STOP
-  DROP --> STOP
-  STOP --> FG["feature-gate"]
-  FG --> OPA["OPA判定"]
-  FG --> CAP["起動回数"]
-  FG --> BEH["契約の振る舞い"]
-  FG --> PR["PR"]
-  PR --> HM["人間マージ"]
-  HM --> CY["次の cycle"]
-  HM --> DC["docs/decisions"]
-  G -.->|並列展開の前| BA["Fable backend-architect"]
-  G -.->|人が明示した1回| SR["Fable security-reviewer"]
-  CAP -->|0回| OFF["verifier と reflector は起動しない"]
-```
 
 ### 監査
 
@@ -81,51 +51,6 @@ feature-gate は判定であり、正本へは書かない。正本へ入るの�
 
 ![監査](docs/architecture/audit-overview.png)
 
-```mermaid
-flowchart TB
-  subgraph inbound["受付"]
-    H["人間の依頼"]
-    BH["features/slug の振る舞い"]
-  end
-
-  subgraph plant["実行"]
-    P["監査 親 Grok 4.7"]
-    CM["token効率化"]
-    PK["packet"]
-    PL["計画 writing-plans"]
-    IM["実装 親 Grok"]
-    CT["契約と feature-gate"]
-    OFF["verifier / reflector は出さない"]
-  end
-
-  subgraph qa["品質ゲート"]
-    HK["hooks / commit-msg"]
-  end
-
-  subgraph warehouse["正本"]
-    SK["skills / agents"]
-    AD["docs/decisions と design.md"]
-    PO["policy Rego"]
-  end
-
-  subgraph ship["公開"]
-    PR["PR"]
-    HM["人間マージ"]
-  end
-
-  H --> P
-  BH --> P
-  P --> CM
-  P --> PK
-  P --> PL
-  PK --> IM
-  IM --> HK
-  IM --> CT
-  P --> PR
-  PR --> HM
-  HM --> warehouse
-```
-
 ### ランタイム
 
 席と強制の層。子へ渡すのは packet だけ。会話履歴と `docs/learnings.md` の全文は継がない。
@@ -134,56 +59,11 @@ hooks を踏むのは実装の commit。feature-gate は判定であり正本へ
 
 ![ランタイム](docs/architecture/runtime-overview.png)
 
-```mermaid
-flowchart LR
-  subgraph seats["席"]
-    direction TB
-    G["親 Grok 4.7"]
-    IMP["実装と検証は親"]
-    Rec["cycle-record"]
-    BA["Fable は条件付き"]
-    OFF["verifier と reflector は起動しない"]
-  end
-
-  subgraph force["強制"]
-    direction TB
-    Hook["git hooks"]
-    Gate["OPA feature-gate"]
-    Packet["packet.canon deny"]
-  end
-
-  subgraph canon["正本"]
-    direction TB
-    Beh["features/slug"]
-    Docs["docs/decisions"]
-    Policy["Rego"]
-  end
-
-  G --> IMP
-  IMP --> Hook
-  IMP --> Gate
-  Gate -.->|"判定のみ"| Policy
-  G --> Rec
-  Rec --> Packet["packet.canon deny"]
-  HM["人間マージ"] --> Beh
-  HM --> Docs
-  HM --> Policy
-```
-
 ### 再起的自己改善
 
-人間のマージが点火する。cycle-after-merge は承認を記録し、次の cycle を開く。Feature 票は作らない。エージェントは自動起動しない。
+人間のマージが点火する。cycle-after-merge は承認を記録し、次の cycle を開く。Feature 票は作らない。エージェントは自動起動しない。正本に残るのは `docs/decisions` と `features/<slug>/` だけ。
 
 ![再起的自己改善](docs/architecture/self-improve-flow.png)
-
-```mermaid
-flowchart TD
-  AIPR["AI 実装 PR"] --> Merge1["人間がマージ"]
-  Merge1 --> CAM["cycle-after-merge"]
-  CAM --> Stop["エージェントは自動起動しない"]
-  CAM --> Next["次の cycle"]
-  CAM --> NoFeat["Feature 票は作らない"]
-```
 
 ## 構成
 

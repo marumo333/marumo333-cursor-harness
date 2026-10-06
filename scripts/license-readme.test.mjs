@@ -42,7 +42,7 @@ test('package.json の license は MIT である', () => {
 	assert.equal(pkg.license, 'MIT');
 });
 
-test('README は mermaid を編集の正にし、docs の画像を示す', () => {
+test('README はアーキテクチャ概要の画像だけを示し、mermaid は docs に置く', () => {
 	const readme = readFileSync(join(ROOT, 'README.md'), 'utf8');
 	assert.match(readme, /### 監査/);
 	assert.match(readme, /token効率化/);
@@ -60,22 +60,41 @@ test('README は mermaid を編集の正にし、docs の画像を示す', () =>
 	assert.match(readme, /docs\/architecture\/audit-overview\.png/);
 	assert.match(readme, /docs\/architecture\/runtime-overview\.png/);
 	assert.match(readme, /docs\/architecture\/self-improve-flow\.png/);
+	assert.match(readme, /docs\/architecture\/review-overview\.mmd/);
+	assert.doesNotMatch(readme, /```mermaid/);
+	assert.doesNotMatch(readme, /下記 mermaid/);
 	assert.doesNotMatch(readme, /self-improve-overview\.png/);
 	assert.doesNotMatch(readme, /model-review\.png/);
 	assert.doesNotMatch(readme, /イラスト/);
 	assert.doesNotMatch(readme, /欠落 PNG/);
-	assert.doesNotMatch(readme, /FG --> warehouse/);
-	assert.doesNotMatch(readme, /Gate --> Feat/);
-	assert.doesNotMatch(readme, /HK --> AR/);
-	assert.doesNotMatch(readme, /HG --> CanonOut/);
-	const fences = [...readme.matchAll(/```mermaid\n([\s\S]*?)```/g)].map((m) => m[1]);
-	assert.equal(fences.length, 4, `mermaid 図は4つ: ${fences.length}`);
+	assert.doesNotMatch(readme, /Feature proposed/);
+	assert.doesNotMatch(readme, /Feature YAML/);
+	assert.doesNotMatch(readme, /次 Feature/);
+	assert.doesNotMatch(readme, /harness-grow/);
+	const sources = [
+		'docs/architecture/review-overview.mmd',
+		'docs/architecture/audit-overview.mmd',
+		'docs/architecture/runtime-overview.mmd',
+		'docs/architecture/self-improve-flow.mmd'
+	].map((rel) => readFileSync(join(ROOT, rel), 'utf8'));
+	assert.equal(sources.length, 4);
+	for (const fence of sources) {
+		assert.doesNotMatch(fence, /Feature proposed/);
+		assert.doesNotMatch(fence, /Feature YAML/);
+		assert.doesNotMatch(fence, /次 Feature/);
+		assert.doesNotMatch(fence, /admitted/);
+		assert.doesNotMatch(fence, /harness-grow/);
+		assert.doesNotMatch(fence, /FG --> warehouse/);
+		assert.doesNotMatch(fence, /Gate --> Feat/);
+		assert.doesNotMatch(fence, /HK --> AR/);
+		assert.doesNotMatch(fence, /HG --> CanonOut/);
+	}
 	assert.ok(
-		fences.some((b) => /直す/.test(b) && /検討/.test(b) && /記録/.test(b) && /却下/.test(b) && /tsc --noEmit/.test(b) && /OPA判定/.test(b) && !/被覆/.test(b)),
+		sources.some((b) => /直す/.test(b) && /検討/.test(b) && /記録/.test(b) && /却下/.test(b) && /tsc --noEmit/.test(b) && /OPA判定/.test(b) && !/被覆/.test(b)),
 		'モデル図は4分類と noEmit と OPA判定を含む'
 	);
 	assert.ok(
-		fences.some(
+		sources.some(
 			(b) =>
 				/監査/.test(b) &&
 				/token効率化/.test(b) &&
@@ -86,7 +105,7 @@ test('README は mermaid を編集の正にし、docs の画像を示す', () =>
 		'監査図は契約と人間マージを含み、レビュー周の辺を含まない'
 	);
 	assert.ok(
-		fences.some(
+		sources.some(
 			(b) =>
 				/実装と検証は親/.test(b) &&
 				/IMP --> Hook/.test(b) &&
@@ -98,15 +117,10 @@ test('README は mermaid を編集の正にし、docs の画像を示す', () =>
 		'ランタイム図は feature-gate を判定のみにし、packet deny は cycle-record が評価する'
 	);
 	assert.doesNotMatch(readme, /canon 変更のゲート/);
-	assert.equal(fences.some((b) => /CT --> FG/.test(b)), false);
+	assert.equal(sources.some((b) => /CT --> FG/.test(b)), false);
 	assert.ok(
-		fences.some((b) => /cycle-after-merge/.test(b) && /エージェントは自動起動しない/.test(b) && /次の cycle/.test(b)),
+		sources.some((b) => /cycle-after-merge/.test(b) && /エージェントは自動起動しない/.test(b) && /次の cycle/.test(b) && /Feature 票は作らない/.test(b)),
 		'自己改善図は cycle-after-merge と次の cycle と自動起動しないを含む'
 	);
-	for (const fence of fences) {
-		assert.doesNotMatch(fence, /Feature proposed/);
-		assert.doesNotMatch(fence, /Feature YAML/);
-		assert.doesNotMatch(fence, /次 Feature/);
-		assert.doesNotMatch(fence, /admitted/);
-	}
+	assert.ok(sources.some((b) => /features\/slug/.test(b) && /docs\/decisions/.test(b)), '正本のラベルは features/slug と docs/decisions');
 });
