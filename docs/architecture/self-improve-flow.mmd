@@ -1,0 +1,8 @@
+flowchart TD
+  AIPR["AI 実装 PR"] --> Merge1["人間がマージ"]
+  Merge1 --> CAM["cycle-after-merge"]
+  CAM --> Stop["エージェントは自動起動しない"]
+  CAM --> Next["次の cycle"]
+  CAM --> NoFeat["Feature 票は作らない"]
+  Merge1 --> DC["docs/decisions"]
+  Merge1 --> BH["features/slug"]

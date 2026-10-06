@@ -1,0 +1,27 @@
+flowchart TB
+  H["人間の依頼"] --> G["親 Grok 4.7"]
+  G --> IMP["実装"]
+  IMP --> NE["tsc --noEmit"]
+  NE -->|赤| IMP
+  NE -->|緑| CLS["親が1回分類"]
+  CLS --> FIX["直す"]
+  CLS --> HOLD["検討"]
+  CLS --> NOTE["記録"]
+  CLS --> DROP["却下"]
+  FIX --> EDIT["その項目だけ直す"]
+  EDIT --> NE2["tsc --noEmit"]
+  NE2 -->|緑| STOP["停止"]
+  HOLD --> STOP
+  NOTE --> STOP
+  DROP --> STOP
+  STOP --> FG["feature-gate"]
+  FG --> OPA["OPA判定"]
+  FG --> CAP["起動回数"]
+  FG --> BEH["契約の振る舞い"]
+  FG --> PR["PR"]
+  PR --> HM["人間マージ"]
+  HM --> CY["次の cycle"]
+  HM --> DC["docs/decisions"]
+  G -.->|並列展開の前| BA["Fable backend-architect"]
+  G -.->|人が明示した1回| SR["Fable security-reviewer"]
+  CAP -->|0回| OFF["verifier と reflector は起動しない"]

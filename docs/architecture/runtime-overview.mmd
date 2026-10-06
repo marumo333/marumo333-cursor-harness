@@ -1,0 +1,33 @@
+flowchart LR
+  subgraph seats["席"]
+    direction TB
+    G["親 Grok 4.7"]
+    IMP["実装と検証は親"]
+    Rec["cycle-record"]
+    BA["Fable は条件付き"]
+    OFF["verifier と reflector は起動しない"]
+  end
+
+  subgraph force["強制"]
+    direction TB
+    Hook["git hooks"]
+    Gate["OPA feature-gate"]
+    Packet["packet.canon deny"]
+  end
+
+  subgraph canon["正本"]
+    direction TB
+    Beh["features/slug"]
+    Docs["docs/decisions"]
+    Policy["Rego"]
+  end
+
+  G --> IMP
+  IMP --> Hook
+  IMP --> Gate
+  Gate -.->|"判定のみ"| Policy
+  G --> Rec
+  Rec --> Packet["packet.canon deny"]
+  HM["人間マージ"] --> Beh
+  HM --> Docs
+  HM --> Policy

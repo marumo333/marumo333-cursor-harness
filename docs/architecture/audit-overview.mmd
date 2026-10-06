@@ -1,0 +1,42 @@
+flowchart TB
+  subgraph inbound["受付"]
+    H["人間の依頼"]
+    BH["features/slug の振る舞い"]
+  end
+
+  subgraph plant["実行"]
+    P["監査 親 Grok 4.7"]
+    CM["token効率化"]
+    PK["packet"]
+    PL["計画 writing-plans"]
+    IM["実装 親 Grok"]
+    CT["契約と feature-gate"]
+    OFF["verifier / reflector は出さない"]
+  end
+
+  subgraph qa["品質ゲート"]
+    HK["hooks / commit-msg"]
+  end
+
+  subgraph warehouse["正本"]
+    SK["skills / agents"]
+    AD["docs/decisions と design.md"]
+    PO["policy Rego"]
+  end
+
+  subgraph ship["公開"]
+    PR["PR"]
+    HM["人間マージ"]
+  end
+
+  H --> P
+  BH --> P
+  P --> CM
+  P --> PK
+  P --> PL
+  PK --> IM
+  IM --> HK
+  IM --> CT
+  P --> PR
+  PR --> HM
+  HM --> warehouse
